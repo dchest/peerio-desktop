@@ -7,25 +7,22 @@ const T = require('~/ui/shared-components/T');
 
 @observer
 class RatingDialog extends React.Component {
-    @observable numStars = 0;
-    @observable currentRatingText;
+    @observable numStars = null;
     @observable textContent = '';
 
     updateNumStars = (n) => {
         this.numStars = n;
-        this.currentRatingText = t(`dialog_rating${n}Star`);
     };
 
     handleTextChange = (value) => {
         this.textContent = value;
     };
 
-
     render() {
         const starArray = [];
         for (let i = 1; i <= 5; i++) {
             starArray.push(
-                <div className="star-container">
+                <div key={i} className="star-container">
                     <Button className="nowripple"
                         icon={this.numStars >= i ? 'star' : 'star_border'}
                         onClick={() => this.updateNumStars(i)} />
@@ -37,14 +34,13 @@ class RatingDialog extends React.Component {
                 <p><T k="dialog_ratingInstructions" /></p>
                 <div className="star-rating-input">{starArray}</div>
                 <div className="rating-text">
-                    <p>{this.currentRatingText}</p>
+                    <p>{this.numStars && t(`dialog_rating${this.numStars}Star`)}</p>
                 </div>
                 <Input type="text" multiline
                     placeholder={t('dialog_suggestionsPlaceholder')}
                     value={this.textContent}
                     rows={4}
                     onChange={() => this.handleTextChange(this.value)} />
-
             </div>
         );
     }
