@@ -50,14 +50,14 @@ class App extends React.Component {
 
     get ratingDialog() {
         const ratingDialogActions = [
-            { label: 'later', className: 'button-later', onClick: this.hideRatingDialog },
-            { label: 'send', onClick: this.hideRatingDialog }
+            { label: t('button_notNow'), className: 'button-later', onClick: this.hideRatingDialog },
+            { label: t('button_send'), onClick: this.hideRatingDialog }
         ];
         return (
             <Dialog active={!this.ratingDialogHiding}
                 actions={ratingDialogActions}
                 onOverlayClick={this.hideRatingDialog} onEscKeyDown={this.hideRatingDialog}
-                title="How would you rate Peerio?"
+                title={t('title_ratingDialogHeading')}
                 className="rating-dialog">
                 <RatingDialog />
             </Dialog>

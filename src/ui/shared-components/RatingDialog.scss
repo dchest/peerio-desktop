@@ -17,10 +17,14 @@
     color: $text-dark-primary;
   }
 
-  .star-text {
-    font-size: 16px;
-    font-weight: $font-weight-semibold;
-    text-align: center;
+  .rating-text {
+    height: 24px;
+
+    p {
+      font-size: 16px;
+      font-weight: $font-weight-semibold;
+      text-align: center;
+    }
   }
 
   .rt-input-input {
