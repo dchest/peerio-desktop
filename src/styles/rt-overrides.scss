@@ -24,3 +24,9 @@
   background-color: #f0f0f0;
   color: $text-light-primary;
 }
+
+.nowripple.rt-button-button {
+  .rt-button-rippleWrapper {
+    display: none;
+  }
+}

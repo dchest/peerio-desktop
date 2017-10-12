@@ -7,9 +7,13 @@ const ContactProfile = require('~/ui/contact/components/ContactProfile');
 const { observer } = require('mobx-react');
 const { observable } = require('mobx');
 const { clientApp } = require('~/icebear');
+const RatingDialog = require('./shared-components/RatingDialog');
 
 @observer
 class App extends React.Component {
+    // variable for testing only, TODO hook up to sdk
+    showRatingDialog = true;
+
     // for smooth dialog hiding, without this it will render empty dialog while hiding it
     @observable contactDialogHiding = false;
     hideContactDialog = () => {
@@ -19,6 +23,11 @@ class App extends React.Component {
             uiStore.contactDialogUsername = null;
             this.contactDialogHiding = false;
         }, 500);
+    };
+
+    @observable ratingDialogHiding = false;
+    hideRatingDialog = () => {
+        this.ratingDialogHiding = true;
     };
 
     get signatureErrorDialog() {
@@ -35,6 +44,22 @@ class App extends React.Component {
                 title={t('title_invalidFileSignature')}
                 className="dialog-warning">
                 <p>{t('error_invalidFileSignatureLong')}</p>
+            </Dialog>
+        );
+    }
+
+    get ratingDialog() {
+        const ratingDialogActions = [
+            { label: 'later', className: 'button-later', onClick: this.hideRatingDialog },
+            { label: 'send', onClick: this.hideRatingDialog }
+        ];
+        return (
+            <Dialog active={!this.ratingDialogHiding}
+                actions={ratingDialogActions}
+                onOverlayClick={this.hideRatingDialog} onEscKeyDown={this.hideRatingDialog}
+                title="How would you rate Peerio?"
+                className="rating-dialog">
+                <RatingDialog />
             </Dialog>
         );
     }
@@ -68,6 +93,10 @@ class App extends React.Component {
                     }
                 </Dialog>
                 {this.signatureErrorDialog}
+                {this.showRatingDialog
+                    ? this.ratingDialog
+                    : null
+                }
             </div>
         );
     }

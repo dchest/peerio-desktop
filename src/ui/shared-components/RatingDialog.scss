@@ -1,0 +1,62 @@
+// Container (App.jsx)
+.rating-dialog {
+  max-width: 400px;
+
+  .button-later.rt-button-button {
+    color: $text-dark-secondary;
+  }
+
+  .rt-dialog-body {
+    padding-bottom: 0;
+  }
+}
+
+// Content (RatingDialog.jsx)
+.rating-dialog-content {
+  p {
+    color: $text-dark-primary;
+  }
+
+  .star-text {
+    font-size: 16px;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+  }
+
+  .rt-input-input {
+    height: auto;
+    margin-top: $margin-default;
+
+    textarea {
+      border: 1px solid $divider-dark;
+      border-radius: 2px;
+      height: 112px;
+      max-height: 112px;
+      overflow-y: auto;
+      padding: $padding-small;
+      resize: none;
+    }
+  }
+}
+
+// Separating if this ever becomes its own component
+.star-rating-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: $margin-default 0;
+
+  .star-container {
+    .rt-button-button {
+      margin: 0;
+      min-width: 0;
+      padding: 0;
+      width: 48px;
+    }
+
+    .material-icons {
+      color: $blue;
+      font-size: 48px;
+    }
+  }
+}
