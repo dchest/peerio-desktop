@@ -17,41 +17,25 @@ class RatingDialog extends React.Component {
     };
 
     handleTextChange = (value) => {
-        this.setState({ textContent: value });
+        this.textContent = value;
     };
 
+
     render() {
+        const starArray = [];
+        for (let i = 1; i <= 5; i++) {
+            starArray.push(
+                <div className="star-container">
+                    <Button className="nowripple"
+                        icon={this.numStars >= i ? 'star' : 'star_border'}
+                        onClick={() => this.updateNumStars(i)} />
+                </div>);
+        }
+
         return (
             <div className="rating-dialog-content">
-                <T k="dialog_ratingInstructions" />
-
-                <div className="star-rating-input">
-                    <div className="star-container">
-                        <Button className="nowripple"
-                            icon={this.numStars >= 1 ? 'star' : 'star_border'}
-                            onClick={() => this.updateNumStars(1)} />
-                    </div>
-                    <div className="star-container">
-                        <Button className="nowripple"
-                            icon={this.numStars >= 2 ? 'star' : 'star_border'}
-                            onClick={() => this.updateNumStars(2)} />
-                    </div>
-                    <div className="star-container">
-                        <Button className="nowripple"
-                            icon={this.numStars >= 3 ? 'star' : 'star_border'}
-                            onClick={() => this.updateNumStars(3)} />
-                    </div>
-                    <div className="star-container">
-                        <Button className="nowripple"
-                            icon={this.numStars >= 4 ? 'star' : 'star_border'}
-                            onClick={() => this.updateNumStars(4)} />
-                    </div>
-                    <div className="star-container">
-                        <Button className="nowripple"
-                            icon={this.numStars >= 5 ? 'star' : 'star_border'}
-                            onClick={() => this.updateNumStars(5)} />
-                    </div>
-                </div>
+                <p><T k="dialog_ratingInstructions" /></p>
+                <div className="star-rating-input">{starArray}</div>
                 <div className="rating-text">
                     <p>{this.currentRatingText}</p>
                 </div>
