@@ -26,16 +26,16 @@ class ChatView extends React.Component {
 
     componentDidMount() {
         this.reactionsToDispose = [
-            reaction(() => chatStore.activeChat, () => { this.showUserPicker = false; })
+            reaction(() => chatStore.activeChat, () => { this.showUserPicker = false; }),
+
+            // TODO: refactor when SDK is there for chat invites
+            reaction(() => !chatStore.chats.length && !chatInviteStore.received.length, () => {
+                routerStore.navigateTo(routerStore.ROUTES.zeroChats);
+            }, true)
         ];
 
         if (chatInviteStore.activeInvite) {
             routerStore.navigateTo(routerStore.ROUTES.channelInvite);
-        }
-
-        // TODO: refactor when SDK is there for chat invites
-        if (!chatStore.chats.length && !chatInviteStore.received.length) {
-            routerStore.navigateTo(routerStore.ROUTES.zeroChats);
         }
     }
 

@@ -4,7 +4,7 @@ const { observer } = require('mobx-react');
 
 const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
-const { chatStore, User, systemMessages, chatInviteStore } = require('peerio-icebear');
+const { chatStore, chatInviteStore, chatNotifier, User, systemMessages } = require('peerio-icebear');
 const routerStore = require('~/stores/router-store');
 
 const css = require('classnames');
@@ -96,13 +96,6 @@ class ChatList extends React.Component {
     }
 
     render() {
-        const allRooms = chatInviteStore.received.concat(chatStore.channels);
-        allRooms.sort((a, b) => {
-            const first = a.name || a.channelName;
-            const second = b.name || b.channelName;
-            return first.localeCompare(second);
-        });
-
         return (
             <div className="feature-navigation-list">
                 {/* TODO: use a general full width progress bar instead of this one. */}
@@ -130,7 +123,7 @@ class ChatList extends React.Component {
                                             caption={`# ${t('title_newRoom')}`}
                                         />
                                     }
-                                    {allRooms.map(r =>
+                                    {chatNotifier.allRooms.map(r =>
                                         r.isChannel
                                             ? (
                                                 <ListItem

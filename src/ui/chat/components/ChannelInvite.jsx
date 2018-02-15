@@ -1,9 +1,9 @@
 const React = require('react');
 
-const { action, observable } = require('mobx');
+const { action, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
-const { chatInviteStore, contactStore, User } = require('peerio-icebear');
+const { chatStore, chatInviteStore, contactStore, User } = require('peerio-icebear');
 const urls = require('~/config').translator.urlMap;
 
 const css = require('classnames');
@@ -17,6 +17,17 @@ const { ProgressBar } = require('~/peer-ui');
 class ChannelInvite extends React.Component {
     @observable declined = false;
     @observable inProgress = false;
+
+    componentDidMount() {
+        // TODO: refactor when better server/sdk support for room invites
+        this.disposer = reaction(() => !chatStore.chats.length && !chatInviteStore.received.length, () => {
+            routerStore.navigateTo(routerStore.ROUTES.zeroChats);
+        });
+    }
+
+    componentWillUnmount() {
+        this.disposer();
+    }
 
     @action.bound async acceptInvite() {
         const kegDbId = chatInviteStore.activeInvite.kegDbId;
