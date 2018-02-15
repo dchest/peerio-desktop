@@ -222,7 +222,14 @@ class UserPicker extends React.Component {
         if (!items.length) return null;
         return (
             <div key={subTitle} className="user-list">
-                {!!subTitle && <ListHeading key={subTitle} caption={`${t(subTitle)} (${items.length})`} />}
+                {!!subTitle &&
+                    <ListHeading key={subTitle}
+                        caption={this.foundContact
+                            ? t(subTitle)
+                            : `${t(subTitle)} (${items.length})`
+                        }
+                    />
+                }
                 {items.map(c => (
                     <span key={c.username} data-id={c.username}>
                         <ListItem
@@ -360,7 +367,7 @@ class UserPicker extends React.Component {
                                 </div>
                             }
                             <List theme="large" clickable>
-                                {this.foundContact && this.renderList(null, [this.foundContact])}
+                                {this.foundContact && this.renderList('title_exactMatch', [this.foundContact])}
                                 {!this.foundContact
                                     && this.renderList('title_favoriteContacts', this.options.favorites)}
                                 {!this.foundContact && this.renderList('title_allContacts', this.options.normal)}
