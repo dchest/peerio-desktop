@@ -159,7 +159,7 @@ class UserPicker extends React.Component {
         if (c === null || this.selected.find(s => s.username === this.query)) {
             return;
         }
-        // this.query = '';
+        this.query = '';
         if (this.isExcluded(c)) {
             return;
         }
