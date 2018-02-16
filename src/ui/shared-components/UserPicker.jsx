@@ -159,7 +159,7 @@ class UserPicker extends React.Component {
         if (c === null || this.selected.find(s => s.username === this.query)) {
             return;
         }
-        this.query = '';
+        // this.query = '';
         if (this.isExcluded(c)) {
             return;
         }
@@ -367,10 +367,9 @@ class UserPicker extends React.Component {
                                 </div>
                             }
                             <List theme="large" clickable>
+                                {this.renderList('title_favoriteContacts', this.options.favorites)}
+                                {this.renderList('title_allContacts', this.options.normal)}
                                 {this.foundContact && this.renderList('title_exactMatch', [this.foundContact])}
-                                {!this.foundContact
-                                    && this.renderList('title_favoriteContacts', this.options.favorites)}
-                                {!this.foundContact && this.renderList('title_allContacts', this.options.normal)}
                             </List>
                         </div>
                     </div>
