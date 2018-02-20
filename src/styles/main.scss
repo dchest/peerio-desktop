@@ -49,6 +49,9 @@
 @import './typography';
 
 html {
+  cursor: default;
+  user-select: none;
+
   box-sizing: border-box;
   overflow: hidden;
   font-family: $font-stack;

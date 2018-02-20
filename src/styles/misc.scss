@@ -68,14 +68,18 @@ ul {
   }
 }
 
-// All items are not selectable by default
-// use this class to make items selectable
+// All items are not selectable by default. Use this class to make items selectable.
 .selectable,
 %selectable {
-  -webkit-user-drag: auto;
   cursor: text;
-  -webkit-user-select: auto;
   user-select: auto;
+
+  // Children of selectable content may still be clickable, so need to override.
+  button,
+  a,
+  .clickable {
+    cursor: pointer;
+  }
 }
 
 // Make things scrollable
