@@ -96,7 +96,7 @@
     "cz-conventional-changelog": "2.1.0",
     "debounce-queue": "0.2.2",
     "devtron": "1.4.0",
-    "electron": "1.7.11",
+    "electron": "1.8.2",
     "electron-builder": "19.55.2",
     "electron-devtools-installer": "2.2.3",
     "electron-reload": "1.2.2",
