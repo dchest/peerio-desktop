@@ -79,11 +79,6 @@ if (isDevEnv) {
     app.setPath('userData', path.resolve(app.getPath('appData'), `${app.getName().toLowerCase()}_dev`));
 }
 
-// <UPDATES> -----------------------------------------------------------------------------------------------------
-// If the app was started as a part of update process we don't want to proceed with startup
-if (require('~/main-process/handle-windows-update')) app.quit();
-// </UPDATES> ----------------------------------------------------------------------------------------------------
-
 // configure logging
 require('~/helpers/logging');
 
