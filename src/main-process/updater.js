@@ -1,4 +1,4 @@
-
+const path = require('path');
 const isDevEnv = require('~/helpers/is-dev-env');
 const { app, ipcMain } = require('electron');
 const TinyDb = require('peerio-icebear/dist/db/tiny-db');
@@ -22,6 +22,9 @@ function sendStatusToWindow(text) {
 function start(mainWindow) {
     try {
         window = mainWindow;
+
+        autoUpdater.setDownloadsDirectory(path.join(app.getPath('userData'), 'Updates'));
+
         ipcMain.on('install-update', () => {
             console.log('Client approved update installation.');
             app.releaseSingleInstance();
