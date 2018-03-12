@@ -1,6 +1,6 @@
 const React = require('react');
 
-const { action, observable } = require('mobx');
+const { action, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
 const { chatInviteStore, contactStore, User } = require('peerio-icebear');
@@ -16,6 +16,25 @@ const { ProgressBar } = require('~/peer-ui');
 @observer
 class ChannelInvite extends React.Component {
     @observable inProgress = false;
+
+    componentDidMount() {
+        this.disposer = reaction(() => chatInviteStore.received.length, () => {
+            let activeExists = false;
+            chatInviteStore.received.forEach(invite => {
+                if (invite.kegDbId === chatInviteStore.activeInvite.kegDbId) {
+                    activeExists = true;
+                }
+            });
+
+            if (!activeExists) {
+                chatInviteStore.activeInvite = false;
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.disposer();
+    }
 
     @action.bound async acceptInvite() {
         const kegDbId = chatInviteStore.activeInvite.kegDbId;
