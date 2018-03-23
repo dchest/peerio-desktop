@@ -1,13 +1,11 @@
 const React = require('react');
 const { observable, when } = require('mobx');
 const { observer } = require('mobx-react');
-const { chatStore, User } = require('peerio-icebear');
+const { chatStore, config, User } = require('peerio-icebear');
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
 const { Input, ProgressBar } = require('~/peer-ui');
-const ChannelUpgradeDialog = require('./components/ChannelUpgradeDialog');
-const config = require('~/config');
 
 @observer
 class NewChannel extends React.Component {
@@ -80,9 +78,6 @@ class NewChannel extends React.Component {
                     </div>
                     <div className="description">
                         <T k="title_createChannelDetails">{textParser}</T>
-                        {!(config.disablePayments || User.current.hasActivePlans) &&
-                            <T k="title_createChannelUpgradeOffer" />
-                        }
                     </div>
                 </div>
                 <div className="new-channel-inputs">
@@ -90,7 +85,10 @@ class NewChannel extends React.Component {
                         <div className="new-chat-search">
                             <div className="chip-wrapper">
                                 <Input placeholder={t('title_channelName')} innerRef={this.setNameInputRef}
-                                    value={this.channelName} onChange={this.handleNameChange} />
+                                    value={this.channelName}
+                                    onChange={this.handleNameChange}
+                                    maxLength={config.chat.maxChatNameLength}
+                                />
                             </div>
                         </div>
                         <div className="helper-text" />
@@ -99,7 +97,10 @@ class NewChannel extends React.Component {
                         <div className="new-chat-search">
                             <div className="chip-wrapper">
                                 <Input placeholder={t('title_purpose')}
-                                    value={this.purpose} onChange={this.handlePurposeChange} />
+                                    value={this.purpose}
+                                    onChange={this.handlePurposeChange}
+                                    maxLength={config.chat.maxChatPurposeLength}
+                                />
                             </div>
                         </div>
                         <T k="title_optional" tag="div" className="helper-text" />
@@ -108,13 +109,11 @@ class NewChannel extends React.Component {
                         <UserPicker ref={this.setUserPickerRef} title={t('title_chatWith')}
                             noHeader onlyPick noAutoFocus
                             onAccept={this.handleAccept}
-                            noSubmit={
-                                !this.channelName.length || !this.upgradeDialog || this.isLimitReached
-                            }
+                            noSubmit={!this.channelName.length}
                         />
                     </div>
                 </div>
-                <ChannelUpgradeDialog ref={this.setUpgradeDialogRef} />
+                {/* <ChannelUpgradeDialog ref={this.setUpgradeDialogRef} /> */}
             </div>
         );
     }

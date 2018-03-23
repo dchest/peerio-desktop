@@ -39,5 +39,4 @@ echo '**'
 peerio-desktop-release --key ~/.peerio-updater/secret.key \
                        --shared ~/Win \
                        --repository PeerioTechnologies/peerio-desktop \
-                       --publish \
-                       --prerelease
+                       --publish

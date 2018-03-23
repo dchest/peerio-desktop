@@ -3,6 +3,8 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const sanitize = require('sanitize-filename');
+const { t } = require('peerio-translator');
+
 
 function requestDownloadPath(fileName) {
     return new Promise((resolve, reject) => {
@@ -14,10 +16,30 @@ function requestDownloadPath(fileName) {
             console.log(err);
         }
 
+        let filters;
+        let ext = path.extname(path.basename(p));
+        // On Windows, set up "Save as type" filters if the file has an extension.
+        if (process.platform === 'win32' && ext.length > 1) {
+            ext = ext.substring(1); // strip dot
+            filters = [
+                {
+                    name: t('dialog_fileTypeForExtension', { extension: ext.toUpperCase() }), // '{extension} File'
+                    extensions: [ext]
+                },
+                {
+                    name: t('dialog_fileTypeAllFiles'), // 'All Files'
+                    extensions: ['*']
+                }
+            ];
+        }
+
         const win = electron.getCurrentWindow();
         electron.dialog.showSaveDialog(
             win,
-            { defaultPath: p },
+            {
+                defaultPath: p,
+                filters
+            },
             fileSavePath => {
                 if (fileSavePath) resolve(fileSavePath);
                 else reject(new Error('User cancelled save dialog.'));

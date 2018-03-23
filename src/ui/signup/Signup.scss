@@ -7,13 +7,19 @@
   transition: 350ms opcaity $transition-easing-default;
   opacity: 0;
 
+  .signup-content-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: calc(100% - 260px);
+    margin: 48px auto;
+  }
+
   .signup-content,
   .signup-welcome {
     @extend %flex-col;
     @extend %flex-align-center;
     height: 100%;
-    width: calc(100% - 260px);
-    margin: 48px auto;
     background: #eaf8f9; //TODO: create var - Paul
     border-radius: 4px;
 
@@ -23,19 +29,25 @@
   }
 
   .signup-content {
-    margin-top: 112px;
+    margin-top: 64px;
   }
 
   .signup-welcome {
     @extend %flex-justify-around;
-
-    height: 100%;
-    margin: 48px auto;
     text-align: center;
   }
 
   .terms-smallprint {
     font-size: 12px;
+  }
+
+  .back-to-login {
+    @extend %subtitle;
+    display: flex;
+    align-items: baseline;
+    margin-top: $margin-tiny;
+    font-weight: $font-weight-semibold;
+    color: $text-light-primary;
   }
 
   .private,
@@ -125,15 +137,18 @@
       }
 
       .error {
-        color: $red-error;
         border: 0;
       }
     }
   }
 
-  @media (max-height: $minimum-screen-height) {
-    img {
-      margin: $margin-small 0 $margin-default;
+  @media all and (max-height: 768px) {
+    .signup-content {
+      margin-top: 48px;
+    }
+
+    .p-input {
+      margin-top: 28px;
     }
   }
 }

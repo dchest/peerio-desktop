@@ -269,7 +269,7 @@ class Message extends React.Component {
                                         </span>
                                     </div>
                                 }
-                                position="auto">
+                                position="top-right">
                                 <MenuItem
                                     caption={t('button_retry')}
                                     onClick={() => m.send()} />

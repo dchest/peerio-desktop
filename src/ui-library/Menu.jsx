@@ -132,7 +132,7 @@ class Menu extends React.Component {
                 {this.props.tooltip
                     ? <Tooltip
                         text={this.props.tooltip}
-                        position={this.props.tooltipPosition || 'top'}
+                        position={this.props.tooltipPosition || 'top-left'}
                     />
                     : null
                 }

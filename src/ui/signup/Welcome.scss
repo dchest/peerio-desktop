@@ -2,10 +2,23 @@
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
+  flex-grow: .2;
   align-items: center;
   justify-content: space-around;
   padding: $padding-large;
-  margin-top: $margin-xl;
+  margin-top: $margin-large;
+
+  .welcome-heading {
+    margin-bottom: 16px;
+
+    .display-1 {
+      color: $blue;
+    }
+  }
+
+  .title {
+    font-weight: $font-weight-regular;
+  }
 
   p {
     margin: 0 0 $margin-large;
@@ -23,8 +36,4 @@
       margin: auto;
     }
   }
-}
-
-.welcome-heading {
-  margin-bottom: 16px;
 }
