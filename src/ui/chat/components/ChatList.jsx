@@ -4,7 +4,7 @@ const { observer } = require('mobx-react');
 
 const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
-const { chatStore, chatInviteStore } = require('peerio-icebear');
+const { chatStore, chatInviteStore, chatNotifier } = require('peerio-icebear');
 const routerStore = require('~/stores/router-store');
 
 const css = require('classnames');
@@ -40,11 +40,7 @@ class ChatList extends React.Component {
 
     // Building the rooms & invites list
     @computed get allRooms() {
-        return chatInviteStore.received.concat(chatStore.channels).sort((a, b) => {
-            const first = a.name || a.channelName;
-            const second = b.name || b.channelName;
-            return first.localeCompare(second);
-        });
+        return chatNotifier.allRooms;
     }
 
     @computed get allRoomsMap() {
