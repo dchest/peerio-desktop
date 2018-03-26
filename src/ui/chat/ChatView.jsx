@@ -4,7 +4,7 @@ const { observer } = require('mobx-react');
 const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('~/peer-ui');
 const MessageInput = require('./components/MessageInput');
 const MessageList = require('./components/MessageList');
-const { chatStore, chatInviteStore, chatNotifier } = require('peerio-icebear');
+const { chatStore, chatInviteStore } = require('peerio-icebear');
 const routerStore = require('~/stores/router-store');
 const sounds = require('~/helpers/sounds');
 const uiStore = require('~/stores/ui-store');
@@ -26,7 +26,7 @@ class ChatView extends React.Component {
 
     componentDidMount() {
         this.reactionsToDispose = [
-            reaction(() => chatStore.activeChat, () => { this.showUserPicker = false; }),
+            reaction(() => chatStore.activeChat, () => { this.showUserPicker = false; })
 
             // TODO: refactor when SDK is there for chat invites
             // reaction(() => !chatStore.chats.length && !chatInviteStore.received.length, () => {

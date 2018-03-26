@@ -63,18 +63,33 @@ class ChannelInvite extends React.Component {
     }
 
     get renderParticipants() {
-        const { channelName, participants } = chatInviteStore.activeInvite;
-        // if (participants.length > 2) {
+        const { channelName, participants, username } = chatInviteStore.activeInvite;
+        if (participants.length <= 2) return null;
+
+        const participantsToShow = [];
+
+        for (let i = 0; i < participants.length && participantsToShow.length < 4; i++) {
+            const participant = participants[i];
+
+            if (participant !== username && participant !== User.current.username) {
+                participantsToShow.push(<Avatar key={participant} username={participant} clickable tooltip />);
+            }
+        }
+
         return (
             <div className="participant-list">
                 <span>
-                    <T k="title_whoIsAlreadyIn" className="hosted-by" tag="span" />&nbsp;
-                    <span className="host-username">{`#${channelName}`}</span>
+                    <T k="title_whoIsAlreadyIn" className="already-in-room" tag="span" />&nbsp;
+                    <span className="room-name">{`# ${channelName}`}</span>
                 </span>
                 <div className="avatars">
-                    {participants.map(participant => (
-                        <Avatar username={participant} clickable tooltip />
-                    ))}
+                    {participantsToShow}
+                    {participants.length > 6
+                        ? <div className="more-participants">
+                            +{participants.length - 6}
+                        </div>
+                        : null
+                    }
                 </div>
             </div>);
         // }
@@ -85,7 +100,7 @@ class ChannelInvite extends React.Component {
         if (this.inProgress) return <ProgressBar mode="indeterminate" />;
         const { activeInvite } = chatInviteStore;
         if (!activeInvite) return null;
-        const { channelName, username, participants } = activeInvite;
+        const { channelName, username } = activeInvite;
         return (
             <div className={css('channel-invite', this.props.className)}>
                 <div className="invite-content">

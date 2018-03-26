@@ -87,13 +87,36 @@
     .participant-list {
       margin-top: $margin-default;
 
-      .hosted-by {
+      .hosted-by,
+      .already-in-room {
+        color: $text-dark-secondary;
+      }
+
+      .room-name {
+        font-weight: $font-weight-semibold;
         color: $text-dark-secondary;
       }
 
       .avatars {
-        margin-top: $margin-small;
         display: flex;
+        margin-top: $margin-small;
+
+        .p-avatar + div {
+          margin-left: 8px;
+        }
+
+        .more-participants {
+          @extend %hint-error-label;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          width: 40px;
+          font-weight: $font-weight-semibold;
+          color: $text-light-primary;
+          background-color: $icon-dark-active;
+          border-radius: 100%;
+        }
       }
     }
   }
