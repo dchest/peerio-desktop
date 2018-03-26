@@ -1,6 +1,8 @@
 const isDevEnv = require('~/helpers/is-dev-env');
 if (!isDevEnv) require('~/helpers/console-history');
 const { ipcRenderer, webFrame } = require('electron');
+const { when } = require('mobx');
+const languageStore = require('~/stores/language-store');
 
 // apply desktop config values to icebear
 require('~/config');
@@ -58,17 +60,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.start();
 
-    render(React.createElement(Router, { history: window.router, routes }), document.getElementById('root'));
+    // Load translations and render once they're loaded.
+    languageStore.loadSavedLanguage();
+    when(() => languageStore.language, () => {
+        render(React.createElement(Router, { history: window.router, routes }), document.getElementById('root'));
 
-    ipcRenderer.on('router', (event, message) => {
-        window.router.push(message);
+        ipcRenderer.on('router', (event, message) => {
+            window.router.push(message);
+        });
+
+        // starting power management
+        require('~/helpers/power').start();
+        // starting network management
+        require('~/helpers/network').start();
+        // starting failed image reload management
+        require('~/helpers/image-retry').start();
     });
-    // starting power management
-    require('~/helpers/power').start();
-    // starting network management
-    require('~/helpers/network').start();
-    // starting failed image reload management
-    require('~/helpers/image-retry').start();
 });
 
 // Disable zoom.

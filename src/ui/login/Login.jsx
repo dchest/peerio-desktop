@@ -14,6 +14,7 @@ const OrderedFormStore = require('~/stores/ordered-form-store');
 const css = require('classnames');
 const autologin = require('~/helpers/autologin');
 const routerStore = require('~/stores/router-store');
+const updaterStore = require('~/stores/updater-store');
 
 const { validators } = validation; // use common validation from core
 
@@ -74,6 +75,10 @@ class LoginStore extends OrderedFormStore {
                                 return;
                             }
                             this.loginStore.passcodeOrPassphrase = passphrase;
+                            if (updaterStore.lastUpdateFailed) {
+                                this.loginStore.busy = false;
+                                return;
+                            }
                             this.login(true);
                         })
                         .catch(() => { this.loginStore.busy = false; });

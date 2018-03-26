@@ -1,5 +1,4 @@
 const React = require('react');
-const languageStore = require('~/stores/language-store');
 const isDevEnv = require('~/helpers/is-dev-env');
 const config = require('~/config');
 const { setStringReplacement } = require('peerio-translator');
@@ -13,6 +12,9 @@ const { t } = require('peerio-translator');
 const SystemWarningDialog = require('~/ui/shared-components/SystemWarningDialog');
 const TwoFADialog = require('~/ui/shared-components/TwoFADialog');
 const Snackbar = require('~/ui/shared-components/Snackbar');
+const UpdateFailedDialog = require('./updater/UpdateFailedDialog');
+const InstallingUpdateDialog = require('./updater/InstallingUpdateDialog');
+const ReadyToInstallUpdateDialog = require('./updater/ReadyToInstallUpdateDialog');
 const routerStore = require('~/stores/router-store');
 const appState = require('~/stores/app-state');
 const appControl = require('~/helpers/app-control');
@@ -36,18 +38,13 @@ class Root extends React.Component {
         config.translator.stringReplacements.forEach((replacementObject) => {
             setStringReplacement(replacementObject.original, replacementObject.replacement);
         });
-        // UI language handling
-        languageStore.loadSavedLanguage();
         // events from main process
-        ipcRenderer.on('warning', (ev, key) => warnings.add(key));
-        ipcRenderer.on('update-will-restart', () => {
-            alert(t('title_updateWillRestart'));
-            ipcRenderer.send('install-update');
-        });
+        ipcRenderer.on('warning', (ev, key) => warnings.add(key)); // TODO: not needed anymore?
         ipcRenderer.on('console_log', (ev, arg) => console.log(arg));
         ipcRenderer.on('activate_dev_mode', () => {
             appState.devModeEnabled = true;
         });
+
         reaction(() => socket.connected, (connected) => {
             if (connected) {
                 this.showOfflineNotification = false;
@@ -96,6 +93,9 @@ class Root extends React.Component {
                 {this.snackbarVisible ? <Snackbar /> : null}
                 <SystemWarningDialog />
                 <TwoFADialog />
+                <UpdateFailedDialog />
+                <ReadyToInstallUpdateDialog />
+                <InstallingUpdateDialog />
                 <DropTarget />
             </div>
         );
