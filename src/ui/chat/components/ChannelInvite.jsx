@@ -62,12 +62,30 @@ class ChannelInvite extends React.Component {
         );
     }
 
+    get renderParticipants() {
+        const { channelName, participants } = chatInviteStore.activeInvite;
+        // if (participants.length > 2) {
+        return (
+            <div className="participant-list">
+                <span>
+                    <T k="title_whoIsAlreadyIn" className="hosted-by" tag="span" />&nbsp;
+                    <span className="host-username">{`#${channelName}`}</span>
+                </span>
+                <div className="avatars">
+                    {participants.map(participant => (
+                        <Avatar username={participant} clickable tooltip />
+                    ))}
+                </div>
+            </div>);
+        // }
+    }
+
     render() {
         if (chatInviteStore.activeInvite && chatInviteStore.activeInvite.declined) return this.declineControl;
         if (this.inProgress) return <ProgressBar mode="indeterminate" />;
         const { activeInvite } = chatInviteStore;
         if (!activeInvite) return null;
-        const { channelName, username } = activeInvite;
+        const { channelName, username, participants } = activeInvite;
         return (
             <div className={css('channel-invite', this.props.className)}>
                 <div className="invite-content">
@@ -117,6 +135,7 @@ class ChannelInvite extends React.Component {
                                 <Avatar username={username} clickable tooltip />
                             </div>
                         </div>
+                        {this.renderParticipants}
                     </div>
                     : null
                 }
