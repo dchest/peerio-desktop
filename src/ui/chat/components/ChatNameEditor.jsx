@@ -12,10 +12,6 @@ class ChatNameEditor extends React.Component {
         if (this.props.innerRef) this.props.innerRef(ref);
     }
 
-    componentDidMount() {
-        if (this.inputRef) this.inputRef.focus();
-    }
-
     acceptNameEdit = (val) => {
         try {
             if (this.props.purpose) {
