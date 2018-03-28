@@ -39,7 +39,7 @@ class ChannelSideBar extends React.Component {
         if (!chat) return;
         if (confirm(t('title_confirmChannelLeave'))) {
             try {
-                chat.leave();
+                chat.leave().then(chatStore.switchToFirstChat);
             } catch (err) {
                 console.error(err);
             }
