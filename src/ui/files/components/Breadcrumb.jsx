@@ -150,10 +150,12 @@ class Breadcrumb extends React.Component {
                 </div>
                 {!this.props.currentFolder.isRoot && !this.props.noActions &&
                     <FolderActions
+                        data-folderid={this.props.currentFolder.folderId}
                         moveable
                         onMove={this.props.onMove}
                         onDelete={this.props.onDelete}
                         onRename={this.props.onRename}
+                        position="top-right"
                     />
                 }
             </div>

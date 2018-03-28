@@ -7,7 +7,7 @@ const { Button, ProgressBar } = require('~/peer-ui');
 const DropTarget = require('./shared-components/DropTarget');
 const { ipcRenderer } = require('electron');
 const { socket, clientApp, warnings } = require('peerio-icebear');
-const { computed, reaction, observable } = require('mobx');
+const { computed, reaction, observable, when } = require('mobx');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
 const SystemWarningDialog = require('~/ui/shared-components/SystemWarningDialog');
@@ -15,6 +15,7 @@ const TwoFADialog = require('~/ui/shared-components/TwoFADialog');
 const Snackbar = require('~/ui/shared-components/Snackbar');
 const routerStore = require('~/stores/router-store');
 const appState = require('~/stores/app-state');
+const appControl = require('~/helpers/app-control');
 
 @observer
 class Root extends React.Component {
@@ -56,6 +57,8 @@ class Root extends React.Component {
                 this.showOfflineNotification = !socket.connected;
             }, 5000);
         }, { fireImmediately: true });
+
+        when(() => clientApp.clientSessionExpired, () => appControl.relaunch());
     }
 
     componentWillMount() {

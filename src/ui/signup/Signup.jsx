@@ -137,7 +137,7 @@ const config = require('~/config');
     };
 
     retreat = () => {
-        if (this.step === 1) {
+        if (this.step === 0 || this.step === 1) {
             this.navigateToLogin();
         } else if (this.step === 2) {
             this.navigateToProfile();
@@ -198,18 +198,27 @@ const config = require('~/config');
         return (
             <div className={css('signup', { show: this.show })}>
                 <SignupProgress step={step} count={steps.length - 1} title={this.title} />
-                <div className={step === 0 || step === 3 ? 'signup-welcome' : 'signup-content'} >
-                    {steps[this.step]()}
-                    {this.signupNav}
-                    {this.errorDialog}
-                    {step === 0 ?
-                        <T k="title_TOSRequestText" className="terms-smallprint">
-                            {{
-                                tosButton: text => (<Button onClick={TermsDialog.showDialog}
-                                    label={text}
-                                    theme="link" />)
-                            }}
-                        </T>
+                <div className="signup-content-container">
+                    <div className={step === 0 || step === 3 ? 'signup-welcome' : 'signup-content'} >
+                        {steps[this.step]()}
+                        {this.signupNav}
+                        {this.errorDialog}
+                        {step === 0 ?
+                            <T k="title_TOSRequestText" className="terms-smallprint">
+                                {{
+                                    tosButton: text => (<Button onClick={TermsDialog.showDialog}
+                                        label={text}
+                                        theme="link" />)
+                                }}
+                            </T>
+                            : null
+                        }
+                    </div>
+                    {step === 0 || step === 1
+                        ? <div className="back-to-login">
+                            <T k="title_alreadyHaveAccount" />&nbsp;
+                            <Button label={t('button_login')} theme="link" onClick={this.retreat} />
+                        </div>
                         : null
                     }
                 </div>

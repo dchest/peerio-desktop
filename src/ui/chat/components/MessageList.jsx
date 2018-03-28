@@ -4,10 +4,8 @@ const { observer } = require('mobx-react');
 const { Avatar, ProgressBar } = require('~/peer-ui');
 const T = require('~/ui/shared-components/T');
 const Message = require('./Message');
-const { chatStore, User, clientApp } = require('peerio-icebear');
+const { chatStore, clientApp } = require('peerio-icebear');
 const { t } = require('peerio-translator');
-const urls = require('~/config').translator.urlMap;
-const config = require('~/config');
 const IdentityVerificationNotice = require('~/ui/chat/components/IdentityVerificationNotice');
 
 @observer
@@ -216,12 +214,6 @@ class MessageList extends React.Component {
                         chatName: chat.name
                     }}
                 </T>
-                {config.disablePayments || User.current.hasActivePlans ? null
-                    : <div className="archive-link">
-                        {t('title_chatArchive')}
-                        &nbsp;<a href={urls.upgrade}>{t('button_upgradeForArchive')}</a>
-                    </div>
-                }
                 <IdentityVerificationNotice />
             </div>
         );

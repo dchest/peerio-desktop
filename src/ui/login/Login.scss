@@ -16,8 +16,7 @@
     input {
       box-shadow: $shadow-2;
       background-color: $input-light;
-      border-color: transparent;
-      border-width: 0 0 4px;
+      border-width: 0;
 
       &:hover {
         box-shadow: $shadow-8;
@@ -29,8 +28,15 @@
       }
     }
 
-    .error {
-      color: $text-light-primary;
+    &.has-error {
+      input {
+        border-bottom: 4px solid $red-error;
+      }
+
+      .error {
+        margin-top: $margin-tiny;
+        color: $text-light-primary;
+      }
     }
   }
 
@@ -43,10 +49,15 @@
     position: relative;
     margin-top: 40px;
 
+    input {
+      padding-right: 48px;
+    }
+
     .p-button {
       position: absolute;
-      right: 12px;
-      top: 12px;
+      right: 6px;
+      top: 50%;
+      margin-top: -16px; // half of icon height
     }
   }
 

@@ -15,7 +15,6 @@ const { ProgressBar } = require('~/peer-ui');
 
 @observer
 class ChannelInvite extends React.Component {
-    @observable declined = false;
     @observable inProgress = false;
 
     @action.bound async acceptInvite() {
@@ -32,8 +31,7 @@ class ChannelInvite extends React.Component {
     }
 
     @action.bound rejectInvite() {
-        this.declined = true;
-        setTimeout(() => chatInviteStore.rejectInvite(chatInviteStore.activeInvite.kegDbId), 1000);
+        chatInviteStore.rejectInvite(chatInviteStore.activeInvite.kegDbId);
     }
 
     toUpgrade() {
@@ -54,7 +52,7 @@ class ChannelInvite extends React.Component {
     }
 
     render() {
-        if (this.declined) return this.declineControl;
+        if (chatInviteStore.activeInvite && chatInviteStore.activeInvite.declined) return this.declineControl;
         if (this.inProgress) return <ProgressBar mode="indeterminate" />;
         const { activeInvite } = chatInviteStore;
         if (!activeInvite) return null;
@@ -70,11 +68,11 @@ class ChannelInvite extends React.Component {
 
                     {User.current.channelsLeft > 0
                         ? <div className="buttons">
-                            <Button label={t('button_nay')}
+                            <Button label={t('button_decline')}
                                 theme="affirmative secondary"
                                 onClick={this.rejectInvite}
                             />
-                            <Button label={t('button_aye')}
+                            <Button label={t('button_accept')}
                                 theme="affirmative"
                                 onClick={this.acceptInvite}
                             />

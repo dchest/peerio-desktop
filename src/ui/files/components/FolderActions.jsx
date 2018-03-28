@@ -9,7 +9,7 @@ class FolderActions extends React.Component {
             <Menu
                 className="item-actions"
                 icon="more_vert"
-                position="bottom-right"
+                position={this.props.position || 'bottom-right'}
                 onClick={this.props.onClick}
                 {...getDataProps(this.props)}
             >

@@ -1,6 +1,8 @@
 .message-view {
   .send-error-menu {
+    padding-right: 112px; // TODO: replace when Menu has more position options
     margin-left: $margin-default;
+    margin-right: auto;
 
     .p-button:hover {
       background-color: inherit;

@@ -93,6 +93,7 @@ const buildGlobalShortcuts = require('~/main-process/global-shortcuts');
 const applyMiscHooks = require('~/main-process/misc-hooks');
 const { saveWindowState, getSavedWindowState } = require('~/main-process/state-persistance');
 const setMainMenu = require('~/main-process/main-menu');
+const { isAppInDMG, handleLaunchFromDMG } = require('~/main-process/dmg');
 const updater = require('./main-process/updater');
 const config = require('~/config');
 
@@ -115,6 +116,10 @@ app.on('ready', async () => {
     buildGlobalShortcuts();
     setMainMenu();
     app.setAppUserModelId(config.appId);
+
+    if (await isAppInDMG()) {
+        await handleLaunchFromDMG();
+    }
 
     await config.FileStream.createTempCache();
 
@@ -202,7 +207,10 @@ app.on('ready', async () => {
     applyMiscHooks(mainWindow);
     buildContextMenu(mainWindow);
     devtools.onAppReady(mainWindow);
-    updater.start(mainWindow);
+
+    if (!(await isAppInDMG())) {
+        updater.start(mainWindow);
+    }
 });
 
 app.on('activate', () => {
