@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable, when } = require('mobx');
 const { observer } = require('mobx-react');
-const { chatStore, config, User } = require('peerio-icebear');
+const { chatStore, config } = require('peerio-icebear');
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
@@ -13,13 +13,13 @@ class NewChannel extends React.Component {
     @observable channelName = '';
     @observable purpose = '';
 
-    componentDidMount() {
-        if (this.isLimitReached) this.upgradeDialog.show();
-    }
+    // componentDidMount() {
+    //     if (this.isLimitReached) this.upgradeDialog.show();
+    // }
 
-    get isLimitReached() {
-        return User.current.channelsLeft === 0;
-    }
+    // get isLimitReached() {
+    //     return User.current.channelsLeft === 0;
+    // }
 
     handleAccept = () => {
         this.waiting = true;

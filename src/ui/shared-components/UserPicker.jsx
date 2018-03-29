@@ -1,5 +1,5 @@
 const React = require('react');
-const { observable, computed, when, transaction } = require('mobx');
+const { observable, computed, when } = require('mobx');
 const { observer } = require('mobx-react');
 const { Avatar, Button, Chip, Input, List, ListHeading, ListItem, MaterialIcon, ProgressBar } = require('~/peer-ui');
 const { t } = require('peerio-translator');
@@ -97,7 +97,6 @@ class UserPicker extends React.Component {
     // Don't use onKeyUp - text change fires earlier
     handleKeyDown = e => {
         if (e.key === 'Enter' && this.query !== '') {
-            // if we are in 1-1 DM selection and user hits enter
             this.tryAcceptUsername();
         }
         if (e.key === 'Backspace' && this.query === '' && this.selected.length > 0) {
@@ -129,16 +128,13 @@ class UserPicker extends React.Component {
     async tryAcceptUsername() {
         this.reset();
         const c = this.searchUsername(this.query);
+
         if (c === null || this.selected.find(s => s.username === this.query)) {
             return;
         }
 
         if (this.isExcluded(c)) {
             return;
-        }
-
-        if (this.props.limit !== 1) {
-            this.selected.push(c);
         }
 
         when(() => !c.loading, () => {
@@ -178,11 +174,9 @@ class UserPicker extends React.Component {
             if (this.props.limit === 1) {
                 this.selected.clear();
                 this.selected.push(c);
-                this.query = '';
                 this.accept();
                 return;
             }
-            this.query = '';
             if (this.isExcluded(c)) return;
             if (this.selected.find(i => i.username === c.username)) return;
             this.selected.push(c);
