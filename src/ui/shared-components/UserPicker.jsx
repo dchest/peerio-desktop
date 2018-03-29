@@ -20,7 +20,6 @@ class UserPicker extends React.Component {
     @observable foundContact;
     legacyContactError = false; // not observable bcs changes only with showNotFoundError
     @observable contactLoading = false;
-    @observable _searchUsernameTimeout = false;
 
     @computed get showSearchError() {
         return this.suggestInviteEmail || this.showNotFoundError || this.userAlreadyAdded;
@@ -85,12 +84,10 @@ class UserPicker extends React.Component {
         const newValLower = newVal.toLocaleLowerCase();
         if (this.props.limit === 1) {
             this.query = newValLower.trim();
-            this.searchUsernameTimeout(this.query);
             return;
         }
         if (newValLower.length > 1 && ', '.includes(newValLower[newValLower.length - 1])) {
             this.query = newValLower.substr(0, newValLower.length - 1).trim();
-            this.tryAcceptUsername();
             return;
         }
         this.query = newValLower.trim();
@@ -101,36 +98,12 @@ class UserPicker extends React.Component {
     handleKeyDown = e => {
         if (e.key === 'Enter' && this.query !== '') {
             // if we are in 1-1 DM selection and user hits enter
-            if (this.props.limit === 1) {
-                const c = this.foundContact || this.searchUsername(this.query);
-                // if we know for sure contact is there, then go to DM immediately
-                if (c && !c.loading && !c.notFound) {
-                    this.query = '';
-                    this.selected = [c];
-                    this.accept();
-                }
-                return;
-            }
             this.tryAcceptUsername();
         }
         if (e.key === 'Backspace' && this.query === '' && this.selected.length > 0) {
             this.selected.remove(this.selected[this.selected.length - 1]);
         }
     };
-
-    searchUsernameTimeout(q) {
-        if (this._searchUsernameTimeout) {
-            clearTimeout(this._searchUsernameTimeout);
-            this._searchUsernameTimeout = null;
-        }
-        if (!q) return;
-        this._searchUsernameTimeout = setTimeout(() => {
-            transaction(() => {
-                this._searchUsernameTimeout = null;
-                this.searchUsername(q);
-            });
-        }, 1000);
-    }
 
     searchUsername(q) {
         if (!q) return null;
@@ -159,11 +132,15 @@ class UserPicker extends React.Component {
         if (c === null || this.selected.find(s => s.username === this.query)) {
             return;
         }
-        this.query = '';
+
         if (this.isExcluded(c)) {
             return;
         }
-        this.selected.push(c);
+
+        if (this.props.limit !== 1) {
+            this.selected.push(c);
+        }
+
         when(() => !c.loading, () => {
             setTimeout(() => {
                 if (c.notFound) this.selected.remove(c);
@@ -311,7 +288,7 @@ class UserPicker extends React.Component {
                                                 theme="affirmative"
                                             />
                                         }
-                                        {(this.contactLoading || this._searchUsernameTimeout) &&
+                                        {this.contactLoading &&
                                             <ProgressBar type="circular" mode="indeterminate" theme="small" />
                                         }
                                     </div>
