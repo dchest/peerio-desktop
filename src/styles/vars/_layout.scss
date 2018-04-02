@@ -32,3 +32,22 @@ $background-pattern-size: 280px;
   background-image: url($background-pattern);
   background-size: $background-pattern-size;
 }
+
+/* Z-INDEX MASTER LIST
+  List of z-indices of elements that have a reasonable chance of interacting
+  (e.g. excludes ZeroChats, which has a lot of custom positioning of images but those don't show up anywhere else)
+
+   1  %notify (red dot on AppNav avatar + "Public Profile" settings tab)
+   1  ChatList pin
+   1  MemberSection action list (e.g. Add members)
+   2  AppNav
+   2  Dropdown
+   2  Status bar
+   2  FullCoverLoader
+   2  "Unread Messages" button in ChatList
+  10  tooltip
+  10  FileActions
+  90  Menu
+  98  Dialog
+  99  DropTarget
+*/
