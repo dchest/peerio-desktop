@@ -1,6 +1,6 @@
 const React = require('react');
 const { t } = require('peerio-translator');
-const { List, ListItem, Divider, Tooltip } = require('~/peer-ui');
+const { List, ListItem, Tooltip } = require('~/peer-ui');
 const { action } = require('mobx');
 const { observer } = require('mobx-react');
 const routerStore = require('~/stores/router-store');
@@ -53,7 +53,6 @@ class Contacts extends React.Component {
                                 caption={`${t('title_allContacts')} (${contactStore.contacts.length})`}
                                 className={css({ active: isAllActive })}
                                 onClick={this.toAll} />
-                            <Divider />
                             <ListItem leftIcon="person_add"
                                 caption={`${t('title_invitedContacts')} (${contactStore.invitedContacts.length})`}
                                 className={css({ active: isInvitedActive })}

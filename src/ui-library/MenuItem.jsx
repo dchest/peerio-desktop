@@ -48,6 +48,7 @@ class MenuItem extends React.Component {
                             key={`icon-${customIcon}`}
                             icon={customIcon}
                             className="icon"
+                            hover
                         />
                         : null
                     )

@@ -1,6 +1,6 @@
 .url-consent {
   .url-grey {
-    color: $text-dark-secondary;
+    color: $text-dark-inactive;
   }
 
   .url-grey,
@@ -62,16 +62,16 @@
 
     .material-icons {
       font-size: 16px;
-      color: $green-affirmative;
+      color: $color-confirmation;
     }
 
     .text {
       margin-left: $margin-small;
-      color: $text-dark-secondary;
+      color: $text-dark-inactive;
 
       a {
         text-decoration: underline;
-        color: $text-dark-secondary;
+        color: $text-dark-inactive;
       }
     }
   }

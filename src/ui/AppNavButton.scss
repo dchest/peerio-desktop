@@ -11,17 +11,21 @@
 
     .look-at-me {
       @extend %hint-error-label;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: absolute;
       height: 24px;
       width: 24px;
-      right: 2px;
-      top: 2px;
-      line-height: 20px;
-      text-align: center;
-      background: $red-error;
-      border: 2px solid $blue;
+      right: 8px;
+      top: 8px;
+      background: $color-error;
+      border: 2px solid $darkteal;
       border-radius: 12px;
+    }
+
+    &.active .look-at-me {
+      border-color: $darkblue;
     }
 
     .p-button {

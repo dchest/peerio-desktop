@@ -39,6 +39,10 @@ class Preferences extends React.Component {
         uiStore.prefs.messageDesktopNotificationsEnabled = ev.target.checked;
     }
 
+    onInviteDesktopNotificationsChanged(ev) {
+        uiStore.prefs.inviteDesktopNotificationsEnabled = ev.target.checked;
+    }
+
     onUnreadChatSorting(ev) {
         chatStore.unreadChatsAlwaysOnTop = ev.target.checked;
         User.current.saveSettings();
@@ -106,6 +110,9 @@ class Preferences extends React.Component {
                         label={t('title_mentionDesktopNotificationsMessage')}
                         disabled={this.mentionDesktopNotificationsSwitchDisabled}
                         onChange={this.onMentionDesktopNotificationsChanged} />
+                    <Switch checked={uiStore.prefs.inviteDesktopNotificationsEnabled}
+                        label={t('title_inviteDesktopNotificationsMessage')}
+                        onChange={this.onInviteDesktopNotificationsChanged} />
                 </section>
                 {/* <section className="section-divider prefs-files">
                     <div className="title">{t('title_files')}</div>

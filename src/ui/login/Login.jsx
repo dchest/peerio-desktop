@@ -174,7 +174,7 @@ class LoginStore extends OrderedFormStore {
             <div className="app-root">
                 <FullCoverLoader show={this.loginStore.busy} />
                 <div className="login">
-                    <img alt="Peerio logo" className="logo" src="static/img/logo-with-tag.png" />
+                    <img alt="Peerio logo" className="logo" src="static/img/logo-mark.svg" />
                     {this.loginStore.lastAuthenticatedUser ? this.getWelcomeBlock() : ''}
                     <div className="login-form">
                         <div className={css('title', { banish: this.loginStore.lastAuthenticatedUser })}>
@@ -187,7 +187,8 @@ class LoginStore extends OrderedFormStore {
                             store={this.loginStore}
                             validator={validators.usernameLogin}
                             onKeyPress={this.handleKeyPress}
-                            className={css({ banish: this.loginStore.lastAuthenticatedUser })} />
+                            className={css({ banish: this.loginStore.lastAuthenticatedUser })}
+                            theme="dark" />
                         <div className="password">
                             <ValidatedInput type={this.loginStore.passwordVisible ? 'text' : 'password'}
                                 label={t('title_AccountKey')}
@@ -196,9 +197,11 @@ class LoginStore extends OrderedFormStore {
                                 validator={validators.stringExists}
                                 name="passcodeOrPassphrase"
                                 onKeyPress={this.handleKeyPress}
-                                ref={this.onAKRef} />
+                                ref={this.onAKRef}
+                                theme="dark" />
                             <Button
-                                icon={this.loginStore.passwordVisible ? 'visibility_off' : 'visibility'}
+                                icon="visibility"
+                                active={this.loginStore.passwordVisible}
                                 tooltip={this.loginStore.passwordVisible ?
                                     t('title_hideAccountKey') : t('title_showAccountKey')}
                                 tooltipPosition="right"
@@ -215,7 +218,7 @@ class LoginStore extends OrderedFormStore {
                         label={t('button_login')}
                         onClick={this.onLoginClick}
                         disabled={this.loginStore.hasErrors}
-                        theme="inverted"
+                        theme="affirmative"
                     />
 
                     <div>

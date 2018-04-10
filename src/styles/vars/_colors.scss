@@ -1,18 +1,16 @@
-//// COLOR VARIABLES
-// main colours (pulled either from _branding or whitelabel)
-$blue: $color-brand-primary;
-$green: $color-brand-secondary;
+//// COLOR VARIABLES (pulled either from _branding or whitelabel)
+// base UI colors
+$darkblue: $color-ui-1;   // 040b40
+$darkteal: $color-ui-2;   // 004e69
 
-// secondary colours
-$orange: $color-accent;
-$lightblue: #32b0e3;
-$lightblue-hover: rgba($lightblue, .38);
-$gold: gold;
+// brand colours
+$peerio-blue: $color-brand-1;    // 408cff
+$peerio-purple: $color-brand-2;  // 5461cc
+$peerio-teal: $color-brand-3;    // 02cedb
 
-// Status (warning/error/etc)
-$red-error: rgb(208, 2, 27);
-$green-affirmative: rgb(44, 207, 132);
-$yellow-warning: rgb(244, 203, 66); // only used once
+// status and accent colours
+$yellow: $color-accent-1; // fdc700
+$red: $color-accent-2;    // e90162
 
 // for use with dark backgrounds
 $white: rgb(255, 255, 255);
@@ -23,39 +21,41 @@ $white-12: rgba($white, .12);
 
 // for use with light backgrounds
 $black: rgba(0, 0, 0, .87);
-$black-50: rgba(0, 0, 0, .54);
+$black-54: rgba(0, 0, 0, .54);
 $black-38: rgba(0, 0, 0, .38);
 $black-12: rgba(0, 0, 0, .12);
 $black-06: rgba(0, 0, 0, .06);
 $black-03: rgba(0, 0, 0, .03);
-$black-01: rgba(0, 0, 0, .01);
 
 //// BACKGROUNDS
 // Background colors
-$background-faintblue: rgba($blue, .12);
-$background-light-dropdown: $white-12;
-$background-overlay: rgba(0, 0, 0, .5);
 $background-root: $white;
+$background-hover-default: rgba($darkblue, .05);
+$background-hover-default-solid: #f2f2f5;
+$background-selected: rgba($peerio-blue, .15);
+$background-neutral: $black-12;
+$background-overlay: rgba($darkblue, .3);
 
 //// FONT COLORS
 // Text
-$text-dark-primary: $black;
-$text-dark-secondary: $black-50;
+$text-dark-default: $black;
+$text-dark-secondary: $black-54;
+$text-dark-inactive: $black-54;
 $text-dark-hint: $black-38;
-$text-light-primary: $white;
-$text-light-secondary: $white-70;
+$text-light-default: $white;
+$text-light-inactive: $white-70;
 $text-light-disabled: $white-38;
 
 // Icons
-$icon-dark-active: $black-50;
+$icon-dark-active: $black-54;
 $icon-dark-inactive: $black-38;
 $icon-light-active: $white;
 $icon-light-inactive: $white-70;
 
 //// DIVIDERS
-$divider-dark: $black-12;
-$divider-light: $white-12;
+$divider-dark: rgba($darkblue, .12);
+$divider-accent: $peerio-teal;
 
 //// INPUTS
-$input-light: $white-70;
+$input-inactive: $white-70;
 $input-border: $black-38;

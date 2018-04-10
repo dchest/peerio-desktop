@@ -16,9 +16,9 @@
     .room-invite-notification-icon {
       padding: 1px $padding-small 2px;
       font-size: 11px;
-      font-weight: $font-weight-regular;
-      color: $text-light-primary;
-      background-color: $green-affirmative;
+      font-weight: $font-weight-semibold;
+      color: $darkblue;
+      background-color: $peerio-blue;
       border-radius: 5px;
     }
   }
@@ -46,20 +46,11 @@
         width: 16px;
         left: 8px;
         top: 0;
-        background-image: url('./static/custom-icons/pin-on.svg');
+        opacity: .7;
+        background-image: url('./static/custom-icons/pin-on-white.svg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100%;
-      }
-
-      &.active::before {
-        background-image: url('./static/custom-icons/pin-on-white.svg');
-      }
-    }
-
-    &.new-dm-list-entry {
-      .left-icon span {
-        margin-right: $margin-default;
       }
     }
 
@@ -85,8 +76,8 @@
     bottom: 0;
     margin-left: $margin-small;
 
-    color: $text-light-primary;
-    background-color: $lightblue;
+    color: $peerio-blue;
+    background-color: $background-root;
 
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -95,7 +86,7 @@
 
     .material-icons {
       margin-left: $margin-small;
-      color: $text-light-primary;
+      color: $peerio-blue;
     }
 
     &.top {

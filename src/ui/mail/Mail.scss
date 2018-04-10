@@ -2,7 +2,7 @@
   @extend %flex-row;
   position: relative;
   width: 100%;
-  color: $text-dark-secondary;
+  color: $text-dark-inactive;
   background-color: $white;
 
   // MAIL ITEM LIST
@@ -12,7 +12,7 @@
     @extend %flex-col;
     height: 100%;
     width: $width-mail-list;
-    background-color: $background-faintblue;
+    background-color: $background-selected;
     border-right: 1px solid $divider-dark;
   }
 

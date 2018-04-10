@@ -18,6 +18,7 @@ const Tooltip = require('./Tooltip');
 
     disabled        bool
     selected        bool        makes button blue (e.g. radio buttons, checkboxes)
+    active          bool        make button teal (e.g. sidebar toggle)
 
     onClick         function
     onMouseEnter    function
@@ -28,14 +29,13 @@ const Tooltip = require('./Tooltip');
     tooltipSize     string
 
     theme           string      theme keywords to apply various styles other than default
-                                (no keyword, default theme: $blue text, transparent background)
-                                * primary: font color $text-dark-primary
-                                * secondary: font color $text-dark-secondary (for secondary action e.g. dialog "cancel")
-                                * inverted: font color $text-light-primary
+                                (no keyword, default theme: $peerio-blue text, transparent background)
+                                * primary: font color $text-dark-default
+                                * secondary: font color $text-dark-inactive (for secondary action e.g. dialog "cancel")
+                                * inverted: font color $text-light-default
                                 * affirmative: green "go" style
 
                                 * small: collapses padding
-                                * rounded: more rounded borders
                                 * link: style button as link (look like <a>)
 
                                 * no-hover: remove hover effects
@@ -52,7 +52,8 @@ class Button extends React.Component {
                 {
                     icon: !this.props.label && (this.props.icon || this.props.customIcon),
                     'icon-and-label': this.props.label && (this.props.icon || this.props.customIcon),
-                    selected: this.props.selected
+                    selected: this.props.selected,
+                    active: this.props.active
                 }
             )
         );

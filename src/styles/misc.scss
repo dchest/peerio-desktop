@@ -5,13 +5,13 @@
   height: 10px;
   width: 10px;
   right: 0;
-  background: $red-error;
+  background: $color-error;
   border-radius: 10px;
 }
 
 .logo {
-  width: 300px;
-  margin: 64px 0 48px;
+  width: 150px;
+  margin-bottom: $margin-large;
 }
 
 %reverse-icon {
@@ -46,17 +46,6 @@ ul {
   filter: blur(5px);
 }
 
-@keyframes gradient {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
 @keyframes pulse-scale {
   0%,
   100% {
@@ -88,19 +77,6 @@ ul {
 }
 
 // BUTTONS
-.button-gradient {
-  line-height: 34px;
-  background-image: linear-gradient(to right, rgba($blue, .5), rgba($green, .75));
-  border: 2px solid $white-70 !important;
-  border-color: $white-70;
-  border-radius: 4px;
-
-  &:hover {
-    background-image: $gradient-to-right !important;
-    border: 1px solid $white;
-  }
-}
-
 .clickable {
   cursor: pointer;
 }

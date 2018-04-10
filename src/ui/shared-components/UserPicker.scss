@@ -13,7 +13,7 @@ $userlist-maxwidth: 608px; // $userpicker-maxwidth - $userpicker-margin-large
     @extend %flex-grow-0;
     @extend %flex-shrink-0;
     width: 256px;
-    background-color: $background-faintblue;
+    background-color: $background-selected;
 
     ul {
       overflow-y: auto;
@@ -63,10 +63,10 @@ $userlist-maxwidth: 608px; // $userpicker-maxwidth - $userpicker-margin-large
     }
 
     &.warning {
-      background-color: rgba($red-error, .25);
+      background-color: rgba($color-error, .25);
 
       .right .material-icons {
-        color: $red-error;
+        color: $color-error;
       }
     }
   }
@@ -83,7 +83,7 @@ $userlist-maxwidth: 608px; // $userpicker-maxwidth - $userpicker-margin-large
 
   .user-search-error-container {
     padding-left: $userpicker-margin-large;
-    color: $text-dark-secondary;
+    color: $text-dark-inactive;
   }
 
   .user-search-error {
@@ -129,7 +129,7 @@ $userlist-maxwidth: 608px; // $userpicker-maxwidth - $userpicker-margin-large
       margin-top: $margin-small;
       font-size: 14px;
       font-weight: $font-weight-regular;
-      color: $text-dark-secondary;
+      color: $text-dark-inactive;
     }
   }
 

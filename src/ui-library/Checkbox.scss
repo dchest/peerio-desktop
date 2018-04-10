@@ -14,6 +14,10 @@
       width: 100%;
       opacity: 0;
     }
+
+    &:hover .material-icons {
+      color: $color-affirmative;
+    }
   }
 
   .p-checkbox-label {

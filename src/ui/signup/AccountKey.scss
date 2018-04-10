@@ -26,9 +26,9 @@
     margin-top: auto;
     margin-bottom: auto;
     transition: 150ms;
-    color: $text-light-primary !important;
+    color: $text-light-default !important;
     box-shadow: none;
-    background-color: $blue !important;
+    background-color: $peerio-blue !important;
     border-radius: 4px;
 
     &:hover {
@@ -36,7 +36,7 @@
     }
 
     .material-icons {
-      color: $text-light-primary;
+      color: $text-light-default;
     }
   }
 }

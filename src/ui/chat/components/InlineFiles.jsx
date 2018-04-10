@@ -194,7 +194,13 @@ class InlineFile extends React.Component {
                         options={this.radioOptions}
                     />
                     <div className="buttons-container">
-                        <Button className="notnow" onClick={this.onDismiss}>{t('button_notNow')}</Button>
+                        <Button
+                            className="notnow"
+                            onClick={this.onDismiss}
+                            theme="secondary"
+                        >
+                            {t('button_notNow')}
+                        </Button>
                         <Button className="save" onClick={this.onSubmitConsent}>{t('button_save')}</Button>
                     </div>
                 </div>

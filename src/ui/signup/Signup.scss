@@ -1,10 +1,9 @@
 .signup {
   @extend %flex-col;
-  @extend %background-pattern;
   align-items: center;
   height: 100vh;
   width: 100vw;
-  transition: 350ms opcaity $transition-easing-default;
+  transition: 350ms opacity $transition-easing-default;
   opacity: 0;
 
   .signup-content-container {
@@ -20,7 +19,7 @@
     @extend %flex-col;
     @extend %flex-align-center;
     height: 100%;
-    background: #eaf8f9; //TODO: create var - Paul
+    background: $background-root;
     border-radius: 4px;
 
     p {
@@ -47,7 +46,7 @@
     align-items: baseline;
     margin-top: $margin-tiny;
     font-weight: $font-weight-semibold;
-    color: $text-light-primary;
+    color: $text-light-default;
   }
 
   .private,
@@ -133,7 +132,7 @@
 
     &.has-error {
       input {
-        border-color: $red-error;
+        border-color: $color-error;
       }
 
       .error {

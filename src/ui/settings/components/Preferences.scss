@@ -7,7 +7,7 @@ $pref-width: 480px;
 
   .subheading {
     margin-bottom: $margin-large;
-    color: $text-dark-secondary;
+    color: $text-dark-inactive;
   }
 
   .narrow {
@@ -16,7 +16,7 @@ $pref-width: 480px;
 
   .smalltext {
     font-size: 12px;
-    color: $text-dark-secondary;
+    color: $text-dark-inactive;
   }
 
   .prefs-files {
@@ -32,12 +32,12 @@ $pref-width: 480px;
       span {
         word-break: break-all;
         word-wrap: break-word;
-        color: $text-dark-secondary;
+        color: $text-dark-inactive;
       }
 
       button {
         margin-left: $margin-default;
-        color: $blue;
+        color: $peerio-blue;
       }
     }
   }

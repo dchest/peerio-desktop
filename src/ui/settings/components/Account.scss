@@ -23,10 +23,10 @@
       margin-top: auto;
 
       .p-button {
-        color: $red-error;
+        color: $color-error;
 
         &:hover {
-          background-color: rgba($red-error, .2);
+          background-color: rgba($color-error, .2);
         }
       }
     }

@@ -6,7 +6,7 @@
 
   .starred,
   .starred .material-icons {
-    color: $gold;
+    color: $yellow;
   }
 }
 
@@ -109,7 +109,6 @@
 
   .message-toolbar-inner {
     @extend %flex-col;
-    width: '90%';
   }
 
   .title {
@@ -119,7 +118,7 @@
     overflow: hidden;
     font-size: 20px;
     font-weight: $font-weight-bold;
-    color: $text-dark-primary;
+    color: $text-dark-default;
 
     .name-editor {
       height: 24px;
@@ -139,8 +138,8 @@
         line-height: 20px;
         font-size: 14px;
         font-weight: $font-weight-bold;
-        color: $text-dark-secondary;
-        border: 1px solid rgba($blue, .54);
+        color: $text-dark-inactive;
+        border: 1px solid rgba($peerio-blue, .54);
         border-radius: 4px;
       }
     }

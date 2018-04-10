@@ -10,7 +10,7 @@
     margin: 0 -7px;
     transition: 150ms;
     background-color: $background-root;
-    border: 2px solid $green-affirmative;
+    border: 2px solid $color-confirmation;
     border-radius: 20px;
 
     > span:last-child {
@@ -18,7 +18,7 @@
     }
 
     &:hover {
-      border-color: $red-error;
+      border-color: $color-error;
 
       > span:last-child {
         display: initial;
@@ -29,7 +29,7 @@
       }
 
       .material-icons {
-        color: $red-error;
+        color: $color-error;
       }
     }
   }

@@ -16,8 +16,8 @@
     background-color: $background-root;
     border-top: 1px solid $divider-dark;
 
-    .thumbs-up:not([disabled]) .material-icons {
-      color: $blue;
+    .thumbs-up .material-icons {
+      color: $color-affirmative;
     }
   }
 

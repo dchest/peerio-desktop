@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: center;
   height: 36px;
+  min-width: 90px;
   padding: 0 $padding-default;
   vertical-align: middle;
   font-family: $font-stack;
@@ -13,11 +14,11 @@
   transition: background-color 150ms;
 
   // Default "primary" theme
-  color: $blue;
+  color: $peerio-blue;
   box-shadow: none;
   background-color: transparent;
   border: 0;
-  border-radius: 4px;
+  border-radius: 24px;
 
   > span {
     white-space: nowrap;
@@ -28,8 +29,7 @@
   }
 
   &:hover {
-    // box-shadow: $shadow-8; TODO: may add box-shadow on hover later, pending design
-    background-color: rgba(44, 149, 207, .2);
+    background-color: $background-selected;
   }
 
   &:active,
@@ -48,18 +48,18 @@
 
   // "Primary" theme
   &.primary {
-    color: $text-dark-primary;
+    color: $text-dark-default;
   }
 
   // "Secondary" theme
   // e.g. cancel button in a dialog
   &.secondary {
-    color: $text-dark-secondary;
+    color: $text-dark-inactive;
   }
 
   // "Inverted" theme
   &.inverted {
-    color: $text-light-primary;
+    color: $text-light-default;
 
     &:disabled {
       color: $text-light-disabled;
@@ -68,20 +68,18 @@
 
   // "Affirmative" theme
   &.affirmative {
-    min-width: 90px;
-    padding: 0 24px;
-    color: $text-light-primary;
-    background-color: $green-affirmative;
-    border-radius: 24px;
+    color: $text-light-default;
+    background-color: $color-affirmative;
 
     &.secondary {
-      color: $green-affirmative;
+      color: $color-affirmative;
       background-color: $white;
-      border: 1px solid $green-affirmative;
+      border: 1px solid $color-affirmative;
     }
 
     &:disabled {
-      background-color: #f0f0f0;
+      color: $text-light-disabled;
+      background-color: transparent;
     }
   }
 
@@ -89,10 +87,20 @@
   &.icon {
     height: 36px;
     width: 36px;
+    min-width: 0;
+    padding: 0;
     border-radius: 100%;
 
     .material-icons {
       color: $icon-dark-active;
+    }
+
+    &:hover {
+      background-color: transparent;
+
+      .material-icons {
+        color: $color-affirmative;
+      }
     }
 
     &:disabled .material-icons {
@@ -115,6 +123,7 @@
   &.small {
     height: auto;
     width: auto;
+    min-width: 0;
     padding: 0;
 
     &:hover {
@@ -123,19 +132,21 @@
     }
   }
 
-  // "Rounded" theme
-  &.rounded {
-    min-width: 90px;
-    padding: 0 24px;
-    border-radius: 24px;
+  // "Active" theme, e.g. sidebar toggle, show/hide passphrase
+  &.active {
+    color: $peerio-teal;
+
+    .material-icons {
+      color: $peerio-teal;
+    }
   }
 
   // "Selected" theme, e.g. used for some radio buttons
   &.selected {
-    color: $blue;
+    color: $peerio-blue;
 
     .material-icons {
-      color: $blue;
+      color: $peerio-blue;
     }
   }
 
@@ -144,6 +155,7 @@
     display: inline;
     height: auto;
     width: auto;
+    min-width: 0;
     padding: 0;
     vertical-align: baseline;
     font-size: inherit;

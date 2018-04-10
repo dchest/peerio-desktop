@@ -5,7 +5,7 @@
   // transition: width 300ms $transition-easing-ease-in;
   width: 0;
   overflow: hidden;
-  background: $black-01;
+  background: $background-hover-default;
 
   .title {
     height: 48px;
@@ -104,8 +104,8 @@
     margin-left: $margin-small;
     line-height: 18px;
     font-size: 11px;
-    color: $text-light-primary;
-    background-color: #757575;
+    color: $text-dark-secondary;
+    background-color: $background-neutral;
     border-radius: 4px;
   }
 }

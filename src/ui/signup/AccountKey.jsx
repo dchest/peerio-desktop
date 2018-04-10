@@ -48,7 +48,7 @@ const { warnings } = require('peerio-icebear');
                         <Button icon="content_copy"
                             tooltip={t('title_copy')}
                             onClick={this.copyPassphrase}
-                            theme="no-hover"
+                            theme="no-hover active"
                         />
                     </div>
                 </div>

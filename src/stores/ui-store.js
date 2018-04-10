@@ -40,6 +40,7 @@ class UIStore {
         errorSoundsEnabled: true,
         messageDesktopNotificationsEnabled: true,
         mentionDesktopNotificationsEnabled: false,
+        inviteDesktopNotificationsEnabled: true,
         last2FATrustDeviceSetting: false,
         chatSideBarIsOpen: true,
         limitInlineImageSize: true, // will use config.chat.inlineImageSizeLimit

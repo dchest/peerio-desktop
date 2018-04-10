@@ -1,4 +1,5 @@
 const React = require('react');
+const css = require('classnames');
 const Tooltip = require('./Tooltip');
 
 /*
@@ -9,6 +10,8 @@ const Tooltip = require('./Tooltip');
 
     tooltip         string
     tooltipPosition string
+
+    active          bool        default false. set to true to enable 'active' style (e.g. $peerio-teal)
     ----------------------------------------
 
     TODO: size (rarely deviates from 24px, currently handled at CSS level)
@@ -16,12 +19,12 @@ const Tooltip = require('./Tooltip');
 
 class MaterialIcon extends React.Component {
     render() {
-        const classNames = this.props.className
-            ? `material-icons ${this.props.className}`
-            : 'material-icons';
-
         return (
-            <span className={classNames}>
+            <span className={css(
+                'material-icons',
+                this.props.className,
+                { active: this.props.active }
+            )}>
                 {this.props.icon}
                 {this.props.tooltip
                     ? <Tooltip text={this.props.tooltip}
