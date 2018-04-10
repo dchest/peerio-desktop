@@ -19,16 +19,7 @@ class ChannelInvite extends React.Component {
 
     componentDidMount() {
         this.disposer = reaction(() => chatInviteStore.received.length, () => {
-            let activeExists = false;
-            chatInviteStore.received.forEach(invite => {
-                if (invite.kegDbId === chatInviteStore.activeInvite.kegDbId) {
-                    activeExists = true;
-                }
-            });
-
-            if (!activeExists) {
-                chatInviteStore.activeInvite = false;
-            }
+            chatInviteStore.activeInviteExistenceCheck();
         });
     }
 
@@ -72,10 +63,43 @@ class ChannelInvite extends React.Component {
 
     render() {
         if (chatInviteStore.activeInvite && chatInviteStore.activeInvite.declined) return this.declineControl;
+
         if (this.inProgress) return <ProgressBar mode="indeterminate" />;
+
         const { activeInvite } = chatInviteStore;
-        if (!activeInvite) return null;
         const { channelName, username } = activeInvite;
+
+        if (activeInvite) {
+            return (
+                <div className={css('channel-invite', 'channel-invite-revoked', this.props.className)}>
+                    <div className="invite-content">
+                        <div className="emoji-double emojione-32-travel _1f686" alt="🚆" title=":train:" />
+                        <div className="text">
+                            <T k="title_roomInviteRemoved">{{ roomName: channelName }}</T>
+                        </div>
+                        <div className="buttons">
+                            <Button label={t('button_dismiss')}
+                                theme="affirmative secondary"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="participants">
+                        <Divider />
+                        <div className="participant-list">
+                            <span>
+                                <T k="title_hostedBy" className="hosted-by" tag="span" />&nbsp;
+                                <span className="host-username">{contactStore.getContact(username).fullName}</span>
+                            </span>
+                            <div className="avatars">
+                                <Avatar username={username} clickable tooltip />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className={css('channel-invite', this.props.className)}>
                 <div className="invite-content">

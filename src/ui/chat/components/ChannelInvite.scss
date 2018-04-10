@@ -16,11 +16,19 @@
   .invite-content {
     margin-top: 256px;
 
-    ._1f389 {
+    .emoji-double {
       height: 48px;
       width: 48px;
-      background-position: -99px 0;
-      background-size: 691.5px 642px;
+
+      &._1f389 {
+        background-position: -99px 0;
+        background-size: 691.5px 642px;
+      }
+
+      &._1f686 {
+        background-position: -297px -346.5px;
+        background-size: 543px 543px;
+      }
     }
 
     .text {
@@ -95,5 +103,15 @@
         margin-top: $margin-small;
       }
     }
+  }
+}
+
+.channel-invite-revoked {
+  .invite-content .text {
+    margin-top: $margin-default;
+  }
+
+  .participant-list {
+    opacity: .5;
   }
 }
