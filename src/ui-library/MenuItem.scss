@@ -1,4 +1,11 @@
 .p-menu-item {
+  &:hover,
+  &.active {
+    .material-icons {
+      color: $peerio-blue;
+    }
+  }
+
   &.disabled {
     cursor: default;
     pointer-events: none;

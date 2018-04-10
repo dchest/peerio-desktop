@@ -59,7 +59,10 @@ let desktopNotificationsStarted = false;
 function startDesktopNotifications() {
     if (desktopNotificationsStarted) return;
     desktopNotificationsStarted = true;
-    chatStore.events.on(chatStore.EVENT_TYPES.messagesReceived, notificationFactory.send);
+    chatStore.events.on(chatStore.EVENT_TYPES.messagesReceived,
+        notificationFactory.sendMessageNotification);
+    chatStore.events.on(chatStore.EVENT_TYPES.invitedToChannel,
+        notificationFactory.sendInviteNotification);
 }
 
 @observer

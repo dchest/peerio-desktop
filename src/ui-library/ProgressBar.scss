@@ -19,7 +19,7 @@
     height: 4px;
     width: 100%;
     overflow: hidden;
-    background-color: #eee;
+    background-color: #d9d9d9;
 
     .determinate {
       position: absolute;
@@ -27,11 +27,11 @@
       bottom: 0;
       animation: pulse 1.5s linear infinite;
       transition: width 200ms;
-      background-color: $blue;
+      background-color: $color-confirmation;
     }
 
     .indeterminate {
-      background-color: $blue;
+      background-color: $color-confirmation;
 
       &::before {
         will-change: left, right;
@@ -110,19 +110,19 @@
     @keyframes color {
       100%,
       0% {
-        background-color: $red-error;
+        background-color: $color-error;
       }
 
       25% {
-        background-color: $blue;
+        background-color: $peerio-blue;
       }
 
       50% {
-        background-color: $green;
+        background-color: $color-confirmation;
       }
 
       75% {
-        background-color: $yellow-warning;
+        background-color: $color-warning;
       }
     }
   }
@@ -147,7 +147,7 @@
       r: 20;
       animation: dash 1.5s ease-in-out infinite;
       fill: none;
-      stroke: $blue;
+      stroke: $color-confirmation;
     }
 
     &.multicolor {
@@ -183,19 +183,19 @@
     @keyframes color {
       100%,
       0% {
-        stroke: $red-error;
+        stroke: $color-error;
       }
 
       25% {
-        stroke: $blue;
+        stroke: $peerio-blue;
       }
 
       50% {
-        stroke: $green;
+        stroke: $color-confirmation;
       }
 
       75% {
-        stroke: $yellow-warning;
+        stroke: $color-warning;
       }
     }
 

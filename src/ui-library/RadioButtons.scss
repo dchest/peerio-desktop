@@ -9,5 +9,9 @@
     .label {
       margin-left: $margin-default;
     }
+
+    .material-icons:hover {
+      color: $color-affirmative;
+    }
   }
 }

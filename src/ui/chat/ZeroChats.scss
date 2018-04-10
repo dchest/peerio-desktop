@@ -29,7 +29,7 @@ $zero-chats-break: 984px;
 
     .welcome-title {
       @extend %display-1;
-      color: $blue;
+      color: $peerio-blue;
     }
 
     .subtitle {
@@ -58,7 +58,7 @@ $zero-chats-break: 984px;
         .description-large {
           @extend %title;
           margin: $margin-large 0;
-          color: $text-dark-secondary;
+          color: $text-dark-inactive;
         }
 
         .description-small {
@@ -78,7 +78,7 @@ $zero-chats-break: 984px;
       .already-invited-text {
         @extend %hint-error-label;
         font-weight: $font-weight-semibold;
-        color: $text-dark-secondary;
+        color: $text-dark-inactive;
       }
 
       .room-invites-button {
@@ -120,7 +120,7 @@ $zero-chats-break: 984px;
 
     .chat-item-title {
       @extend %display-1;
-      color: $blue;
+      color: $peerio-blue;
       border: none;
     }
   }

@@ -26,7 +26,7 @@ class RadioButtons extends React.Component {
                 <li key={options[i].value}>
                     <span
                         className={value === options[i].value
-                            ? 'material-icons clickable button-selected'
+                            ? 'material-icons clickable selected'
                             : 'material-icons clickable'
                         }
                         data-value={options[i].value}

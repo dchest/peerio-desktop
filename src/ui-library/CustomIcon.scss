@@ -7,4 +7,31 @@
     height: 16px;
     width: 16px;
   }
+
+  // Hover state
+  img.default {
+    opacity: .54;
+  }
+
+  img.hover {
+    display: none;
+    opacity: 1;
+  }
+
+  &.hovered {
+    img.default {
+      display: none;
+    }
+
+    img.hover {
+      display: block;
+    }
+  }
+
+  // Active state
+  &.active {
+    img.default {
+      opacity: 1;
+    }
+  }
 }

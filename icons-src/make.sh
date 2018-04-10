@@ -37,3 +37,6 @@ cp $BASE_DIR/icon.iconset/icon_32x32@2x.png $LINUX_DIR/64x64.png
 cp $BASE_DIR/icon.iconset/icon_128x128.png $LINUX_DIR/128x128.png
 cp $BASE_DIR/icon.iconset/icon_256x256.png $LINUX_DIR/256x256.png
 cp $BASE_DIR/icon.iconset/icon_512x512.png $LINUX_DIR/512x512.png
+
+# Some other icon
+cp $BASE_DIR/icon.iconset/icon_512x512@2x.png $BASE_DIR/../dist-assets/icon.png

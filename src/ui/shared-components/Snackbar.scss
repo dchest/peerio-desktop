@@ -37,14 +37,14 @@ $snackbar-min-width: 288px;
   min-width: $snackbar-min-width;
   top: 0;
   padding: 0 $padding-default 0 24px;
-  color: $text-light-primary;
-  background: #555;
+  color: $text-light-default;
+  background: $darkblue;
   border-radius: 2px;
 
   .p-button:not([disabled]) {
     min-width: 64px;
     padding: 0 8px;
     margin-left: 40px;
-    color: $blue;
+    color: $peerio-blue;
   }
 }

@@ -27,7 +27,7 @@
 
       &.unconfirmed {
         .legend {
-          color: $red-error;
+          color: $color-error;
         }
       }
     }
@@ -87,7 +87,7 @@
         @extend %flex-shrink-0;
         @extend %flex-align-start;
         height: 64px;
-        color: $text-light-primary;
+        color: $text-light-default;
       }
 
       &-display-name {
@@ -105,7 +105,7 @@
         @extend %flex-justify-center;
         @extend %flex-grow-1;
         font-size: 112px;
-        color: $text-light-primary;
+        color: $text-light-default;
       }
 
       .card-footer {
@@ -123,7 +123,7 @@
         }
 
         .p-button:hover {
-          background-color: $background-light-dropdown;
+          background-color: $white-12;
 
           .material-icons {
             color: $icon-light-active;

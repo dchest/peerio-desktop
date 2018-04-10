@@ -1,12 +1,23 @@
+const { when } = require('mobx');
 const sounds = require('~/helpers/sounds');
 const uiStore = require('~/stores/ui-store');
 const appState = require('~/stores/app-state');
 const routerStore = require('~/stores/router-store');
-const { chatStore } = require('peerio-icebear');
+const { contactStore, chatStore, chatInviteStore } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const path = require('path');
 const { app, getCurrentWindow } = require('electron').remote;
 const config = require('~/config');
+
+function bringAppToFront() {
+    // Put app window into foreground.
+    app.focus();
+    const win = getCurrentWindow();
+    if (win.isMinimized()) {
+        win.restore();
+    }
+    win.show();
+}
 
 const notifications = {};
 class MessageNotification {
@@ -46,13 +57,7 @@ class MessageNotification {
 
     handleClick = () => {
         if (this.chat) {
-            // Put app window into foreground.
-            app.focus();
-            const win = getCurrentWindow();
-            if (win.isMinimized()) {
-                win.restore();
-            }
-            win.show();
+            bringAppToFront();
 
             // Activate chat.
             routerStore.navigateTo(routerStore.ROUTES.chats);
@@ -106,7 +111,7 @@ class DMNotification extends MessageNotification {
     }
 }
 
-function send(props) {
+function sendMessageNotification(props) {
     if (props.chat.otherParticipants.length <= 1) {
         const m = new DMNotification(props);
         m.send();
@@ -118,6 +123,76 @@ function send(props) {
     m.send();
 }
 
+class InviteNotification {
+    constructor(props) {
+        this.invite = props.invite;
+        this.userDesktopNotificationCondition = uiStore.prefs.inviteDesktopNotificationsEnabled;
+        this.userSoundsCondition = uiStore.prefs.messageSoundsEnabled;
+    }
+
+    send() {
+        if (this.userDesktopNotificationCondition) this.showDesktopNotification();
+        if (this.userSoundsCondition) this.playSound();
+    }
+
+    showDesktopNotification() {
+        if (!appState.isFocused) {
+            const { username, channelName } = this.invite;
+            const contact = contactStore.getContact(username);
+            when(() => !contact.loading, () => {
+                this.postDesktopNotification(
+                    t('notification_roomInviteTitle'),
+                    t('notification_roomInviteBody', { name: contact.fullName, room: channelName })
+                );
+            });
+        }
+    }
+
+    playSound() {
+        sounds.received.play();
+    }
+
+    handleClick = () => {
+        if (this.invite) {
+            bringAppToFront();
+
+            // Activate invite
+            // "when" is needed because notification can arrive and be clicked
+            // before chatStore is loaded, which causes lots of confusion in UI.
+            when(() => chatStore.loaded, () => {
+                chatInviteStore.activateInvite(this.invite.kegDbId);
+                if (chatInviteStore.activeInvite) {
+                    chatStore.deactivateCurrentChat();
+                    routerStore.navigateTo(routerStore.ROUTES.channelInvite);
+                }
+            });
+        }
+    }
+
+    postDesktopNotification(title, body) {
+        if (!title || !body) return;
+        const props = {
+            body,
+            silent: true
+        };
+
+        // icon needed for Windows, looks weird on Mac
+        if (config.os !== 'Darwin') props.icon = path.join(app.getAppPath(), 'build/static/img/notification-icon.png');
+
+        const notification = new Notification(
+            title,
+            props
+        );
+        notification.onclick = this.handleClick;
+    }
+}
+
+function sendInviteNotification(props) {
+    const n = new InviteNotification(props);
+    n.send();
+}
+
 module.exports = {
-    send
+    sendMessageNotification,
+    sendInviteNotification
 };

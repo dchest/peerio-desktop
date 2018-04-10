@@ -137,7 +137,11 @@ const css = require('classnames');
 
     render() {
         return (
-            <div className={css('validated-input', { focused: this.props.store[this.fFocused] })}>
+            <div className={css(
+                'validated-input',
+                this.props.theme,
+                { focused: this.props.store[this.fFocused] }
+            )}>
                 <Input type={this.props.type || 'text'}
                     value={this.props.store[this.props.name] || ''}
                     label={this.props.label}
@@ -151,7 +155,7 @@ const css = require('classnames');
                     disabled={this.props.disabled}
                     innerRef={this.onRef}
                 />
-                {!this.validationMessage && <div className="text-dark-helper">{this.props.hint}</div>}
+                {!this.validationMessage && <div className="helper-text">{this.props.hint}</div>}
             </div>
         );
     }

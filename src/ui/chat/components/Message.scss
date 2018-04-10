@@ -14,7 +14,7 @@
     }
 
     .material-icons {
-      color: $red-error;
+      color: $color-error;
     }
 
     .send-error-message {
@@ -22,7 +22,7 @@
       margin-left: $margin-tiny;
       font-weight: $font-weight-regular;
       text-transform: none;
-      color: $red-error;
+      color: $color-error;
     }
   }
 
@@ -61,12 +61,12 @@
     font-size: 12px;
     font-weight: 600;
     transition: background-color 100ms linear;
-    color: #f2f2f2;
-    background: #757575;
+    color: $text-light-default;
+    background: $darkblue;
     border-radius: 20px;
 
     &:hover {
-      background: #444;
+      background: $peerio-blue;
     }
   }
 

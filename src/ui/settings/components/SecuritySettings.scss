@@ -16,7 +16,7 @@
     background-color: $white;
 
     &.totp-error {
-      border-bottom: 4px solid $red-error;
+      border-bottom: 4px solid $color-error;
     }
   }
 }

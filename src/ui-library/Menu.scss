@@ -1,6 +1,9 @@
 // Menu button
 .p-menu {
+
+  // Overwrite p-button defaults
   .p-button {
+    min-width: 0;
     padding: 0;
   }
 }
@@ -42,7 +45,7 @@
     }
 
     &:hover {
-      background-color: #eee;
+      background-color: $background-hover-default;
     }
   }
 

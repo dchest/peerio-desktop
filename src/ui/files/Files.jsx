@@ -333,9 +333,11 @@ class Files extends React.Component {
         this.enqueueCheck();
         return (
             <div className="files">
-                <Search onChange={this.handleSearch} query={fileStore.currentFilter} />
-                <div className="file-wrapper">
+                <div className="files-header-container">
+                    <Search onChange={this.handleSearch} query={fileStore.currentFilter} />
                     {fileStore.currentFilter ? this.searchResultsHeader : this.breadCrumbsHeader}
+                </div>
+                <div className="file-wrapper">
                     <div className="file-table-wrapper scrollable"
                         ref={this.setContainerRef}
                         onScroll={this.enqueueCheck}

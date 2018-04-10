@@ -4,7 +4,7 @@
 
 .display-2 {
   @extend %display-2;
-  color: $blue;
+  color: $peerio-blue;
 }
 
 .display-3 {
@@ -28,18 +28,8 @@
   color: $text-dark-hint;
 }
 
-.text-light-helper {
-  @extend %hint-error-label;
-  color: $text-light-secondary;
-}
-
-.text-dark-helper {
-  @extend %hint-error-label;
-  color: $text-dark-secondary;
-}
-
 .text-brand-primary {
-  color: $blue;
+  color: $peerio-blue;
 }
 
 .text-right {

@@ -102,7 +102,7 @@ class MessageSideBar extends React.Component {
                 </div>
                 <T k="title_readBy" tag="div" className="p-list-heading" />
 
-                <List className="receipts" theme="large" clickable>
+                <List className="receipts" clickable>
                     {this.getReceipts(msg)}
                 </List>
             </div>

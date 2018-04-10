@@ -189,12 +189,15 @@ class ChatView extends React.Component {
                                     className={css(
                                         'pin-toggle',
                                         'clickable',
+                                        'custom-icon-hover-container',
                                         { starred: chat.isFavorite }
                                     )}
                                 >
                                     <CustomIcon
-                                        icon={chat.isFavorite ? 'pin-on-blue' : 'pin-off'}
+                                        active={chat.isFavorite}
+                                        icon={chat.isFavorite ? 'pin-on' : 'pin-off'}
                                         className="small"
+                                        hover={!chat.isFavorite}
                                     />
                                     <Tooltip
                                         text={chat.isFavorite
@@ -221,6 +224,7 @@ class ChatView extends React.Component {
                     <Button
                         icon="chrome_reader_mode"
                         onClick={this.toggleSidebar}
+                        active={uiStore.prefs.chatSideBarIsOpen}
                         tooltip={t('button_toggleSidebar')}
                         tooltipPosition="bottom"
                         tooltipSize="small"

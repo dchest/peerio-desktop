@@ -45,26 +45,26 @@
   a {
     @extend %selectable;
     word-break: break-word;
-    color: $blue;
+    color: $peerio-blue;
   }
 
   .mention {
     cursor: pointer;
     font-weight: $font-weight-semibold;
     transition: background-color 50ms;
-    color: $text-dark-primary;
-    background-color: rgba($blue, .15);
+    color: $text-dark-default;
+    background-color: rgba($peerio-blue, .15);
     border-radius: 3px;
 
     &:hover {
-      background-color: rgba($blue, .1);
+      background-color: rgba($peerio-blue, .1);
     }
 
     &.self {
-      background-color: rgba($green, .5);
+      background-color: rgba($darkteal, .5);
 
       &:hover {
-        background-color: rgba($green, .3);
+        background-color: rgba($darkteal, .3);
       }
     }
   }
