@@ -24,6 +24,26 @@
       .contact-list-section-content {
         @extend %flex-col;
         width: 600px;
+
+        @media all and (max-width: 1052px) {
+          width: 448px;
+        }
+
+        // stylelint-disable-next-line
+        .p-list-item {
+          .content .caption {
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .side-content.left {
+            min-width: 40px;
+          }
+
+          .side-content.right {
+            min-width: 80px;
+          }
+        }
       }
     }
   }

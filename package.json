@@ -14,6 +14,7 @@
     "start-debug": "REMOTE_DEBUG_PORT=9222 npm run start",
     "start-latest": "git pull && npm install && npm run start",
     "start-dev": "(export NODE_ENV=development; npm run compile && run-p -l watch:* electron:run)",
+    "start-instance": "NODE_ENV=development electron app",
     "=== COMPILATION ===": "",
     "compile": "run-s -ln cleanup icebear-copy && run-p -ln compile:* static:copy",
     "compile:code": "babel --source-maps -q src -d app/build --ignore emojione.js",
