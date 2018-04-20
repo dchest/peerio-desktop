@@ -62,13 +62,17 @@ class ChannelInvite extends React.Component {
         );
     }
 
+    minParticipants = 2;
+    maxAvatars = 4;
+    maxParticipants = 6;
+
     get renderParticipants() {
         const { channelName, participants, username } = chatInviteStore.activeInvite;
-        if (participants.length <= 2) return null;
+        if (participants.length <= this.minParticipants) return null;
 
         const participantsToShow = [];
 
-        for (let i = 0; i < participants.length && participantsToShow.length < 4; i++) {
+        for (let i = 0; i < participants.length && participantsToShow.length < this.maxAvatars; i++) {
             const participant = participants[i];
 
             if (participant !== username && participant !== User.current.username) {
@@ -84,9 +88,9 @@ class ChannelInvite extends React.Component {
                 </span>
                 <div className="avatars">
                     {participantsToShow}
-                    {participants.length > 6
+                    {participants.length > this.maxParticipants
                         ? <div className="more-participants">
-                            +{participants.length - 6}
+                            +{participants.length - this.maxParticipants}
                         </div>
                         : null
                     }
