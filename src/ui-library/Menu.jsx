@@ -27,6 +27,7 @@ const appRoot = document.getElementById('root');
 
     tooltip         string
     tooltipPosition string      default 'top'
+    theme           string      so far only 'wide' exists
 
     onClick         function    use this very rarely, e.g. to stopPropagation of other click events
     ----------------------------------------
@@ -146,6 +147,7 @@ class Menu extends React.Component {
                 key="p-menu-content"
                 className={css(
                     'p-menu-content',
+                    this.props.theme,
                     { visible: this.menuVisible }
                 )}
                 style={this.style}

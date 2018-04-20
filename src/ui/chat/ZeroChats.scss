@@ -107,6 +107,7 @@ $zero-chats-break: 984px;
       width: 40px;
       margin-left: -56px; // 40px + margin-default
       margin-right: $margin-default;
+      border-color: $peerio-blue;
       border-radius: 6px;
       border-width: 3px;
 
@@ -115,6 +116,7 @@ $zero-chats-break: 984px;
         width: 40px;
         line-height: 40px;
         font-size: 40px;
+        color: $peerio-blue;
       }
     }
 
