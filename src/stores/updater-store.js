@@ -1,6 +1,6 @@
 const { observable } = require('mobx');
 const { ipcRenderer } = require('electron');
-const { warnings } = require('peerio-icebear');
+const { clientApp, warnings } = require('peerio-icebear');
 
 class UpdaterStore {
     /**
@@ -73,6 +73,11 @@ class UpdaterStore {
 
         // Request to check if last update failed.
         ipcRenderer.send('update-check-last-failed');
+
+        // Force check and install if client is deprecated.
+        when(() => clientApp.clientVersionDeprecated, () => {
+            this.quitAndRetryInstall();
+        });
     }
 
     cleanup() {
@@ -87,12 +92,14 @@ class UpdaterStore {
     }
 
     quitAndInstall() {
+        if (this.installing) return;
         this.readyToInstall = false;
         this.installing = true;
         ipcRenderer.send('update-install');
     }
 
     quitAndRetryInstall() {
+        if (this.installing) return;
         this.readyToInstall = false;
         this.installing = true;
         ipcRenderer.send('update-retry-install');
