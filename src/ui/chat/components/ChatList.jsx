@@ -83,7 +83,7 @@ class ChatList extends React.Component {
                         onClick={this.activateInviteByEvent}
                         caption={`# ${r.channelName}`}
                         rightContent={
-                            <T k="title_new" className="room-invite-notification-icon" />
+                            <T k="title_new" className="badge-new" />
                         }
                     />
                 );
