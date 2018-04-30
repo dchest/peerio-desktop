@@ -92,43 +92,78 @@ class ChatList extends React.Component {
 
     // Building the DM list
     @computed get dmMap() {
-        return chatStore.directMessages.map(c => {
-            return (
-                <ListItem
-                    data-chatid={c.id}
-                    key={c.id || c.tempId}
-                    className={css(
-                        'dm-item',
-                        {
-                            active: c.active,
-                            unread: c.unreadCount > 0,
-                            pinned: c.isFavorite
-                        }
-                    )}
-                    leftContent={
-                        <Avatar
-                            key="a"
-                            contact={
-                                c.otherParticipants.length > 0
-                                    ? c.otherParticipants[0]
-                                    : c.allParticipants[0]
-                            }
-                            size="small"
-                            clickable
-                            tooltip
-                        />
-                    }
+        // Testing vars
+        const acceptedInvites = [{
+            isInvite: true,
+            username: 'ltest1',
+            name: 'Jane Walters',
+            id: 123,
+            viewed: false
+        }];
+        const directMessagesAndPending = acceptedInvites.concat(chatStore.directMessages);
+        //
 
-                    onClick={this.activateChat}
-                    rightContent={
-                        ((!c.active || c.newMessagesMarkerPos) && c.unreadCount > 0)
-                            ? <div className="notification">{c.unreadCount}</div>
-                            : null
-                    }
-                >
-                    {c.name}
-                </ListItem>
-            );
+        return directMessagesAndPending.map(c => {
+            return c.isInvite
+                ? (
+                    <ListItem
+                        data-chatid={c.id}
+                        key={c.id || c.tempId}
+                        className={css(
+                            'dm-item'
+                        )}
+                        leftContent={
+                            <Avatar
+                                key="a"
+                                username="ltest1"
+                                size="small"
+                                clickable
+                                tooltip
+                            />
+                        }
+
+                        onClick={this.activatePendingDM}
+                        rightContent={c.viewed ? null : <T k="title_new" className="room-invite-notification-icon" />}
+                    >
+                        {c.name}
+                    </ListItem>
+                )
+                : (
+                    <ListItem
+                        data-chatid={c.id}
+                        key={c.id || c.tempId}
+                        className={css(
+                            'dm-item',
+                            {
+                                active: c.active,
+                                unread: c.unreadCount > 0,
+                                pinned: c.isFavorite
+                            }
+                        )}
+                        leftContent={
+                            <Avatar
+                                key="a"
+                                contact={
+                                    c.otherParticipants.length > 0
+                                        ? c.otherParticipants[0]
+                                        : c.allParticipants[0]
+                                }
+                                size="small"
+                                clickable
+                                tooltip
+                            />
+                        }
+
+                        onClick={this.activateChat}
+                        rightContent={
+                            ((!c.active || c.newMessagesMarkerPos) && c.unreadCount > 0)
+                                ? <div className="notification">{c.unreadCount}</div>
+                                : null
+                        }
+                    >
+                        {c.name}
+                    </ListItem>
+                );
         });
     }
 
@@ -265,6 +300,12 @@ class ChatList extends React.Component {
         routerStore.navigateTo(routerStore.ROUTES.chats);
         const id = getAttributeInParentChain(ev.target, 'data-chatid');
         chatStore.activate(id);
+    }
+
+    activatePendingDM = (ev) => {
+        chatInviteStore.deactivateInvite();
+        routerStore.navigateTo(routerStore.ROUTES.pendingDM);
+        // const id = getAttributeInParentChain(ev.target, 'data-chatid');
     }
 
     newMessage = () => {
