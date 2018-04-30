@@ -97,8 +97,7 @@ class ChatList extends React.Component {
             isInvite: true,
             username: 'ltest1',
             name: 'Jane Walters',
-            id: 123,
-            viewed: false
+            id: 123
         }];
         const directMessagesAndPending = acceptedInvites.concat(chatStore.directMessages);
         //
@@ -123,7 +122,7 @@ class ChatList extends React.Component {
                         }
 
                         onClick={this.activatePendingDM}
-                        rightContent={c.viewed ? null : <T k="title_new" className="room-invite-notification-icon" />}
+                        rightContent={<T k="title_new" className="badge-new" />}
                     >
                         {c.name}
                     </ListItem>
