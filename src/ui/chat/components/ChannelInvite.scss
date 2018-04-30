@@ -16,13 +16,6 @@
   .invite-content {
     margin-top: 256px;
 
-    ._1f389 {
-      height: 48px;
-      width: 48px;
-      background-position: -99px 0;
-      background-size: 691.5px 642px;
-    }
-
     .text {
       @extend %headline;
       line-height: 33px;
@@ -63,15 +56,6 @@
           margin-right: 10%;
         }
       }
-    }
-  }
-
-  .decline-content {
-    ._270c-1f3fc {
-      height: 48px;
-      width: 48px;
-      background-position: 0 -1584px;
-      background-size: 1632px 1632px;
     }
   }
 
