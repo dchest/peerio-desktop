@@ -5,7 +5,13 @@ const { observer } = require('mobx-react');
 
 @observer
 class PendingDM extends React.Component {
-
+    render() {
+        return (
+            <div>
+                Pending invite
+            </div>
+        );
+    }
 }
 
 module.exports = PendingDM;

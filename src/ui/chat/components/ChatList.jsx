@@ -302,12 +302,6 @@ class ChatList extends React.Component {
         chatStore.activate(id);
     }
 
-    activatePendingDM = (ev) => {
-        chatInviteStore.deactivateInvite();
-        routerStore.navigateTo(routerStore.ROUTES.pendingDM);
-        // const id = getAttributeInParentChain(ev.target, 'data-chatid');
-    }
-
     newMessage = () => {
         chatInviteStore.deactivateInvite();
         routerStore.navigateTo(routerStore.ROUTES.newChat);
@@ -332,6 +326,16 @@ class ChatList extends React.Component {
             chatStore.deactivateCurrentChat();
             routerStore.navigateTo(routerStore.ROUTES.channelInvite);
         }
+    }
+
+    // Accepted invite 'pending DM' click events
+    activatePendingDM = (ev) => {
+        chatStore.deactivateCurrentChat();
+        chatInviteStore.deactivateInvite();
+        routerStore.navigateTo(routerStore.ROUTES.pendingDM);
+
+        // const id = getAttributeInParentChain(ev.target, 'data-chatid');
+        console.log(ev.target);
     }
 
     render() {
