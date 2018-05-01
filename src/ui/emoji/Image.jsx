@@ -5,6 +5,10 @@ const { observer } = require('mobx-react');
 const css = require('classnames');
 
 const emojiMaster = {
+    relieved: {
+        category: 'people',
+        id: '_1f60c'
+    },
     tada: {
         category: 'objects',
         id: '_1f389'
@@ -27,13 +31,16 @@ class EmojiImage extends React.Component {
 
     render() {
         return (
-            <div className={css(
-                'emoji-image',
-                this.props.size,
-                `emojione-32-${this.category}`,
-                this.emojiID,
-                this.props.className
-            )} />
+            <div
+                className={css(
+                    'emoji-image',
+                    this.props.size,
+                    `emojione-32-${this.category}`,
+                    this.emojiID,
+                    this.props.className
+                )}
+                title={this.props.emoji}
+            />
         );
     }
 }

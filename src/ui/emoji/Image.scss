@@ -16,6 +16,13 @@
     height: 48px;
     width: 48px;
 
+    &.emojione-32-diversity {
+      background-size: 1632px 1632px;
+
+      // :v: (peace hand sign)
+      &._270c-1f3fc { background-position: 0 -1584px; }
+    }
+
     &.emojione-32-objects {
       background-size: 691.5px 642px;
 
@@ -23,11 +30,11 @@
       &._1f389 { background-position: -99px 0; }
     }
 
-    &.emojione-32-diversity {
-      background-size: 1632px 1632px;
+    &.emojione-32-people {
+      background-size: 939px 939px;
 
-      // :v: (peace hand sign)
-      &._270c-1f3fc { background-position: 0 -1584px; }
+      // :relieved:
+      &._1f60c { background-position: -445.5px -643.5px; }
     }
   }
 }
