@@ -14,6 +14,9 @@ const { Avatar, Button, List, ListItem, MaterialIcon, ProgressBar, Tooltip } = r
 const MaintenanceWarning = require('~/ui/shared-components/MaintenanceWarning');
 const { getAttributeInParentChain } = require('~/helpers/dom');
 
+// Testing only
+const { contactStore } = require('peerio-icebear');
+
 // Variables to calculate position-in-window of unread messages
 const paddingTop = 20;
 const paddingMiddle = 16;
@@ -93,11 +96,12 @@ class ChatList extends React.Component {
     // Building the DM list
     @computed get dmMap() {
         // Testing vars
+        const testContact = contactStore.getContact('ltest1');
         const acceptedInvites = [{
             isInvite: true,
-            username: 'ltest1',
-            name: 'Jane Walters',
-            id: 123
+            username: testContact.username,
+            name: testContact.fullName,
+            id: testContact.id
         }];
         const directMessagesAndPending = acceptedInvites.concat(chatStore.directMessages);
         //
@@ -106,7 +110,7 @@ class ChatList extends React.Component {
             return c.isInvite
                 ? (
                     <ListItem
-                        data-chatid={c.id}
+                        data-username={c.username}
                         key={c.id || c.tempId}
                         className={css(
                             'dm-item'
@@ -114,7 +118,7 @@ class ChatList extends React.Component {
                         leftContent={
                             <Avatar
                                 key="a"
-                                username="ltest1"
+                                username={c.username}
                                 size="small"
                                 clickable
                                 tooltip
@@ -333,8 +337,10 @@ class ChatList extends React.Component {
         chatInviteStore.deactivateInvite();
         routerStore.navigateTo(routerStore.ROUTES.pendingDM);
 
-        // const id = getAttributeInParentChain(ev.target, 'data-chatid');
-        console.log(ev.target);
+        // Use this to send username to `activePendingDM`
+        // Something similar to `this.activateInvite(kegDbId)`
+        const username = getAttributeInParentChain(ev.target, 'data-username');
+        console.log(username);
     }
 
     render() {
