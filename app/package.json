@@ -1,7 +1,7 @@
 {
   "name": "peerio-2",
   "productName": "Peerio 2",
-  "version": "2.110.1",
+  "version": "2.110.2",
   "description": "Peerio desktop client",
   "main": "build/main.js",
   "repository": {
@@ -43,7 +43,7 @@
         "tfaDetail": "https://peerio.zendesk.com/hc/en-us/articles/203665635-What-is-two-factor-authentication-",
         "msgSignature": "https://peerio.zendesk.com/hc/en-us/articles/204394135",
         "socialShareUrl": "https://www.peerio.com/",
-        "socialShareImage": "https://www.peerio.com/img/favicons/icon300.png",
+        "socialShareImage": "https://www.peerio.com/imgs/favicons/icon300.png",
         "upgrade": "https://www.peerio.com/pricing.html",
         "proWelcome": "https://peerio.zendesk.com/hc/en-us/articles/208395556",
         "proAccount": "https://account.peerio.com",

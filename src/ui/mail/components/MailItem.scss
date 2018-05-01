@@ -35,8 +35,8 @@
     }
 
     &.active {
-      color: $text-light-primary;
-      background-color: $lightblue;
+      color: $text-light-default;
+      background-color: $peerio-blue;
     }
 
     &:hover:not(.active) {

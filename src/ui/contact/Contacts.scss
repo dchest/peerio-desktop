@@ -1,14 +1,25 @@
 .contacts {
   @extend %flex-row;
+  width: 100%;
   background: $background-root;
+
+  .feature-navigation-list .p-list-item {
+    .material-icons,
+    &:hover .material-icons {
+      color: $text-light-inactive;
+    }
+
+    &.active .material-icons {
+      color: $text-light-default;
+    }
+  }
 
   .contacts-view {
     @extend %flex-col;
     @extend %flex-grow-1;
     @extend %flex-shrink-1;
     position: relative;
-    // FIXME remove calc?
-    width: calc(100vw - 336px);
+    width: 100%;
   }
 
   .toolbar {

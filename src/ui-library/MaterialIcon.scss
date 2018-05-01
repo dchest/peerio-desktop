@@ -8,8 +8,12 @@
     color: gold;
   }
 
+  &.active {
+    color: $color-confirmation;
+  }
+
   &.selected {
-    color: $blue;
+    color: $color-affirmative;
   }
 }
 

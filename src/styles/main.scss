@@ -68,7 +68,7 @@ textarea {
 }
 
 a {
-  color: $blue;
+  color: $peerio-blue;
 }
 
 *,
@@ -78,7 +78,7 @@ a {
 }
 
 body {
-  background-image: $gradient-to-right;
+  background-color: $darkblue;
 }
 
 body,
@@ -90,7 +90,7 @@ body,
   margin: 0;
   overflow: hidden;
   font: 14px/1.45 $font-stack;
-  color: $text-dark-primary;
+  color: $text-dark-default;
 }
 
 .app-root {

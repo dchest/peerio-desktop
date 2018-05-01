@@ -1,7 +1,6 @@
 .auto-sign-in {
-  @extend %background-pattern;
   height: 100vh;
-  color: $text-light-primary;
+  color: $text-light-default;
 
   .content {
     @extend %flex-align-center;

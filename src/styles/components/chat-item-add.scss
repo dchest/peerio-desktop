@@ -1,3 +1,5 @@
+// TODO: does this need to be its own file?
+
 .chat-item-add {
   @extend %flex-row;
   @extend %flex-align-center;
@@ -6,17 +8,13 @@
   height: 48px;
   padding: 0 $padding-default;
 
-  &:hover .chat-item-title {
-    color: $text-dark-primary;
-  }
-
   .chat-item-title {
     padding-top: $padding-tiny;
     margin-top: -$margin-tiny;
     font-size: 16px; // 18px in Figma - Paul
     font-weight: $font-weight-semibold;
-    color: $text-dark-secondary;
-    border-top: 1px solid $divider-dark;
+    color: $text-light-inactive;
+    border-top: 1px solid $divider-accent;
   }
 
   .chat-item-add-icon {
@@ -26,7 +24,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border: 2px solid $blue;
+    border: 2px solid $text-light-inactive;
     border-radius: 4px;
 
     &::after {
@@ -38,7 +36,21 @@
       font-size: 24px;
       font-weight: $font-weight-semibold;
       text-align: center;
-      color: $blue;
+      color: $text-light-inactive;
+    }
+  }
+
+  &:hover {
+    .chat-item-title {
+      color: $text-light-default;
+    }
+
+    .chat-item-add-icon {
+      border-color: $color-affirmative;
+
+      &::after {
+        color: $color-affirmative;
+      }
     }
   }
 }

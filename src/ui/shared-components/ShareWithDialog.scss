@@ -39,8 +39,8 @@ $list-header-height: 48px;
     width: 100%;
     top: 0;
     padding-left: $share-with-spacing;
-    color: $text-dark-primary;
-    background-color: #eee;
+    color: $text-dark-default;
+    background-color: $background-hover-default;
   }
 
   .list-chats {
@@ -62,7 +62,7 @@ $list-header-height: 48px;
 
       .display-name {
         margin-left: $margin-default;
-        color: $text-dark-primary;
+        color: $text-dark-default;
       }
 
       .username {

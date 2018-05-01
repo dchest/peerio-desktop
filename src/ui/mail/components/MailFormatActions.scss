@@ -23,8 +23,8 @@
         line-height: 20px;
         font-size: 12px;
         text-align: center;
-        color: $text-light-primary;
-        background: $blue;
+        color: $text-light-default;
+        background: $peerio-blue;
         border: 2px white solid;
         border-radius: 20px;
       }
@@ -44,7 +44,7 @@
       color: $icon-dark-inactive;
 
       .active {
-        color: $blue;
+        color: $peerio-blue;
       }
     }
   }

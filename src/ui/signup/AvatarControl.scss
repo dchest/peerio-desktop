@@ -11,13 +11,27 @@
     margin-top: -64px;
     overflow: hidden;
     transition: 150ms;
-    box-shadow: 0 0 1px 0 grey;
 
-    background: #eaf8f9; //TODO: create var - Paul
+    color: $text-dark-hint;
+    background: $background-root;
+    border: 1px solid;
     border-radius: 128px;
 
+    .material-icons {
+      transition: 150ms;
+      color: $text-dark-hint;
+    }
+
     &:hover {
-      background: #fff;
+      border-color: $black;
+
+      .material-icons {
+        color: $peerio-blue;
+      }
+    }
+
+    .caption {
+      @extend %hint-error-label;
     }
 
     img {

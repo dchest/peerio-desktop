@@ -1,13 +1,26 @@
-.app-nav {
-  .usage {
-    @extend %flex-col;
-    @extend %hint-error-label;
-    margin: auto 0 32px;
-    text-align: center;
-    color: $text-light-secondary;
+.usage-cloud {
+  @extend %flex-col;
+  @extend %hint-error-label;
+  position: relative;
+  margin: auto 0 32px;
+  text-align: center;
+  color: $text-light-inactive;
 
+  .p-button {
     .material-icons {
       color: $icon-light-active;
+    }
+
+    &.cloud-in-progress {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    &:hover,
+    &:hover + .p-button {
+      .material-icons {
+        color: $color-affirmative;
+      }
     }
   }
 }

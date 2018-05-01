@@ -124,10 +124,11 @@ class ChannelSideBar extends React.Component {
                     <List clickable>
                         {canILeave ?
                             <ListItem
+                                className="custom-icon-hover-container"
                                 disabled={chatStore.hidingChat}
                                 caption={t('button_leaveChannel')}
                                 onClick={this.leaveChannel}
-                                leftContent={<CustomIcon icon="leave" />}
+                                leftContent={<CustomIcon icon="leave" hover />}
                             /> : null
                         }
                         {canIAdmin ?

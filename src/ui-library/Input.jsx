@@ -45,7 +45,7 @@ class Input extends React.Component {
                     this.props.className,
                     {
                         'has-error': !!this.props.error,
-                        'is-focused': this.isFocused
+                        focused: this.isFocused
                     }
                 )}
             >

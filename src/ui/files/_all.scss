@@ -54,7 +54,7 @@
     transition: 150ms;
 
     &:hover {
-      color: $blue;
+      color: $peerio-blue;
     }
   }
 
@@ -64,7 +64,7 @@
     margin-left: auto;
 
     &:hover {
-      color: $blue;
+      color: $peerio-blue;
     }
   }
 
@@ -95,25 +95,35 @@
       font-size: 12px;
       font-weight: $font-weight-semibold;
       text-align: left;
-      color: $text-dark-secondary;
+      color: $text-dark-inactive;
     }
   }
 
   .file-table-body {
+    background-color: $background-hover-default;
+
     .row {
       position: relative;
       height: 48px;
 
       &.selected-row {
-        background: rgba($blue, .12);
+        background: $background-selected;
       }
 
       &:hover {
-        background: rgba($blue, .12);
+        background: $background-selected;
+
+        .material-icons {
+          color: $color-affirmative;
+        }
+
+        .file-icon .material-icons {
+          color: $icon-dark-active;
+        }
       }
 
       &.new-file {
-        background-color: rgba($green-affirmative, .12);
+        background-color: rgba($color-confirmation, .12);
       }
 
       > div {

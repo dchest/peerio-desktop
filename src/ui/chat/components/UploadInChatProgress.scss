@@ -6,7 +6,7 @@
   right: 0;
   top: 0;
   margin: 0;
-  color: $text-dark-primary;
+  color: $text-dark-default;
   background: $white;
 
   .progress-content {
@@ -18,7 +18,7 @@
     background-color: $black-06;
 
     .material-icons {
-      color: $text-dark-secondary;
+      color: $text-dark-inactive;
     }
   }
 

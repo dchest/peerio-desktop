@@ -49,7 +49,7 @@
         padding: $padding-small $padding-default;
 
         &:hover {
-          background-color: #eee;
+          background-color: $background-hover-default;
         }
       }
     }

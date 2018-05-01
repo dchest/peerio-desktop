@@ -22,10 +22,6 @@
     padding: 18px $padding-small 0;
     margin-top: 0;
     transition: 150ms;
-
-    &:focus {
-      outline: 0;
-    }
   }
 
   textarea {
@@ -63,13 +59,33 @@
     }
   }
 
+  // Hover state
+  input:hover {
+    border-color: $black;
+  }
+
+  // Focus state
+  &.focused {
+    input {
+      outline: 0;
+      border-color: $peerio-blue;
+    }
+
+    .label,
+    .error,
+    + .helper-text {
+      color: $peerio-blue;
+    }
+  }
+
+  // Error state
   &.has-error {
     input {
-      border-color: $red-error;
+      border-color: $color-error;
     }
 
     .label {
-      color: $red-error;
+      color: $color-error;
     }
 
     .error {
@@ -77,7 +93,7 @@
       position: absolute;
       width: 100%;
       top: 100%;
-      color: $red-error;
+      color: $color-error;
       opacity: 1;
     }
   }

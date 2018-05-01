@@ -5,15 +5,23 @@
   z-index: 2;
   height: 100vh;
   width: $app-nav-width;
-  background-image: url($background-pattern), $gradient-to-bottom;
-  background-position-x: 90px;
-  background-size: 220px;
+  background-color: $darkteal;
 
   .app-menu {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
+    width: 100%;
+
+    .menu-item {
+      height: 64px;
+      width: 64px;
+
+      &.active {
+        background-color: $darkblue;
+      }
+    }
   }
 
   .avatar-menu-wrapper {
@@ -29,6 +37,10 @@
       @extend %notify;
       right: 20px !important;
       top: 20px !important;
+    }
+
+    .p-button:hover {
+      background-color: transparent;
     }
 
     li {

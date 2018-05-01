@@ -1,6 +1,9 @@
 // Menu button
 .p-menu {
+
+  // Overwrite p-button defaults
   .p-button {
+    min-width: 0;
     padding: 0;
   }
 }
@@ -30,23 +33,11 @@
     opacity: 1;
   }
 
-  .p-menu-item {
-    display: flex;
-    align-items: center;
-    padding: $padding-small $padding-xl $padding-small $padding-default;
-    overflow: hidden;
-    white-space: nowrap;
+  &.wide .p-menu-item {
+    min-width: 192px;
 
     .icon {
-      margin-right: $margin-small;
+      margin-right: $margin-default;
     }
-
-    &:hover {
-      background-color: #eee;
-    }
-  }
-
-  &.wide .p-menu-item {
-    min-width: 248px;
   }
 }

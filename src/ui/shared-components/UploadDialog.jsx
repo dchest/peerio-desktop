@@ -1,7 +1,7 @@
 const React = require('react');
 const { action, computed, observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { chatStore, contactStore, fileHelpers, User } = require('peerio-icebear');
+const { chatStore, fileHelpers, contactStore } = require('peerio-icebear');
 const { Button, Dialog, Input } = require('~/peer-ui');
 const FileSpriteIcon = require('~/ui/shared-components/FileSpriteIcon');
 const ShareWithDialog = require('~/ui/shared-components/ShareWithDialog');
@@ -149,7 +149,7 @@ class UploadDialog extends React.Component {
         if (targetContact) {
             contact = targetContact;
         } else {
-            contact = contactStore.getContact(targetChat.participantUsernames[0] || User.current.username);
+            contact = targetChat.otherParticipants[0] || contactStore.currentUser;
         }
 
         return (

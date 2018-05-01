@@ -1,14 +1,19 @@
 // Main colours
-$color-brand-primary: rgb(44, 149, 207);
-$color-brand-secondary: rgb(50, 206, 195);
-$color-accent: rgb(246, 146, 35);
+$color-ui-1: #040b40;
+$color-ui-2: #004e69;
 
-// Gradients - used with background-image property
-$gradient-to-right: linear-gradient(to right, $color-brand-primary, $color-brand-secondary);
-$gradient-to-bottom: linear-gradient(to bottom, $color-brand-primary 0, $color-brand-secondary 50%);
+$color-brand-1: #408cff;
+$color-brand-2: #5461cc;
+$color-brand-3: #02cedb;
 
-// Background pattern
-$background-pattern: './static/img/bg-pattern.png';
+$color-accent-1: #fdc700;
+$color-accent-2: #e90162;
+
+// Semantic colour variables
+$color-confirmation: $color-brand-3;
+$color-affirmative: $color-brand-1;
+$color-warning: $color-accent-1;
+$color-error: $color-accent-2;
 
 // Main font stack
 @import './static/fonts/OpenSans/opensans.css';

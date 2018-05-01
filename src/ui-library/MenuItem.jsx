@@ -32,7 +32,8 @@ class MenuItem extends React.Component {
                     className,
                     {
                         clickable: !this.props.disabled,
-                        disabled: this.props.disabled
+                        disabled: this.props.disabled,
+                        selected: this.props.selected
                     }
                 )}
                 onClick={onClick}
@@ -48,6 +49,7 @@ class MenuItem extends React.Component {
                             key={`icon-${customIcon}`}
                             icon={customIcon}
                             className="icon"
+                            hover
                         />
                         : null
                     )

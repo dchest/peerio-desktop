@@ -32,8 +32,8 @@
   .contact-error {
     padding: $padding-small;
     font-weight: $font-weight-semibold;
-    color: $text-light-primary;
-    background-color: $red-error;
+    color: $text-light-default;
+    background-color: $color-error;
     border-radius: 2px;
   }
 
@@ -44,7 +44,7 @@
 
     .account-profile-container {
       @extend %flex-col;
-      color: $text-dark-secondary;
+      color: $text-dark-inactive;
 
       .full-name {
         @extend %title;
@@ -52,7 +52,7 @@
     }
 
     .deleted-account {
-      color: $red-error;
+      color: $color-error;
     }
   }
 

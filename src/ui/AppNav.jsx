@@ -59,7 +59,10 @@ let desktopNotificationsStarted = false;
 function startDesktopNotifications() {
     if (desktopNotificationsStarted) return;
     desktopNotificationsStarted = true;
-    chatStore.events.on(chatStore.EVENT_TYPES.messagesReceived, notificationFactory.send);
+    chatStore.events.on(chatStore.EVENT_TYPES.messagesReceived,
+        notificationFactory.sendMessageNotification);
+    chatStore.events.on(chatStore.EVENT_TYPES.invitedToChannel,
+        notificationFactory.sendInviteNotification);
 }
 
 @observer
@@ -112,6 +115,7 @@ class AppNav extends React.Component {
                     <Menu
                         customButton={<Avatar contact={contact} size="medium" />}
                         position="top-left"
+                        theme="wide"
                     >
                         <MenuItem
                             value="profile"
@@ -119,36 +123,42 @@ class AppNav extends React.Component {
                             caption={t('title_settingsProfile')}
                             onClick={this.toProfile}
                             className={css({ 'avatar-notify': !primaryAddressConfirmed })}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.profile}
                         />
                         <MenuItem
                             value="security"
                             icon="security"
                             caption={t('title_settingsSecurity')}
                             onClick={this.toSecurity}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.security}
                         />
                         <MenuItem
                             value="preferences"
                             icon="settings"
                             caption={t('title_settingsPreferences')}
                             onClick={this.toPrefs}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.prefs}
                         />
                         <MenuItem
                             value="account"
                             icon="account_circle"
                             caption={t('title_settingsAccount')}
                             onClick={this.toAccount}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.account}
                         />
                         <MenuItem
                             value="about"
                             icon="info"
                             caption={t('title_About')}
                             onClick={this.toAbout}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.about}
                         />
                         <MenuItem
                             value="help"
                             icon="help"
                             caption={t('title_help')}
                             onClick={this.toHelp}
+                            selected={routerStore.currentRoute === routerStore.ROUTES.help}
                         />
                         {config.disablePayments || User.current.hasActivePlans
                             ? null : (

@@ -1,4 +1,29 @@
 .p-menu-item {
+  display: flex;
+  align-items: center;
+  padding: $padding-small $padding-xl $padding-small $padding-default;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &:hover,
+  &.selected {
+    .material-icons {
+      color: $peerio-blue;
+    }
+  }
+
+  &:hover {
+    background-color: $background-hover-default;
+  }
+
+  &.selected {
+    background-color: rgba($peerio-blue, .05);
+  }
+
+  .icon {
+    margin-right: $margin-small;
+  }
+
   &.disabled {
     cursor: default;
     pointer-events: none;

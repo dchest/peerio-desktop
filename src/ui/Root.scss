@@ -17,10 +17,9 @@ $status-bar-height: 36px;
   font-weight: $font-weight-semibold;
   text-align: center;
   transition: all 400ms $transition-easing-bounce-in-out;
-  color: $text-light-primary;
+  color: $text-light-default;
   box-shadow: $shadow-8;
-  background-image: $gradient-to-right;
-  background-size: 400%;
+  background-color: $darkblue;
   border-radius: 4px;
 
   &.visible {

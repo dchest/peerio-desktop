@@ -29,7 +29,7 @@
         width: 8px;
         left: 16px;
         font-size: 8px;
-        color: $red-error;
+        color: $color-error;
       }
     }
   }
@@ -38,13 +38,13 @@
     margin: 0;
 
     .marker {
-      background: rgba($red-error, .38);
+      background: rgba($color-error, .38);
     }
 
     .content {
       padding-right: $padding-default;
       font-size: 12px;
-      color: rgba($red-error, .7);
+      color: rgba($color-error, .7);
     }
   }
 
@@ -67,7 +67,6 @@
       position: relative;
       padding: $padding-tiny 24px;
       margin: 12px 0 0;
-      border-radius: 2px;
 
       &:not(.invalid-sign) {
         width: 100%;
@@ -75,8 +74,7 @@
 
       &:hover,
       &.selected {
-        background-color: $black-03;
-        border-radius: 2px;
+        background-color: $background-hover-default;
       }
 
       .message-content-wrapper-inner {
@@ -113,14 +111,14 @@
         padding: $padding-tiny 0 0 $padding-tiny;
         margin: 0 32px 0 28px;
         overflow: hidden;
-        background-color: rgba($red-error, .06);
+        background-color: rgba($color-error, .06);
         border-radius: 18px;
 
         .warning-icon {
           @extend %flex-shrink-0;
           width: 24px;
           margin: 0 12px 0 auto;
-          color: $red-error;
+          color: $color-error;
 
           + .receipt-wrapper {
             @extend %flex-align-center;
@@ -133,7 +131,7 @@
         min-width: 320px;
         padding: $padding-small $padding-tiny;
         margin: 0 0 12px;
-        background-color: rgba($red-error, .06);
+        background-color: rgba($color-error, .06);
       }
 
       .sending-overlay {
@@ -161,7 +159,7 @@
 
         .timestamp {
           @extend %hint-error-label;
-          color: $text-dark-secondary;
+          color: $text-dark-inactive;
         }
 
         .user {
@@ -171,14 +169,14 @@
           .username {
             font-style: italic;
             font-weight: $font-weight-regular;
-            color: $text-dark-secondary;
+            color: $text-dark-inactive;
           }
         }
       }
 
       .system-message {
         font-style: italic;
-        color: $text-dark-secondary;
+        color: $text-dark-inactive;
       }
 
       .video-system-message {

@@ -19,9 +19,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  color: $blue;
+  color: $peerio-blue;
   background-color: $background-root;
-  border: 1px solid $blue;
+  border: 1px solid $peerio-blue;
   border-radius: 32px;
 
   .content {
@@ -43,16 +43,16 @@
     width: 20px;
     margin-right: -8px;
     box-sizing: content-box;
-    border: 2px solid $lightblue-hover;
+    border: 2px solid $background-selected;
     border-radius: 20px;
 
     .material-icons {
       font-size: 20px;
-      color: $lightblue-hover;
+      color: $background-selected;
     }
 
     &:hover {
-      background: $blue;
+      background: $peerio-blue;
 
       .material-icons {
         color: $background-root;
@@ -67,7 +67,7 @@
     transition: 250ms 500ms;
     color: transparent;
     opacity: 0;
-    background-color: $red-error;
+    background-color: $color-error;
 
     .p-button {
       display: none;

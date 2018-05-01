@@ -1,5 +1,5 @@
 const React = require('react');
-const { observable, reaction } = require('mobx');
+const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('~/peer-ui');
 const MessageInput = require('./components/MessageInput');
@@ -185,12 +185,15 @@ class ChatView extends React.Component {
                                     className={css(
                                         'pin-toggle',
                                         'clickable',
+                                        'custom-icon-hover-container',
                                         { starred: chat.isFavorite }
                                     )}
                                 >
                                     <CustomIcon
-                                        icon={chat.isFavorite ? 'pin-on-blue' : 'pin-off'}
+                                        active={chat.isFavorite}
+                                        icon={chat.isFavorite ? 'pin-on' : 'pin-off'}
                                         className="small"
+                                        hover={!chat.isFavorite}
                                     />
                                     <Tooltip
                                         text={chat.isFavorite
@@ -217,6 +220,7 @@ class ChatView extends React.Component {
                     <Button
                         icon="chrome_reader_mode"
                         onClick={this.toggleSidebar}
+                        active={uiStore.prefs.chatSideBarIsOpen}
                         tooltip={t('button_toggleSidebar')}
                         tooltipPosition="bottom"
                         tooltipSize="small"
@@ -234,6 +238,28 @@ class ChatView extends React.Component {
         return chatStore.activeChat.isChannel ?
             <ChannelSideBar open={uiStore.prefs.chatSideBarIsOpen} onAddParticipants={this.openUserPicker} /> :
             <ChatSideBar open={uiStore.prefs.chatSideBarIsOpen} />;
+    }
+
+    @observable messageListRef;
+    @action.bound setMessageListRef(ref) {
+        if (ref) this.messageListRef = ref;
+    }
+
+    jumpToBottom = () => {
+        const chat = chatStore.activeChat;
+
+        if (chat.canGoDown) {
+            chat.reset();
+            return;
+        }
+
+        if (this.messageListRef) {
+            this.messageListRef.scrollToBottom();
+        }
+    }
+
+    @computed get pageScrolledUp() {
+        return this.messageListRef && this.messageListRef.pageScrolledUp;
     }
 
     render() {
@@ -262,7 +288,10 @@ class ChatView extends React.Component {
                                     title={t('title_addParticipants')} noDeleted />
                             </div>
                             : <div className="messages-container">
-                                {chatStore.chats.length === 0 && !chatStore.loading ? null : <MessageList />}
+                                {chatStore.chats.length === 0 && !chatStore.loading
+                                    ? null
+                                    : <MessageList ref={this.setMessageListRef} />
+                                }
                                 {
                                     chat && chat.uploadQueue.length
                                         ? <UploadInChatProgress queue={chat.uploadQueue} />
@@ -280,6 +309,8 @@ class ChatView extends React.Component {
                                     onSend={this.sendRichTextMessage}
                                     onAck={this.sendAck}
                                     onFileShare={this.shareFiles}
+                                    messageListScrolledUp={this.pageScrolledUp}
+                                    onJumpToBottom={this.jumpToBottom}
                                 />
                             </div>
                     }

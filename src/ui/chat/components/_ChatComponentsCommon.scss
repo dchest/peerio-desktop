@@ -45,26 +45,26 @@
   a {
     @extend %selectable;
     word-break: break-word;
-    color: $blue;
+    color: $peerio-blue;
   }
 
   .mention {
     cursor: pointer;
     font-weight: $font-weight-semibold;
     transition: background-color 50ms;
-    color: $text-dark-primary;
-    background-color: rgba($blue, .15);
+    color: $text-dark-default;
+    background-color: rgba($peerio-blue, .45);
     border-radius: 3px;
 
     &:hover {
-      background-color: rgba($blue, .1);
+      background-color: rgba($peerio-blue, .15);
     }
 
     &.self {
-      background-color: rgba($green, .5);
+      background-color: $peerio-teal;
 
       &:hover {
-        background-color: rgba($green, .3);
+        background-color: rgba($peerio-teal, .15);
       }
     }
   }
@@ -87,4 +87,91 @@
   //   margin-right: 0;
   //   border-left: 3px solid #eee;
   // }
+}
+
+// UrlPreviewConsent and InlineFiles both have consent dialogs which are identical despite being in different components
+$urlpreview-width: 480px;
+
+.first-time {
+  max-width: 496px; // $urlpreview-width + 16px
+  padding: $padding-default 0;
+  margin-left: $margin-default;
+
+  .warning-body,
+  .url-content {
+    padding-left: $padding-default;
+    border-left: 1px solid $divider-dark;
+  }
+
+  .warning-header {
+    @extend %title;
+    @extend %flex-row;
+    @extend %flex-align-center;
+
+    padding-right: $padding-default;
+    margin: $margin-default 0;
+
+    .text {
+      margin-left: $margin-small;
+    }
+  }
+
+  .warning-body {
+    // half of icon width
+    padding-left: 12px;
+    margin-left: 12px;
+
+    p.text {
+      max-width: 100%; // override of a general <p> style in MessageList
+      padding-right: $padding-default;
+      margin: 0;
+      margin-left: $margin-small;
+    }
+
+    .p-radio {
+      padding-right: $padding-default;
+      margin-left: $margin-default;
+      margin-bottom: $margin-default;
+    }
+  }
+
+  .buttons-container {
+    @extend %flex-row;
+    @extend %flex-justify-end;
+
+    margin-bottom: $margin-default;
+
+    .p-button:last-child {
+      margin-left: $margin-small;
+    }
+  }
+}
+
+.update-settings {
+  @extend %hint-error-label;
+  display: flex;
+
+  align-content: center;
+  margin-left: $margin-default;
+  margin-top: $margin-small;
+  font-style: italic;
+
+  &.nomargin {
+    margin-left: 0;
+  }
+
+  .material-icons {
+    font-size: 16px;
+    color: $color-confirmation;
+  }
+
+  .text {
+    margin-left: $margin-small;
+    color: $text-dark-inactive;
+
+    a {
+      text-decoration: underline;
+      color: $text-dark-inactive;
+    }
+  }
 }

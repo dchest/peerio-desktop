@@ -12,20 +12,18 @@
     margin-top: -$margin-tiny;
     font-size: 16px;
     font-weight: $font-weight-semibold;
-    color: $red-error;
+    color: $color-error;
   }
 
   .maintenance-icon {
     height: 24px;
     width: 24px;
     margin-left: auto;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    color: $color-error;
   }
 }
 
 .dialog-maintenance {
   border-radius: 8px;
-  border-top: 12px solid $red-error;
+  border-top: 12px solid $color-error;
 }
