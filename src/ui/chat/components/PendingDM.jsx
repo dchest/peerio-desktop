@@ -1,69 +1,112 @@
 const React = require('react');
 
-const { computed, observable } = require('mobx');
+const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
-const { contactStore } = require('peerio-icebear');
+const routerStore = require('~/stores/router-store');
+const { contactStore, chatStore, chatInviteStore } = require('peerio-icebear');
 const T = require('~/ui/shared-components/T');
 
 const { Avatar, Button } = require('~/peer-ui');
 const EmojiImage = require('~/ui/emoji/Image');
+const PlusIcon = require('~/ui/shared-components/PlusIcon');
 const IdentityVerificationNotice = require('~/ui/chat/components/IdentityVerificationNotice');
 
 @observer
 class PendingDM extends React.Component {
     // Testing vars
-    activePendingDMUsername = 'ltest1';
+    @observable activePendingDMUsername = 'ltest1';
 
     // Contact object for the target user
     @computed get targetContact() {
         return contactStore.getContact(this.activePendingDMUsername);
     }
 
-    // Did you attempt to invite an existing user, or is this a new user?
-    // Behaviour is the same but the text is slightly different
     @observable isNewUser = true;
+    @observable dismissed = false;
 
-    onDismiss = () => {
-        console.log('on dismiss');
+    @computed get chatListEmpty() {
+        // TODO: refactor when SDK is there for chat invites
+        return !chatStore.chats.length && !chatInviteStore.received.length;
+    }
+
+    componentDidMount() {
+        /*
+            Listen for a change in activePendingDMUsername.
+            When switching between two PendingDMs, `dismissed` will be reset so that the proper text shows up.
+        */
+        this.targetUserReaction = reaction(() => this.activePendingDMUsername, () => {
+            this.dismissed = false;
+        });
+    }
+
+    componentWillUnmount() {
+        this.targetUserReaction();
+        this.targetUserReaction = null;
+    }
+
+    @action.bound onDismiss() {
+        this.dismissed = true;
     }
 
     onMessage = () => {
         console.log('on message');
     }
 
+    onCancel = () => {
+        routerStore.navigateTo(routerStore.ROUTES.zeroChats);
+    }
+
     render() {
         const c = this.targetContact;
 
-        return (
-            <div className="pending-dm">
-                <div className="content">
-                    <EmojiImage emoji="tada" size="large" />
-
-                    <T className="main-text"
-                        k={this.isNewUser
-                            ? 'title_acceptedInvitationText'
-                            : 'title_addedToContactsText'
-                        }
-                    >
-                        {{ fullName: c.fullName }}
+        if (this.dismissed) {
+            return (
+                <div className="pending-dm dismissed">
+                    <EmojiImage emoji="relieved" size="large" />
+                    <T className="main-text" k="title_acceptedInvitationDismissed">
+                        {{ plusIcon: () => <PlusIcon /> }}
                     </T>
 
-                    <div className="user-profile-container">
-                        <Avatar username={c.username} size="large" clickable />
-                        <div className="username">@{c.username}</div>
-                    </div>
+                    {this.chatListEmpty
+                        ? <div className="button-container">
+                            <Button onClick={this.onCancel}>
+                                <T k="button_cancel" />
+                            </Button>
+                        </div>
+                        : null
+                    }
+                </div>
+            );
+        }
 
-                    <IdentityVerificationNotice />
+        return (
+            <div className="pending-dm">
+                <EmojiImage emoji="tada" size="large" />
 
-                    <div className="button-container">
-                        <Button onClick={this.onDismiss}>
-                            <T k="button_dismiss" />
-                        </Button>
-                        <Button onClick={this.onMessage} theme="affirmative">
-                            <T k="button_message" />
-                        </Button>
-                    </div>
+                <T className="main-text"
+                    k={this.isNewUser
+                        ? 'title_acceptedInvitationText'
+                        : 'title_addedToContactsText'
+                    }
+                >
+                    {{ fullName: c.fullName }}
+                </T>
+
+                <div className="user-profile-container">
+                    <Avatar username={c.username} size="large" clickable />
+                    <div className="username">@{c.username}</div>
+                </div>
+
+                <IdentityVerificationNotice />
+
+                <div className="button-container">
+                    <Button onClick={this.onDismiss}>
+                        <T k="button_dismiss" />
+                    </Button>
+                    <Button onClick={this.onMessage} theme="affirmative">
+                        <T k="button_message" />
+                    </Button>
                 </div>
             </div>
         );
@@ -71,7 +114,3 @@ class PendingDM extends React.Component {
 }
 
 module.exports = PendingDM;
-
-// "title_acceptedInvitationText": "Good news! {fullName} just joined Peerio.",
-// "title_addedToContactsText": "Hello! {fullName} has added you to the Contact list.",
-// "title_blankChatScreen": "You can start a Direct Message with your contacts using the <plusIcon>+</> button",
