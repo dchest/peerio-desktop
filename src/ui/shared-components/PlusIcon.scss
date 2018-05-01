@@ -1,0 +1,17 @@
+.plus-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  height: 24px;
+  width: 24px;
+  margin-bottom: -8px;
+  vertical-align: baseline;
+
+  font-size: 24px;
+  font-weight: $font-weight-semibold;
+  color: $peerio-blue;
+  border: 2px solid;
+  border-radius: 4px;
+}
