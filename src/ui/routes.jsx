@@ -12,6 +12,7 @@ const NewChat = require('./chat/NewChat');
 const ChatView = require('./chat/ChatView');
 const NewChannel = require('./chat/NewChannel');
 const ChannelInvite = require('./chat/components/ChannelInvite');
+const PendingDMDismissed = require('./chat/components/PendingDMDismissed');
 const Files = require('./files/Files');
 const ShareFiles = require('./files/ShareFiles');
 const Mail = require('./mail/Mail');
@@ -46,6 +47,7 @@ module.exports = (
                 <Route path="channel-invite" component={ChannelInvite} />
                 <Route path="new-chat" component={NewChat} />
                 <Route path="new-channel" component={NewChannel} />
+                <Route path="pending-dm-dismissed" component={PendingDMDismissed} />
             </Route>
             <Route path="zero-chats" component={ZeroChats} />
             <Route path="files" component={Files} />

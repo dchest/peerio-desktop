@@ -35,7 +35,7 @@ class RouterStore {
             newChat: '/app/chats/new-chat',
             newChannel: '/app/chats/new-channel',
             channelInvite: '/app/chats/channel-invite',
-            pendingDM: '/app/chats/pending-dm',
+            pendingDMDismissed: '/app/chats/pending-dm-dismissed',
             onboarding: '/app/onboarding',
             mail: '/app/mail',
             files: '/app/files',
