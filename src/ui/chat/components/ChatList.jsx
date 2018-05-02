@@ -14,9 +14,6 @@ const { Avatar, Button, List, ListItem, MaterialIcon, ProgressBar, Tooltip } = r
 const MaintenanceWarning = require('~/ui/shared-components/MaintenanceWarning');
 const { getAttributeInParentChain } = require('~/helpers/dom');
 
-// Testing only
-const { contactStore } = require('peerio-icebear');
-
 // Variables to calculate position-in-window of unread messages
 const paddingTop = 20;
 const paddingMiddle = 16;
@@ -95,78 +92,45 @@ class ChatList extends React.Component {
 
     // Building the DM list
     @computed get dmMap() {
-        // Testing vars
-        const testContact = contactStore.getContact('ltest1');
-        const acceptedInvites = [{
-            isInvite: true,
-            username: testContact.username,
-            name: testContact.fullName,
-            id: testContact.id
-        }];
-        const directMessagesAndPending = acceptedInvites.concat(chatStore.directMessages);
-        //
-
-        return directMessagesAndPending.map(c => {
-            return c.isInvite
-                ? (
-                    <ListItem
-                        data-username={c.username}
-                        key={c.id || c.tempId}
-                        className={css(
-                            'dm-item'
-                        )}
-                        leftContent={
-                            <Avatar
-                                key="a"
-                                username={c.username}
-                                size="small"
-                                clickable
-                                tooltip
-                            />
+        return chatStore.directMessages.map(c => {
+            let rightContent = null;
+            let contact = c.otherParticipants.length > 0
+                ? c.otherParticipants[0]
+                : c.allParticipants[0];
+            if (c.isInvite) {
+                rightContent = <T k="title_new" className="badge-new" />;
+                contact = c.contact;
+            } else if ((!c.active || c.newMessagesMarkerPos) && c.unreadCount > 0) {
+                rightContent = <div className="notification">{c.unreadCount}</div>;
+            }
+            return (
+                <ListItem
+                    data-chatid={c.id}
+                    key={c.id || c.tempId}
+                    className={css(
+                        'dm-item',
+                        {
+                            active: c.active,
+                            unread: c.unreadCount > 0,
+                            pinned: c.isFavorite
                         }
+                    )}
+                    leftContent={
+                        <Avatar
+                            key="a"
+                            contact={contact}
+                            size="small"
+                            clickable
+                            tooltip
+                        />
+                    }
 
-                        onClick={this.activatePendingDM}
-                        rightContent={<T k="title_new" className="badge-new" />}
-                    >
-                        {c.name}
-                    </ListItem>
-                )
-                : (
-                    <ListItem
-                        data-chatid={c.id}
-                        key={c.id || c.tempId}
-                        className={css(
-                            'dm-item',
-                            {
-                                active: c.active,
-                                unread: c.unreadCount > 0,
-                                pinned: c.isFavorite
-                            }
-                        )}
-                        leftContent={
-                            <Avatar
-                                key="a"
-                                contact={
-                                    c.otherParticipants.length > 0
-                                        ? c.otherParticipants[0]
-                                        : c.allParticipants[0]
-                                }
-                                size="small"
-                                clickable
-                                tooltip
-                            />
-                        }
-
-                        onClick={this.activateChat}
-                        rightContent={
-                            ((!c.active || c.newMessagesMarkerPos) && c.unreadCount > 0)
-                                ? <div className="notification">{c.unreadCount}</div>
-                                : null
-                        }
-                    >
-                        {c.name}
-                    </ListItem>
-                );
+                    onClick={this.activateChat}
+                    rightContent={rightContent}
+                >
+                    {c.name}
+                </ListItem>
+            );
         });
     }
 
@@ -298,10 +262,10 @@ class ChatList extends React.Component {
     }
 
     // Room, DM, and button click events
-    activateChat = (ev) => {
+    activateChat = async (ev) => {
         chatInviteStore.deactivateInvite();
-        routerStore.navigateTo(routerStore.ROUTES.chats);
         const id = getAttributeInParentChain(ev.target, 'data-chatid');
+        routerStore.navigateTo(routerStore.ROUTES.chats);
         chatStore.activate(id);
     }
 
@@ -329,18 +293,6 @@ class ChatList extends React.Component {
             chatStore.deactivateCurrentChat();
             routerStore.navigateTo(routerStore.ROUTES.channelInvite);
         }
-    }
-
-    // Accepted invite 'pending DM' click events
-    activatePendingDM = (ev) => {
-        chatStore.deactivateCurrentChat();
-        chatInviteStore.deactivateInvite();
-        routerStore.navigateTo(routerStore.ROUTES.pendingDM);
-
-        // Use this to send username to `activePendingDM`
-        // Something similar to `this.activateInvite(kegDbId)`
-        const username = getAttributeInParentChain(ev.target, 'data-username');
-        console.log(username);
     }
 
     render() {

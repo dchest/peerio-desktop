@@ -4,7 +4,7 @@ const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
 const routerStore = require('~/stores/router-store');
-const { contactStore, chatStore, chatInviteStore } = require('peerio-icebear');
+const { chatStore, chatInviteStore } = require('peerio-icebear');
 const T = require('~/ui/shared-components/T');
 
 const { Avatar, Button } = require('~/peer-ui');
@@ -14,15 +14,6 @@ const IdentityVerificationNotice = require('~/ui/chat/components/IdentityVerific
 
 @observer
 class PendingDM extends React.Component {
-    // Testing vars
-    @observable activePendingDMUsername = 'ltest1';
-
-    // Contact object for the target user
-    @computed get targetContact() {
-        return contactStore.getContact(this.activePendingDMUsername);
-    }
-
-    @observable isNewUser = true;
     @observable dismissed = false;
 
     @computed get chatListEmpty() {
@@ -30,27 +21,13 @@ class PendingDM extends React.Component {
         return !chatStore.chats.length && !chatInviteStore.received.length;
     }
 
-    componentDidMount() {
-        /*
-            Listen for a change in activePendingDMUsername.
-            When switching between two PendingDMs, `dismissed` will be reset so that the proper text shows up.
-        */
-        this.targetUserReaction = reaction(() => this.activePendingDMUsername, () => {
-            this.dismissed = false;
-        });
-    }
-
-    componentWillUnmount() {
-        this.targetUserReaction();
-        this.targetUserReaction = null;
-    }
-
     @action.bound onDismiss() {
         this.dismissed = true;
+        chatStore.activeChat.dismiss();
     }
 
     onMessage = () => {
-        console.log('on message');
+        chatStore.activeChat.start();
     }
 
     onCancel = () => {
@@ -58,7 +35,8 @@ class PendingDM extends React.Component {
     }
 
     render() {
-        const c = this.targetContact;
+        const c = chatStore.activeChat && chatStore.activeChat.contact;
+        if (!c) return null;
 
         if (this.dismissed) {
             return (
@@ -85,7 +63,7 @@ class PendingDM extends React.Component {
                 <EmojiImage emoji="tada" size="large" />
 
                 <T className="main-text"
-                    k={this.isNewUser
+                    k={this.isReceived
                         ? 'title_acceptedInvitationText'
                         : 'title_addedToContactsText'
                     }

@@ -17,6 +17,7 @@ const ChannelSideBar = require('./components/sidebar/ChannelSideBar');
 const ChatNameEditor = require('./components/ChatNameEditor');
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const FullCoverLoader = require('~/ui/shared-components/FullCoverLoader');
+const PendingDM = require('./components/PendingDM');
 const { Dialog } = require('~/peer-ui');
 
 @observer
@@ -245,6 +246,8 @@ class ChatView extends React.Component {
 
         const chat = chatStore.activeChat;
         if (!chat) return null;
+
+        if (chat.isInvite) return <PendingDM />;
 
         const jitsiActions = [
             { label: t('button_cancel'), onClick: this.toggleJitsiDialog },
