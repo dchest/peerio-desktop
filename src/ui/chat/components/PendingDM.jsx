@@ -32,8 +32,8 @@ class PendingDM extends React.Component {
 
                 <T className="main-text"
                     k={this.isReceived
-                        ? 'title_acceptedInvitationText'
-                        : 'title_addedToContactsText'
+                        ? 'title_newUserDmInviteHeading'
+                        : 'title_dmInviteHeading'
                     }
                 >
                     {{ fullName: c.fullName }}
