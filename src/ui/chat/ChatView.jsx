@@ -1,5 +1,5 @@
 const React = require('react');
-const { observable, reaction } = require('mobx');
+const { action, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('~/peer-ui');
 const MessageInput = require('./components/MessageInput');
@@ -137,6 +137,12 @@ class ChatView extends React.Component {
         this.toggleJitsiDialog();
     };
 
+    // Render different MessageList chat header if chat is opened from PendingDM view
+    @observable isNewContact = false;
+    @action.bound setNewInviteChat() {
+        this.isNewContact = true;
+    }
+
     // assumes active chat exists, don't render if it doesn't
     renderHeader() {
         const chat = chatStore.activeChat;
@@ -247,7 +253,11 @@ class ChatView extends React.Component {
         const chat = chatStore.activeChat;
         if (!chat) return null;
 
-        if (chat.isInvite) return <PendingDM />;
+        if (chat.isInvite) {
+            return (
+                <PendingDM onMessage={this.setNewInviteChat} />
+            );
+        }
 
         const jitsiActions = [
             { label: t('button_cancel'), onClick: this.toggleJitsiDialog },
@@ -269,7 +279,9 @@ class ChatView extends React.Component {
                                     title={t('title_addParticipants')} noDeleted />
                             </div>
                             : <div className="messages-container">
-                                {chatStore.chats.length === 0 && !chatStore.loading ? null : <MessageList />}
+                                {chatStore.chats.length === 0 && !chatStore.loading
+                                    ? null
+                                    : <MessageList newContactHeader={this.isNewContact} />}
                                 {
                                     chat && chat.uploadQueue.length
                                         ? <UploadInChatProgress queue={chat.uploadQueue} />

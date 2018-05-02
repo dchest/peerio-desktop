@@ -1,6 +1,6 @@
 const React = require('react');
 
-const { action, computed, observable, reaction } = require('mobx');
+const { action, computed, observable } = require('mobx');
 const { observer } = require('mobx-react');
 
 const routerStore = require('~/stores/router-store');
@@ -28,6 +28,7 @@ class PendingDM extends React.Component {
 
     onMessage = () => {
         chatStore.activeChat.start();
+        this.props.onMessage();
     }
 
     onCancel = () => {
@@ -35,7 +36,8 @@ class PendingDM extends React.Component {
     }
 
     render() {
-        const c = chatStore.activeChat && chatStore.activeChat.contact;
+        if (!chatStore.activeChat) return null;
+        const c = chatStore.activeChat.contact || chatStore.activeChat.otherParticipants[0];
         if (!c) return null;
 
         if (this.dismissed) {
@@ -78,14 +80,16 @@ class PendingDM extends React.Component {
 
                 <IdentityVerificationNotice />
 
-                <div className="button-container">
-                    <Button onClick={this.onDismiss}>
-                        <T k="button_dismiss" />
-                    </Button>
-                    <Button onClick={this.onMessage} theme="affirmative">
-                        <T k="button_message" />
-                    </Button>
-                </div>
+                {!this.props.buttonsHidden &&
+                    <div className="button-container">
+                        <Button onClick={this.onDismiss}>
+                            <T k="button_dismiss" />
+                        </Button>
+                        <Button onClick={this.onMessage} theme="affirmative">
+                            <T k="button_message" />
+                        </Button>
+                    </div>
+                }
             </div>
         );
     }

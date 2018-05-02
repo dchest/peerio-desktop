@@ -6,6 +6,7 @@ const T = require('~/ui/shared-components/T');
 const Message = require('./Message');
 const { chatStore, clientApp } = require('peerio-icebear');
 const { t } = require('peerio-translator');
+const PendingDM = require('~/ui/chat/components/PendingDM');
 const IdentityVerificationNotice = require('~/ui/chat/components/IdentityVerificationNotice');
 
 @observer
@@ -200,6 +201,14 @@ class MessageList extends React.Component {
     }
 
     renderChatStart() {
+        if (this.props.newContactHeader) {
+            return (
+                <div className="messages-start">
+                    <PendingDM buttonsHidden />
+                </div>
+            );
+        }
+
         const chat = chatStore.activeChat;
         if (chat.canGoUp || !chat.initialPageLoaded) return null;
         return (
