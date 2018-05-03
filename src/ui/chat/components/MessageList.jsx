@@ -201,7 +201,9 @@ class MessageList extends React.Component {
     }
 
     renderChatStart() {
-        if (this.props.newContactHeader) {
+        const chat = chatStore.activeChat;
+
+        if (chat.isChatCreatedFromPendingDM) {
             return (
                 <div className="messages-start">
                     <PendingDM buttonsHidden />
@@ -209,7 +211,6 @@ class MessageList extends React.Component {
             );
         }
 
-        const chat = chatStore.activeChat;
         if (chat.canGoUp || !chat.initialPageLoaded) return null;
         return (
             <div className="messages-start">
