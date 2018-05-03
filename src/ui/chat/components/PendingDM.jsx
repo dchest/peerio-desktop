@@ -36,7 +36,7 @@ class PendingDM extends React.Component {
                         : 'title_dmInviteHeading'
                     }
                 >
-                    {{ fullName: c.fullName }}
+                    {{ contactName: c.fullName }}
                 </T>
 
                 <div className="user-profile-container">
