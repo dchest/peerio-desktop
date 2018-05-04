@@ -31,7 +31,7 @@ class PendingDM extends React.Component {
                 <EmojiImage emoji="tada" size="large" />
 
                 <T className="main-text"
-                    k={this.isReceived
+                    k={chatStore.activeChat.isReceived
                         ? 'title_newUserDmInviteHeading'
                         : 'title_dmInviteHeading'
                     }
