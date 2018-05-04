@@ -1,5 +1,5 @@
 const React = require('react');
-const { action, computed, observable } = require('mobx');
+const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
 const T = require('~/ui/shared-components/T');
@@ -26,16 +26,33 @@ const notifHeight = 46;
 @observer
 class ChatList extends React.Component {
     componentDidMount() {
-        // TODO: refactor when SDK is there for chat invites
+        // TODO: refactor when !chat.isChannelSDK is there for chat invites
         if (!chatStore.chats.length && !chatInviteStore.activeInvite && chatInviteStore.received.length) {
             this.activateInvite(chatInviteStore.received[0].kegDbId);
         }
+
+        this.disposer = reaction(() => chatStore.directMessages, () => { this.compareDMsAndPending(); }, true);
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.checkScrollHeight);
         if (this.scrollContainerRef) this.scrollContainerRef.removeEventListener('scroll', this.checkScrollDistance);
         window.removeEventListener('resize', this.checkScrollDistance);
+
+        this.disposer();
+    }
+
+    // Remove PendingDMs if actual DM exists
+    compareDMsAndPending() {
+        chatStore.directMessagesWithoutPending.forEach(m => {
+            if (m.otherParticipants[0]) {
+                chatStore.pendingDMs.forEach(p => {
+                    if (m.otherParticipants[0].username === p.username) {
+                        p.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     // Building the rooms & invites list
