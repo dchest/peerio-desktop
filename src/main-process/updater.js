@@ -33,6 +33,11 @@ function start(mainWindow) {
             autoUpdater.quitAndInstall();
         });
 
+        ipcMain.on('update-schedule-install', () => {
+            console.log('Scheduling update installation on quit');
+            autoUpdater.scheduleInstallOnQuit();
+        });
+
         ipcMain.on('update-retry-install', () => {
             console.log('Retrying update installation.');
             app.releaseSingleInstance();

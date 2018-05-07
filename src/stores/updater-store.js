@@ -1,4 +1,4 @@
-const { observable } = require('mobx');
+const { observable, when } = require('mobx');
 const { ipcRenderer } = require('electron');
 const { clientApp, warnings } = require('peerio-icebear');
 
@@ -28,6 +28,20 @@ class UpdaterStore {
     @observable readyToInstall = false;
 
     /**
+     * If true, the user should be asked to install
+     * the update.
+     */
+    @observable askToInstall = false;
+
+    /**
+     * If true, the update is mandatory and
+     * must be installed immediately.
+     *
+     * Value is set after 'update-downloaded' event.
+     */
+    @observable mandatory = false;
+
+    /**
      * If true, the update is being installed
      * (including when retrying install).
      */
@@ -44,9 +58,27 @@ class UpdaterStore {
             this.lastUpdateFailed = failed;
         });
 
-        ipcRenderer.on('update-downloaded', () => {
+        ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest) => {
             console.log('Update downloaded');
+            this.mandatory = manifest.isMandatory;
             this.readyToInstall = true;
+            if (this.mandatory) {
+                this.askToInstall = true;
+            } else {
+                this.scheduleInstallOnQuit();
+                // Turn on askToInstall flag in 12 hours (and every 12 hours after that)
+                // to remind to install updates if the app didn't quit.
+                // We ask nicely 2 times, but the 3rd time the update will be mandatory.
+                let askCount = 0;
+                setInterval(() => {
+                    if (this.installing) return;
+                    if (askCount++ >= 2) {
+                        this.mandatory = true;
+                    }
+                    this.askToInstall = true;
+                }, 12 * 60 * 60 * 1000);
+                warnings.add('title_updateWillBeInstalled');
+            }
         });
 
         ipcRenderer.on('checking-for-update', () => {
@@ -61,12 +93,12 @@ class UpdaterStore {
             warnings.add('title_updateDownloading');
         });
 
-        ipcRenderer.on('update-not-available', info => {
+        ipcRenderer.on('update-not-available', (ev, info) => {
             this.checking = false;
             console.log('Update not available.', info);
         });
 
-        ipcRenderer.on('update-error', err => {
+        ipcRenderer.on('update-error', (ev, err) => {
             this.error = err;
             console.error('Update error:', err);
         });
@@ -89,6 +121,11 @@ class UpdaterStore {
 
     check() {
         ipcRenderer.send('update-check');
+    }
+
+    scheduleInstallOnQuit() {
+        if (this.installing) return;
+        ipcRenderer.send('update-schedule-install');
     }
 
     quitAndInstall() {
