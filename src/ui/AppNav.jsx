@@ -2,7 +2,7 @@ const React = require('react');
 const { autorunAsync, observable } = require('mobx');
 const { observer } = require('mobx-react');
 const { Avatar, Divider, Menu, MenuItem } = require('~/peer-ui');
-const { User, contactStore, chatStore, fileStore, chatNotifier } = require('peerio-icebear');
+const { User, contactStore, chatStore, fileStore } = require('peerio-icebear');
 const UsageCloud = require('~/ui/shared-components/UsageCloud');
 const SignoutDialog = require('~/ui/shared-components/SignoutDialog');
 const css = require('classnames');
@@ -187,8 +187,8 @@ class AppNav extends React.Component {
                 <div className="app-menu">
                     <AppNavButton tooltip={t('title_chats')} icon="forum"
                         active={routerStore.currentRoute.startsWith(routerStore.ROUTES.chats)}
-                        showBadge={chatNotifier.badgeCount > 0}
-                        badge={chatNotifier.badgeCount}
+                        showBadge={chatStore.badgeCount > 0}
+                        badge={chatStore.badgeCount}
                         onClick={this.toChats} />
 
                     <AppNavButton tooltip={t('title_files')} icon="folder"
