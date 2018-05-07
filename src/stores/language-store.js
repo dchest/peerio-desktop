@@ -83,7 +83,11 @@ class LanguageStore {
 
     @action loadSavedLanguage() {
         db.system.getValue('language')
-            .then(lang => this.changeLanguage(lang || 'en'));
+            .then(lang => this.changeLanguage(lang || 'en'))
+            .catch(err => {
+                console.error(err);
+                this.changeLanguage('en'); // still change to English
+            });
     }
 }
 

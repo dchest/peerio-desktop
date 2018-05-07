@@ -81,7 +81,7 @@ class Dialog extends React.Component {
 
     @action.bound handleEscKey(ev) {
         if (!this.dialogVisible || !this.dialogRendered) return;
-        if (ev.keyCode === 27) {
+        if (ev.keyCode === 27 && this.props.onCancel) {
             this.props.onCancel();
         }
     }
