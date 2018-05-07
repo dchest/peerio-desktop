@@ -74,7 +74,7 @@
     "@types/prosemirror-view": "1.0.0",
     "@types/react": "16.0.40",
     "babel-cli": "6.26.0",
-    "babel-eslint": "8.2.2",
+    "babel-eslint": "8.2.3",
     "babel-plugin-console-kungfu": "github:PeerioTechnologies/babel-plugin-console-kungfu#v1.0.0",
     "babel-plugin-syntax-jsx": "6.18.0",
     "babel-plugin-transform-class-properties": "6.24.1",

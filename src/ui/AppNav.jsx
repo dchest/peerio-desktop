@@ -63,6 +63,8 @@ function startDesktopNotifications() {
         notificationFactory.sendMessageNotification);
     chatStore.events.on(chatStore.EVENT_TYPES.invitedToChannel,
         notificationFactory.sendInviteNotification);
+    contactStore.events.on(contactStore.EVENT_TYPES.inviteAccepted,
+        notificationFactory.sendInviteAcceptedNotification);
 }
 
 @observer

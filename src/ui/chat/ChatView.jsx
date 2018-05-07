@@ -1,5 +1,5 @@
 const React = require('react');
-const { observable, reaction } = require('mobx');
+const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('~/peer-ui');
 const MessageInput = require('./components/MessageInput');
@@ -244,6 +244,28 @@ class ChatView extends React.Component {
             <ChatSideBar open={uiStore.prefs.chatSideBarIsOpen} />;
     }
 
+    @observable messageListRef;
+    @action.bound setMessageListRef(ref) {
+        if (ref) this.messageListRef = ref;
+    }
+
+    jumpToBottom = () => {
+        const chat = chatStore.activeChat;
+
+        if (chat.canGoDown) {
+            chat.reset();
+            return;
+        }
+
+        if (this.messageListRef) {
+            this.messageListRef.scrollToBottom();
+        }
+    }
+
+    @computed get pageScrolledUp() {
+        return this.messageListRef && this.messageListRef.pageScrolledUp;
+    }
+
     render() {
         if (!chatStore.chats.length) return null;
 
@@ -270,7 +292,10 @@ class ChatView extends React.Component {
                                     title={t('title_addParticipants')} noDeleted />
                             </div>
                             : <div className="messages-container">
-                                {chatStore.chats.length === 0 && !chatStore.loading ? null : <MessageList />}
+                                {chatStore.chats.length === 0 && !chatStore.loading
+                                    ? null
+                                    : <MessageList ref={this.setMessageListRef} />
+                                }
                                 {
                                     chat && chat.uploadQueue.length
                                         ? <UploadInChatProgress queue={chat.uploadQueue} />
@@ -288,6 +313,8 @@ class ChatView extends React.Component {
                                     onSend={this.sendRichTextMessage}
                                     onAck={this.sendAck}
                                     onFileShare={this.shareFiles}
+                                    messageListScrolledUp={this.pageScrolledUp}
+                                    onJumpToBottom={this.jumpToBottom}
                                 />
                             </div>
                     }

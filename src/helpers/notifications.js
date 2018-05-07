@@ -192,7 +192,78 @@ function sendInviteNotification(props) {
     n.send();
 }
 
+// TODO: all of these notification classes are very similar, can we abstract them?
+class InviteAcceptedNotification {
+    constructor(props) {
+        this.contact = props.contact;
+        this.userDesktopNotificationCondition = true; // TODO: for now this notif is always on
+        this.userSoundsCondition = uiStore.prefs.messageSoundsEnabled;
+    }
+
+    send() {
+        if (this.userDesktopNotificationCondition) this.showDesktopNotification();
+        if (this.userSoundsCondition) this.playSound();
+    }
+
+    showDesktopNotification() {
+        const { username } = this.contact;
+        if (!username) return;
+        const contact = contactStore.getContact(username);
+
+        this.postDesktopNotification(
+            t('notification_inviteAcceptedTitle'),
+            t('notification_inviteAcceptedBody', {
+                firstName: contact.firstName || '', username
+            })
+        );
+    }
+
+    playSound() {
+        sounds.received.play();
+    }
+
+    handleClick = () => {
+        if (this.invite) {
+            bringAppToFront();
+
+            // Activate invite
+            // "when" is needed because notification can arrive and be clicked
+            // before chatStore is loaded, which causes lots of confusion in UI.
+            when(() => chatStore.loaded, () => {
+                chatInviteStore.activateInvite(this.invite.kegDbId);
+                if (chatInviteStore.activeInvite) {
+                    chatStore.deactivateCurrentChat();
+                    routerStore.navigateTo(routerStore.ROUTES.channelInvite);
+                }
+            });
+        }
+    }
+
+    postDesktopNotification(title, body) {
+        if (!title || !body) return;
+        const props = {
+            body,
+            silent: true
+        };
+
+        // icon needed for Windows, looks weird on Mac
+        if (config.os !== 'Darwin') props.icon = path.join(app.getAppPath(), 'build/static/img/notification-icon.png');
+
+        const notification = new Notification(
+            title,
+            props
+        );
+        notification.onclick = this.handleClick;
+    }
+}
+
+function sendInviteAcceptedNotification(props) {
+    const n = new InviteAcceptedNotification(props);
+    n.send();
+}
+
 module.exports = {
     sendMessageNotification,
-    sendInviteNotification
+    sendInviteNotification,
+    sendInviteAcceptedNotification
 };
