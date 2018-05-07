@@ -16,7 +16,7 @@
   "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "updater": {
     "publicKeys": [
-      "RWQ00KRVaZ64gk1Q6bkiPBxxjYL624eBd1vuCo79JJPbYmzBntIwxYrn",
+      "RWQ00KRVaZ64gk1Q6bkiPBxxjYL624eBd1vuCo79JJPbYmzBntIwxYrn"
     ],
     "manifests": [
       "github:dchest/peerio-desktop"
