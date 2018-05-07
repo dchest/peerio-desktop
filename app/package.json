@@ -11,16 +11,15 @@
   "author": "Technologies Peerio Inc. <support@peerio.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PeerioTechnologies/peerio-desktop/issues"
+    "url": "https://github.com/dchest/peerio-desktop/issues"
   },
-  "homepage": "https://github.com/PeerioTechnologies/peerio-desktop#readme",
+  "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "updater": {
     "publicKeys": [
-      "RWRwKJ91Y/oYjLgp1BhDX0OShp6PHCqXiJUAYm3TsDJSsVtNWE07lOMv",
-      "RWQVE9QS3ACqEVxGrn/JIlDfjhMwsUOUPDhTwUg0rcCiLJTLwIMTgPOL"
+      "RWQ00KRVaZ64gk1Q6bkiPBxxjYL624eBd1vuCo79JJPbYmzBntIwxYrn",
     ],
     "manifests": [
-      "github:PeerioTechnologies/peerio-desktop"
+      "github:dchest/peerio-desktop"
     ]
   },
   "peerio": {

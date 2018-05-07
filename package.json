@@ -50,14 +50,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PeerioTechnologies/peerio-desktop.git"
+    "url": "git+https://github.com/dchest/peerio-desktop.git"
   },
   "author": "Technologies Peerio Inc. <support@peerio.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PeerioTechnologies/peerio-desktop/issues"
+    "url": "https://github.com/dchest/peerio-desktop/issues"
   },
-  "homepage": "https://github.com/PeerioTechnologies/peerio-desktop#readme",
+  "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "devDependencies": {
     "@peerio/desktop-release-builder": "6.9.4",
     "@types/chai": "4.1.2",
