@@ -59,9 +59,9 @@ class UpdaterStore {
             this.lastUpdateFailed = failed;
         });
 
-        ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest) => {
+        ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest, mandatory) => {
             console.log('Update downloaded');
-            this.mandatory = manifest.isMandatorySince(app.getVersion());
+            this.mandatory = mandatory;
             this.readyToInstall = true;
             if (this.mandatory) {
                 this.askToInstall = true;

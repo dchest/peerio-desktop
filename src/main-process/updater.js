@@ -77,8 +77,8 @@ function start(mainWindow) {
             mainWindow.webContents.send('update-error', err);
         });
 
-        autoUpdater.on('update-downloaded', (downloadedFile, manifest) => {
-            mainWindow.webContents.send('update-downloaded', downloadedFile, manifest);
+        autoUpdater.on('update-downloaded', (downloadedFile, manifest, mandatory) => {
+            mainWindow.webContents.send('update-downloaded', downloadedFile, manifest, mandatory);
         });
 
         if (!isDevEnv) {
