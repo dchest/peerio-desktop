@@ -1,5 +1,6 @@
 const { observable, when } = require('mobx');
-const { app, ipcRenderer } = require('electron');
+const { ipcRenderer } = require('electron');
+const { app } = require('electron').remote;
 const { clientApp, warnings } = require('peerio-icebear');
 
 class UpdaterStore {
