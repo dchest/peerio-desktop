@@ -1,5 +1,5 @@
 const { observable, when } = require('mobx');
-const { ipcRenderer } = require('electron');
+const { app, ipcRenderer } = require('electron');
 const { clientApp, warnings } = require('peerio-icebear');
 
 class UpdaterStore {
@@ -60,7 +60,7 @@ class UpdaterStore {
 
         ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest) => {
             console.log('Update downloaded');
-            this.mandatory = manifest.isMandatory;
+            this.mandatory = manifest.isMandatorySince(app.getVersion());
             this.readyToInstall = true;
             if (this.mandatory) {
                 this.askToInstall = true;
