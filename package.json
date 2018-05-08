@@ -1,7 +1,7 @@
 {
   "name": "peerio-2",
   "description": "Peerio 2",
-  "version": "2.610.2",
+  "version": "2.710.2",
   "lastMandatoryUpdateVersion": "2.0.0",
   "scripts": {
     "=== HOOKS ===": "",

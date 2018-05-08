@@ -1,7 +1,7 @@
 {
   "name": "peerio-2",
   "productName": "Peerio 2",
-  "version": "2.610.2",
+  "version": "2.710.2",
   "description": "Peerio desktop client",
   "main": "build/main.js",
   "repository": {
