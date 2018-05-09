@@ -82,8 +82,12 @@ function start(mainWindow) {
         });
 
         if (!isDevEnv) {
-            setTimeout(() => autoUpdater.checkForUpdates(), 3000);
-            setInterval(() => autoUpdater.checkForUpdates(), 60 * 60 * 1000);
+            autoUpdater.didLastUpdateFail().then(failed => {
+                if (!failed) {
+                    setTimeout(() => autoUpdater.checkForUpdates(), 3000);
+                    setInterval(() => autoUpdater.checkForUpdates(), 60 * 60 * 1000);
+                }
+            });
         } else {
             sendStatusToMainWindow('Updater did not start because dev build was detected.');
         }
