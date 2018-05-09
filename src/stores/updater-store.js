@@ -77,7 +77,7 @@ class UpdaterStore {
                         this.mandatory = true;
                     }
                     this.askToInstall = true;
-                }, 12 * 60 * 60 * 1000);
+                }, 60 * 1000);
                 warnings.add('title_updateWillBeInstalled');
             }
         });
