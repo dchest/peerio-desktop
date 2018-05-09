@@ -60,7 +60,7 @@
   },
   "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "devDependencies": {
-    "@peerio/desktop-release-builder": "6.12.0",
+    "@peerio/desktop-release-builder": "6.12.2",
     "@types/chai": "4.1.2",
     "@types/chai-as-promised": "7.1.0",
     "@types/lodash": "4.14.105",

@@ -63,10 +63,10 @@ class UpdaterStore {
             console.log('Update downloaded');
             this.mandatory = mandatory;
             this.readyToInstall = true;
+            this.scheduleInstallOnQuit();
             if (this.mandatory) {
                 this.askToInstall = true;
             } else {
-                this.scheduleInstallOnQuit();
                 // Turn on askToInstall flag in 12 hours (and every 12 hours after that)
                 // to remind to install updates if the app didn't quit.
                 // We ask nicely 2 times, but the 3rd time the update will be mandatory.
