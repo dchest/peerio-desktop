@@ -10,6 +10,11 @@ class UpdaterStore {
     @observable lastUpdateFailed = false;
 
     /**
+     * The number of install attempts the failed update had.
+     */
+    @observable lastUpdateInstallAttempts = 0;
+
+    /**
      * If true, update checking is in progress.
      */
     @observable checking = false;
@@ -54,8 +59,14 @@ class UpdaterStore {
 
     constructor() {
         // Set up event handlers.
-        ipcRenderer.on('update-last-failed', (ev, failed) => {
-            this.lastUpdateFailed = failed;
+        ipcRenderer.on('update-failed-attempts', (ev, failedAttempts) => {
+            this.lastUpdateFailed = failedAttempts > 0;
+            this.lastUpdateInstallAttempts = failedAttempts;
+            if (failedAttempts === 1) {
+                // After a single failure, retry immediately
+                // without asking the user.
+                this.quitAndRetryInstall();
+            }
         });
 
         ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest, mandatory) => {
