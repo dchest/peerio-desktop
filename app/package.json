@@ -6,7 +6,7 @@
   "main": "build/main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PeerioTechnologies/peerio-desktop.git"
+    "url": "git+https://github.com/dchest/peerio-desktop.git"
   },
   "author": "Technologies Peerio Inc. <support@peerio.com>",
   "license": "ISC",
