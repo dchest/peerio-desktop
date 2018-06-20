@@ -1,6 +1,6 @@
 const React = require('react');
 const { observer } = require('mobx-react');
-const { MaterialIcon } = require('~/peer-ui');
+const { MaterialIcon } = require('peer-ui');
 const css = require('classnames');
 
 @observer

@@ -1,6 +1,7 @@
 const { observable, action } = require('mobx');
 const { User } = require('peerio-icebear');
-const { getListOfFiles } = require('~/helpers/file');
+const { getFileTree, getFileList } = require('~/helpers/file');
+const _ = require('lodash');
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // There's currently a bug in electron that has broken the normal flow of this store
@@ -21,7 +22,6 @@ class DragDropStore {
     }
     @action.bound _onEnter(ev) {
         // console.log('enter', this._counter, ev.dataTransfer.files.length);
-
         ev.preventDefault();
 
         // if (!User.current || !ev.dataTransfer.files.length) return;
@@ -33,13 +33,13 @@ class DragDropStore {
         // remove this condition ^ after electron bug is fixed
         this._counter++;
         if (this._counter === 1) {
-            let list = Array.prototype.slice.call(ev.dataTransfer.files);
-            list = getListOfFiles(list.map(this._extractPath));
+            // let list = Array.prototype.slice.call(ev.dataTransfer.files);
+            // list = list.map(this._extractPath).map(getFileTree);
             // console.debug(`Hovering ${list.success.length} files of ${list.successBytes} bytes`);
             this.hovering = true;
-            this.hoveringFileCount = list.success.length;
-            this.hoveringFileSize = list.successBytes;
-            this._hoveringFiles = list;
+            // this.hoveringFileCount = list.success.length;
+            // this.hoveringFileSize = list.successBytes;
+            // this._hoveringFiles = list;
         }
     }
 
@@ -66,7 +66,11 @@ class DragDropStore {
             // this._subscribers.forEach(handler => { handler(this._hoveringFiles); });
             // restore this line ^ after electron bug is fixed
             this._subscribers.forEach(handler => {
-                handler(getListOfFiles(Array.prototype.slice.call(ev.dataTransfer.files).map(this._extractPath)));
+                const paths = Array.prototype.slice.call(ev.dataTransfer.files).map(this._extractPath);
+                const list = getFileList(paths);
+                const trees = paths.map(getFileTree);
+                _.remove(trees, item => !item);
+                handler(list, trees);
             });
             // remove this line ^ after electron bug is fixed
         }

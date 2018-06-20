@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 const React = require('react');
-const { ProgressBar } = require('~/peer-ui');
+const { ProgressBar } = require('peer-ui');
 const { User, socket } = require('peerio-icebear');
 const secret = require('peerio-icebear/dist/crypto/secret');
 const { observable, action } = require('mobx');

@@ -10,11 +10,11 @@ const { observer } = require('mobx-react');
 const css = require('classnames');
 const { t } = require('peerio-translator');
 const { fileStore, chatStore, clientApp } = require('peerio-icebear');
-const { Button, Menu, MenuItem } = require('~/peer-ui');
+const { Button, Menu, MenuItem } = require('peer-ui');
 
 const FilePicker = require('~/ui/files/components/FilePicker');
 const Snackbar = require('~/ui/shared-components/Snackbar');
-const { pickLocalFiles } = require('~/helpers/file');
+const { pickLocalFiles, getFileList } = require('~/helpers/file');
 const UploadDialog = require('~/ui/shared-components/UploadDialog');
 
 const MessageInputProseMirror = require('./MessageInputProseMirror');
@@ -40,6 +40,7 @@ class MessageInput extends React.Component {
         if (!chat) return;
         pickLocalFiles()
             .then(paths => {
+                paths = getFileList(paths).success; // eslint-disable-line
                 if (!paths || !paths.length) return;
                 this.selectedFiles = paths;
                 this.uploadDialogActive = true;
@@ -109,6 +110,7 @@ class MessageInput extends React.Component {
                 active={this.filePickerActive}
                 onClose={this.handleFilePickerClose}
                 onShare={this.shareFiles}
+                hideLegacy
             />
         );
     }
@@ -124,7 +126,7 @@ class MessageInput extends React.Component {
     }
 
     @computed get jumpToBottomVisible() {
-        return this.props.messageListScrolledUp ||
+        return this.props.messageListScrolledUp || chatStore.activeChat.canGoDown ||
             (!clientApp.isReadingNewestMessages && chatStore.activeChat.unreadCount > 0);
     }
 
@@ -137,7 +139,9 @@ class MessageInput extends React.Component {
                 { 'snackbar-visible': this.snackbarVisible }
             )}>
                 <Button icon="keyboard_arrow_down" onClick={this.props.onJumpToBottom} />
-                {chat.unreadCount > 0 && <div className="unread-badge">{chat.unreadCount}</div>}
+                {chat.unreadCount > 0 &&
+                    <div className="unread-badge">{chat.unreadCount < 100 ? chat.unreadCount : '99+'}</div>
+                }
             </div>
         );
     }

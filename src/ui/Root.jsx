@@ -1,11 +1,9 @@
 const React = require('react');
 const isDevEnv = require('~/helpers/is-dev-env');
-const config = require('~/config');
-const { setStringReplacement } = require('peerio-translator');
-const { Button, ProgressBar } = require('~/peer-ui');
+const { Button, ProgressBar } = require('peer-ui');
 const DropTarget = require('./shared-components/DropTarget');
 const { ipcRenderer } = require('electron');
-const { socket, clientApp, warnings } = require('peerio-icebear');
+const { socket, clientApp, warnings, chatStore } = require('peerio-icebear');
 const { computed, reaction, observable, when } = require('mobx');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
@@ -15,15 +13,28 @@ const Snackbar = require('~/ui/shared-components/Snackbar');
 const UpdateFailedDialog = require('./updater/UpdateFailedDialog');
 const InstallingUpdateDialog = require('./updater/InstallingUpdateDialog');
 const ReadyToInstallUpdateDialog = require('./updater/ReadyToInstallUpdateDialog');
-const routerStore = require('~/stores/router-store');
 const appState = require('~/stores/app-state');
 const appControl = require('~/helpers/app-control');
+const routerStore = require('~/stores/router-store');
 
 @observer
 class Root extends React.Component {
+    /*
+        Snackbar exists in root because snackbar warnings appears everywhere in app.
+        However, root snackbar interferes with MessageInput in any currently active chat.
+        So we need to only show root snackbar on non-chat screens.
+
+        The rule is:
+            * show if not in either `/app/chats/` or `/app/patients/` view
+            * or, show snackbar if there is no current activeChat.
+                This covers the case where we are in `chats` or `patients` view but without MessageInput
+                e.g. zero states, new DM, new room
+    */
     @computed get snackbarVisible() {
-        return !routerStore.currentRoute.startsWith(routerStore.ROUTES.chats)
-            || routerStore.currentRoute.startsWith(routerStore.ROUTES.newChat);
+        return (
+            !routerStore.currentRoute.startsWith(routerStore.ROUTES.chats)
+            && !routerStore.currentRoute.startsWith(routerStore.ROUTES.patients)
+        ) || !chatStore.activeChat;
     }
 
     @observable showOfflineNotification = false;
@@ -34,10 +45,6 @@ class Root extends React.Component {
             appState.devModeEnabled = true;
         }
 
-        // replace config-specific strings
-        config.translator.stringReplacements.forEach((replacementObject) => {
-            setStringReplacement(replacementObject.original, replacementObject.replacement);
-        });
         // events from main process
         ipcRenderer.on('warning', (ev, key) => warnings.add(key)); // TODO: not needed anymore?
         ipcRenderer.on('console_log', (ev, arg) => console.log(arg));
@@ -81,7 +88,7 @@ class Root extends React.Component {
             <div>
                 <div className={`status-bar ${this.showOfflineNotification ? 'visible' : ''}`}>
                     {this.showOfflineNotification
-                        ? <ProgressBar type="circular" mode="indeterminate" theme="light small" />
+                        ? <ProgressBar type="circular" mode="indeterminate" theme="light" size="small" />
                         : null
                     }
                     #{socket.reconnectAttempt}&nbsp;{t('error_connecting')}&nbsp;

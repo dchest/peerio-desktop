@@ -1,0 +1,238 @@
+// file "table" shared by Files and FilePicker
+.file-table-wrapper {
+  @extend %flex-col;
+  @extend %flex-grow-1;
+  @extend %flex-shrink-0;
+  position: relative;
+  height: calc(100vh - 144px);
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: $white;
+  border-spacing: 0;
+
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 24px 0 48px;
+    border-bottom: 1px solid $divider-dark;
+
+    .row {
+      display: flex;
+      align-items: center;
+    }
+
+    .p-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      margin-top: -2px;
+    }
+
+    // "Disabled" styles for when folder share in progress
+    &.disabled {
+      color: $text-dark-hint;
+    }
+  }
+
+  /*
+    The next section of styles governs the elements that are shared between:
+      * Files header
+      * FileLine
+      * FolderLine
+
+    Specifically these classes need to specify widths so that the columns actually line up.
+    This is all needed because we are *not* using <table>, in order to be able to use virtual scrolling
+  */
+  .file-checkbox {
+    justify-content: flex-start;
+    width: 32px;
+    min-width: 32px;
+    margin-right: 16px;
+  }
+
+  // Finicky show/hide rules for checkboxes
+  .hide-checkboxes .file-checkbox {
+    visibility: hidden;
+  }
+
+  .row-container:hover .file-checkbox,
+  .row-container.selected-row .file-checkbox,
+  .file-checkbox.folder-share-progress {
+    visibility: visible;
+  }
+
+  .file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    min-width: 48px;
+    padding-right: $padding-small !important;
+
+    .material-icons {
+      display: block;
+      font-size: 32px;
+    }
+
+    .p-custom-icon {
+      height: 32px;
+      width: 32px;
+    }
+  }
+
+  .file-name {
+    width: 100%;
+    overflow: hidden;
+    font-weight: $font-weight-semibold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: 150ms;
+  }
+
+  .file-owner {
+    min-width: 20%;
+    margin-left: auto;
+  }
+
+  .file-uploaded {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-width: 200px;
+
+    .badge-old-version {
+      display: flex;
+      align-items: center;
+      height: 18px;
+      padding: 0 $padding-tiny;
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: $font-weight-semibold;
+      white-space: nowrap;
+      color: $text-dark-secondary;
+      background-color: $background-neutral;
+      border-radius: 5px;
+    }
+  }
+
+  .file-size {
+    min-width: 120px;
+    margin-left: $margin-default;
+  }
+
+  .file-actions {
+    display: flex;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    padding-right: 0 !important;
+
+    .item-actions {
+      width: 24px;
+      min-width: 24px;
+      text-align: center;
+
+      .icon {
+        width: 24px;
+      }
+    }
+  }
+
+  //  From here, we are working with styles specific to each section of the Files view. More conventional.
+  .file-table-header {
+    flex-direction: row;
+    align-items: center;
+    height: 56px;
+    min-height: 56px;
+
+    > div {
+      padding-right: 24px;
+      font-size: 12px;
+      font-weight: $font-weight-semibold;
+      text-align: left;
+      color: $text-dark-inactive;
+    }
+
+    .file-checkbox {
+      visibility: visible;
+    }
+  }
+
+  .file-table-body {
+    background-color: $background-hover-default;
+  }
+
+  .row,
+  .sub-row {
+    position: relative;
+    height: 48px;
+
+    > div {
+      padding-right: 24px;
+    }
+  }
+
+  .row {
+    .loading {
+      position: absolute;
+      height: 4px;
+      width: 100%;
+      left: 0;
+      right: 0;
+      top: 100%;
+      padding: 0;
+      margin: 0;
+      margin-top: -4px;
+      line-height: 0;
+    }
+  }
+
+  .selected-row {
+    background: $background-hover-accent;
+  }
+
+  .row-container:hover {
+    background: $background-selected;
+
+    .material-icons {
+      color: $color-affirmative;
+    }
+
+    .file-icon .material-icons {
+      color: $icon-dark-active;
+    }
+  }
+
+  label {
+    display: inline-block;
+    width: 18px;
+    max-width: 18px;
+    margin-bottom: 0;
+  }
+
+  // Placeholder visuals for a file in process of converting to shared
+  .placeholder-file {
+    .placeholder-square {
+      height: 12px;
+      width: 40%;
+      background-color: $background-neutral;
+      border-radius: 4px;
+    }
+
+    .file-icon {
+      padding-left: 4px;
+
+      .placeholder-square {
+        height: 24px;
+        width: 24px;
+      }
+    }
+
+    .file-actions .placeholder-square {
+      height: 20px;
+      width: 8px;
+    }
+  }
+}

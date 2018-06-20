@@ -1,6 +1,6 @@
 const React = require('react');
 const { t } = require('peerio-translator');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 
 function ZeroScreen(props) {
     return (

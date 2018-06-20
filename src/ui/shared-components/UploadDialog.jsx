@@ -2,7 +2,7 @@ const React = require('react');
 const { action, computed, observable } = require('mobx');
 const { observer } = require('mobx-react');
 const { chatStore, fileHelpers, contactStore } = require('peerio-icebear');
-const { Button, Dialog, Input } = require('~/peer-ui');
+const { Button, Dialog, Input } = require('peer-ui');
 const FileSpriteIcon = require('~/ui/shared-components/FileSpriteIcon');
 const ShareWithDialog = require('~/ui/shared-components/ShareWithDialog');
 const css = require('classnames');
@@ -15,7 +15,7 @@ class UploadDialog extends React.Component {
         deactivate()    function    deactivate this dialog
         files           array       files that are being uploaded
     */
-    @action componentWillMount() {
+    componentWillMount() {
         this.targetChat = chatStore.activeChat;
         this.previewNextFile();
     }
@@ -28,7 +28,6 @@ class UploadDialog extends React.Component {
     // if we selected a contact in our list, we should
     // find an existing chat with them or start a new one
     @observable targetContact = null;
-
     /**
      * Multiple files may be shared
      */
@@ -39,11 +38,20 @@ class UploadDialog extends React.Component {
         return this.props.files[this.currentFileIndex];
     }
 
+    /**
+     * Returns current file name with a random query string added to
+     * prevent Chromium caching.
+     */
+    @computed get currentFileForceNoCache() {
+        return `${this.currentFile}?${Math.random()}`;
+    }
+
     @action.bound onFileNameChange(val) {
         this.fileName = val;
     }
 
     @computed get fileExt() {
+        if (!this.currentFile) return '';
         return fileHelpers.getFileExtension(fileHelpers.getFileName(this.currentFile));
     }
 
@@ -106,9 +114,8 @@ class UploadDialog extends React.Component {
         try {
             if (targetContact) {
                 this.targetChat = await chatStore.startChat([targetContact]);
-                chatStore.activate(this.targetChat.id);
             }
-            this.targetChat.uploadAndShareFile(this.currentFile, this.parsedFileName, null, null, this.messageText);
+            this.targetChat.uploadAndShareFile(this.currentFile, this.parsedFileName, null, this.messageText);
         } catch (err) {
             console.error(err);
         }
@@ -179,6 +186,7 @@ class UploadDialog extends React.Component {
                     onSelectContact={this.changeToContact}
                     onSelectChannel={this.changeToChannel}
                     deactivate={this.hideShareWithDialog}
+                    context="sharefiles"
                 />
             );
         }
@@ -191,8 +199,8 @@ class UploadDialog extends React.Component {
                 title={this.dialogTitle}>
                 <div className="upload-dialog-contents">
                     <div className={css('image-or-icon', { 'icon-container': this.fileType !== 'img' })}>
-                        { this.fileType === 'img'
-                            ? <div className="thumbnail"><img src={this.currentFile} alt="" /></div>
+                        {this.fileType === 'img'
+                            ? <div className="thumbnail"><img src={this.currentFileForceNoCache} alt="" /></div>
                             : <div className="icon-inner">
                                 <FileSpriteIcon type={this.fileType} size="xlarge" />
                                 <T k="title_previewUnavailable" tag="div" className="preview-unavailable" />

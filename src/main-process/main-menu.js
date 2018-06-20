@@ -2,52 +2,56 @@ const { app, Menu } = require('electron');
 const config = require('~/config');
 const isDevEnv = require('~/helpers/is-dev-env');
 
-const template = [
-    {
-        label: 'Edit',
-        submenu: [
-            { role: 'undo' },
-            { role: 'redo' },
-            { type: 'separator' },
-            { role: 'cut' },
-            { role: 'copy' },
-            { role: 'paste' },
-            // { role: 'pasteandmatchstyle' },
-            { role: 'delete' },
-            { role: 'selectall' }
-        ]
-    }];
+const editMenu = {
+    label: 'Edit',
+    submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        // { role: 'pasteandmatchstyle' },
+        { role: 'delete' },
+        { role: 'selectall' }
+    ]
+};
+
+const viewMenu = {
+    label: 'View',
+    submenu: [
+        { role: 'reload' },
+        { role: 'toggledevtools' }
+    ]
+};
+
+const windowMenu = {
+    role: 'window',
+    submenu: [
+        { role: 'minimize' },
+        { role: 'close' }
+    ]
+};
+
+const helpMenu = {
+    role: 'help',
+    submenu: [
+        {
+            label: 'Support', // don't use https: url due to weird redirect issues
+            click() { require('electron').shell.openExternal(config.translator.urlMap.helpCenter); }
+        }
+    ]
+};
+
+const template = [editMenu];
 
 if (isDevEnv) {
-    template.push(
-        {
-            label: 'View',
-            submenu: [
-                { role: 'reload' },
-                { role: 'toggledevtools' }
-            ]
-        }
-
-    );
+    template.push(viewMenu);
 }
 
 template.push(
-    {
-        role: 'window',
-        submenu: [
-            { role: 'minimize' },
-            { role: 'close' }
-        ]
-    },
-    {
-        role: 'help',
-        submenu: [
-            {
-                label: 'Support', // don't use https: url due to weird redirect issues
-                click() { require('electron').shell.openExternal(config.translator.urlMap.helpCenter); }
-            }
-        ]
-    }
+    windowMenu,
+    helpMenu
 );
 
 if (process.platform === 'darwin') {
@@ -69,7 +73,7 @@ if (process.platform === 'darwin') {
         ]
     });
     // Edit menu.
-    template[1].submenu.push(
+    editMenu.submenu.push(
         {
             type: 'separator'
         },
@@ -82,7 +86,7 @@ if (process.platform === 'darwin') {
         }
     );
     // Window menu.
-    template[3].submenu = [
+    windowMenu.submenu = [
         {
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',

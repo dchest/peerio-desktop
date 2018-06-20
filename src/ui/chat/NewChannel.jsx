@@ -5,7 +5,7 @@ const { chatStore, config, User } = require('peerio-icebear');
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
-const { Input, ProgressBar } = require('~/peer-ui');
+const { Input, ProgressBar } = require('peer-ui');
 
 @observer
 class NewChannel extends React.Component {
@@ -21,9 +21,9 @@ class NewChannel extends React.Component {
         return User.current.channelsLeft === 0;
     }
 
-    handleAccept = () => {
+    handleAccept = async () => {
         this.waiting = true;
-        const chat = chatStore.startChat(this.userPicker.selected, true, this.channelName, this.purpose);
+        const chat = await chatStore.startChat(this.userPicker.selected, true, this.channelName, this.purpose);
         if (!chat) {
             this.waiting = false;
             return;
@@ -77,7 +77,8 @@ class NewChannel extends React.Component {
                         <T k="title_createChannel" tag="span" />
                     </div>
                     <div className="description">
-                        <T k="title_createChannelDetails">{textParser}</T>
+                        <T k="title_createChannelDetails" />
+                        <T k="title_offerNewDM">{textParser}</T>
                     </div>
                 </div>
                 <div className="new-channel-inputs">

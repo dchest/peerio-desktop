@@ -4,7 +4,8 @@ const { observer } = require('mobx-react');
 const { chatStore, chatInviteStore } = require('peerio-icebear');
 const routerStore = require('~/stores/router-store');
 const T = require('~/ui/shared-components/T');
-const css = require('classnames');
+const { t } = require('peerio-translator');
+const PlusIcon = require('~/ui/shared-components/PlusIcon');
 
 @observer
 class ZeroChats extends React.Component {
@@ -33,7 +34,7 @@ class ZeroChats extends React.Component {
 
     render() {
         return (
-            <div className={css('zero-chats-container')}>
+            <div className="zero-chats-container">
                 <div className="zero-chats-content">
                     <div className="header">
                         <T k="title_zeroChat" tag="div" className="welcome-title" />
@@ -44,10 +45,7 @@ class ZeroChats extends React.Component {
                         <div className="instructions create-rooms">
                             <div className="text">
                                 <div className="text-header">
-                                    <div className="chat-item-add" onClick={this.goToAddChannel} >
-                                        <div className="chat-item-add-icon" />
-                                        <T k="button_createRooms" className="chat-item-title" />
-                                    </div>
+                                    <PlusIcon onClick={this.goToAddChannel} label={t('button_createRooms')} />
                                 </div>
                                 <div className="text-description">
                                     <T k="title_roomsDescription1" tag="div" className="description-large" />
@@ -68,10 +66,7 @@ class ZeroChats extends React.Component {
                             </div>
                             <div className="text">
                                 <div className="text-header">
-                                    <div className="chat-item-add" onClick={this.goToAddChat} >
-                                        <div className="chat-item-add-icon" />
-                                        <T k="button_createDMs" className="chat-item-title" />
-                                    </div>
+                                    <PlusIcon onClick={this.goToAddChat} label={t('button_createDMs')} />
                                 </div>
                                 <div className="text-description">
                                     <T k="title_dmDescription1" tag="div" className="description-large" />

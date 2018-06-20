@@ -3,7 +3,7 @@ const { Component } = require('react');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
-const { Dialog, ProgressBar } = require('~/peer-ui');
+const { Dialog, ProgressBar } = require('peer-ui');
 const updaterStore = require('~/stores/updater-store');
 
 @observer class InstallingUpdateDialog extends Component {

@@ -41,8 +41,13 @@
     height: 55vh;
 
     .row {
-      padding-left: $padding-default;
+      padding-left: 0;
       border: none;
+    }
+
+    .file-checkbox {
+      justify-content: flex-end;
+      visibility: visible;
     }
   }
 }

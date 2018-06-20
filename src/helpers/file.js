@@ -4,13 +4,53 @@ const _ = require('lodash');
 const path = require('path');
 const sanitize = require('sanitize-filename');
 const { t } = require('peerio-translator');
+const { fileHelpers } = require('peerio-icebear');
 
+function selectDownloadFolder() {
+    return new Promise(resolve => {
+        const win = electron.getCurrentWindow();
+        electron.dialog.showOpenDialog(
+            win,
+            {
+                buttonLabel: t('button_download'),
+                properties: ['openDirectory', 'treatPackageAsDirectory', 'createDirectory']
+            },
+            folders => {
+                if (!folders || !folders.length) {
+                    resolve(null);
+                } else {
+                    resolve(folders[0]);
+                }
+            }
+        );
+    });
+}
+
+function pickSavePath(folderPath, nameWithoutExtension, extension = '') {
+    console.log(folderPath);
+    console.log(nameWithoutExtension);
+    console.log(extension);
+    let defaultPath = null;
+    let counter = 0;
+    do {
+        defaultPath = path.join(
+            folderPath,
+            sanitize(nameWithoutExtension, { replacement: '_' }).concat(
+                counter ? ` (${counter})` : '',
+                extension ? `.${extension}` : ''
+            )
+        );
+        ++counter;
+    } while (fs.existsSync(defaultPath));
+    return defaultPath;
+}
 
 function requestDownloadPath(fileName) {
     return new Promise((resolve, reject) => {
         let p = sanitize(fileName, { replacement: '_' });
         try {
             const downloadsDir = electron.app.getPath('downloads');
+            // TODO: maybe use path.join here?
             p = `${downloadsDir}/${p}`;
         } catch (err) {
             console.log(err);
@@ -61,10 +101,10 @@ function downloadFile(file) {
 
 function pickLocalFiles() {
     return new Promise(resolve => {
+        const properties = ['openFile', 'multiSelections', 'treatPackageAsDirectory'];
+        if (process.platform === 'darwin') properties.push('openDirectory');
         const win = electron.getCurrentWindow();
-        electron.dialog.showOpenDialog(win, {
-            properties: ['openFile', 'multiSelections']
-        }, resolve);
+        electron.dialog.showOpenDialog(win, { properties }, resolve);
     });
 }
 
@@ -80,11 +120,12 @@ function pickLocalFiles() {
  * @param {Array<string>} mixed files/folders paths
  * @returns {getListFilesResult}
  */
-function getListOfFiles(paths) {
+function getFileList(paths) {
     // console.debug(paths);
     const ret = {
         success: [], error: [], restricted: []
     };
+    if (!paths) return ret;
     ret.successBytes = 0;
     paths.forEach(p => {
         try {
@@ -95,14 +136,10 @@ function getListOfFiles(paths) {
                 return;
             }
             if (stat.isDirectory()) {
-                if (process.platform === 'darwin' && p.substr(-4).toLowerCase() === '.app') {
-                    ret.restricted.push(p);
-                    return;
-                }
                 // going into recursion
                 const namesInDir = fs.readdirSync(p);
                 for (let i = 0; i < namesInDir.length; i++) namesInDir[i] = path.join(p, namesInDir[i]);
-                const nested = getListOfFiles(namesInDir);
+                const nested = getFileList(namesInDir);
                 ret.success.push(...nested.success);
                 ret.error.push(...nested.error);
                 ret.restricted.push(...nested.restricted);
@@ -121,4 +158,46 @@ function getListOfFiles(paths) {
     return ret;
 }
 
-module.exports = { downloadFile, pickLocalFiles, getListOfFiles };
+function getFileTree(filePath) {
+    try {
+        const stat = fs.lstatSync(filePath);
+        if (stat.isFile()) {
+            return filePath;
+        }
+        if (stat.isDirectory()) {
+            const folder = {
+                name: fileHelpers.getFileName(filePath),
+                folders: [],
+                files: []
+            };
+
+            const namesInDir = fs.readdirSync(filePath);
+            for (let i = 0; i < namesInDir.length; i++) namesInDir[i] = path.join(filePath, namesInDir[i]);
+            namesInDir.forEach(child => {
+                child = getFileTree(child); //eslint-disable-line
+                if (!child) return;
+
+                if (typeof child === 'object') {
+                    folder.folders.push(child);
+                } else {
+                    folder.files.push(child);
+                }
+            });
+            return folder;
+        }
+        return null;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+
+module.exports = {
+    downloadFile,
+    pickLocalFiles,
+    getFileList,
+    selectDownloadFolder,
+    pickSavePath,
+    getFileTree
+};

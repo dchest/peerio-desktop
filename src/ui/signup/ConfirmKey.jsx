@@ -2,7 +2,7 @@ const React = require('react');
 const { Component } = require('react');
 const { observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
-const { Input } = require('~/peer-ui');
+const { Input } = require('peer-ui');
 const { t } = require('peerio-translator');
 
 @observer class ConfirmKey extends Component {

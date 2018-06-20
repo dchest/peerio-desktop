@@ -1,7 +1,7 @@
 const React = require('react');
 const { observer } = require('mobx-react');
-const { Avatar, Dropdown, MaterialIcon } = require('~/peer-ui');
-const { Button, Input, List, ListItem } = require('~/peer-ui');
+const { Avatar, Dropdown, MaterialIcon } = require('peer-ui');
+const { Button, Input, List, ListItem } = require('peer-ui');
 const { contactStore, chatStore } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');

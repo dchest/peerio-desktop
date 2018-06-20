@@ -82,29 +82,8 @@ $userlist-maxwidth: 608px; // $userpicker-maxwidth - $userpicker-margin-large
   }
 
   .user-search-error-container {
-    padding-left: $userpicker-margin-large;
-    color: $text-dark-inactive;
-  }
-
-  .user-search-error {
-    @extend %flex-row;
-    // @extend %flex-align-center;
-    @extend %flex-justify-between;
-    @extend %flex-shrink-0;
-    max-width: $userlist-maxwidth;
-    padding-right: 24px;
-    padding-top: $padding-xl;
-  }
-
-  .search-error-text {
-    @extend %flex-row;
-
-    /* TODO change to flex */
-    .material-icons {
-      min-width: 24px;
-      margin: 0 $margin-large;
-      overflow: hidden;
-    }
+    padding-left: $padding-default;
+    margin-left: $userpicker-margin-large;
   }
 
   .chat-creation-header-container {

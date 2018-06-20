@@ -3,7 +3,7 @@ const { Component } = require('react');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
-const { Dialog } = require('~/peer-ui');
+const { Dialog } = require('peer-ui');
 const updaterStore = require('~/stores/updater-store');
 
 @observer class ReadyToInstallUpdateDialog extends Component {
@@ -18,7 +18,7 @@ const updaterStore = require('~/stores/updater-store');
             { label: t('button_installUpdate'), onClick: this.handleUpdate }
         ];
         if (!updaterStore.mandatory) {
-            actions.push({ label: t('button_installUpdateLater'), onClick: this.handleLater });
+            actions.unshift({ label: t('button_installUpdateLater'), onClick: this.handleLater });
         }
         return (
             <Dialog

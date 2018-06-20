@@ -9,8 +9,6 @@ const appControl = require('~/helpers/app-control');
  * Every time you remove something from here - you're getting smarter.
  */
 class UIStore {
-    @observable contactDialogUsername;
-
     // Message object to show in sidebar when clicking on receipts
     @observable selectedMessage;
 
@@ -48,7 +46,8 @@ class UIStore {
         externalContentEnabled: false,
         externalContentJustForFavs: false,
         peerioContentConsented: false, // false - no feedback from user yet, true - user expressed their desire
-        peerioContentEnabled: false
+        peerioContentEnabled: false,
+        seenMoveToSharedVolumeWarning: false
     };
 
     // anything you add here will be stored with 'pref_' prefix in shared (system) tinydb
@@ -99,7 +98,7 @@ class UIStore {
             async (deleted) => {
                 if (!deleted) return;
                 await autologin.disable();
-                await User.current.clearFromTinyDb();
+                // await User.current.clearFromTinyDb();
                 appControl.relaunch();
             });
 

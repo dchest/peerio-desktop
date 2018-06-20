@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Avatar, Button, List, ListItem, MaterialIcon, ProgressBar } = require('~/peer-ui');
+const { Avatar, Button, List, ListItem, MaterialIcon, ProgressBar } = require('peer-ui');
 const { User, contactStore, validation } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const BetterInput = require('~/ui/shared-components/BetterInput');
@@ -201,6 +201,10 @@ class Profile extends React.Component {
 
                 </div>
                 <div className="avatar-card">
+                    <div className="card-header">
+                        <div className="full-name">{this.contact.fullName}</div>
+                        <div className="username">@{this.contact.username}</div>
+                    </div>
                     <Avatar contact={this.contact} size="full" />
                     <div className="card-footer">
                         <Button icon="delete"

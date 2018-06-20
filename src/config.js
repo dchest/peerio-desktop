@@ -5,7 +5,7 @@ const app = require('electron').app || require('electron').remote.app;
 const isDevEnv = require('~/helpers/is-dev-env');
 const FileStream = require('peerio-icebear/dist/models/files/node-file-stream');
 const StorageEngine = require('peerio-icebear/dist/models/storage/node-json-storage');
-const { setUrlMap, setTagHandler } = require('peerio-translator');
+const { setUrlMap, setTagHandler, setStringReplacement } = require('peerio-translator');
 const tagHandlers = require('~/ui/shared-components/translator-tag-handlers');
 
 const packageJson = require(path.join(app.getAppPath(), 'package.json'));
@@ -27,6 +27,11 @@ setUrlMap(cfg.translator.urlMap);
 for (const name in tagHandlers) {
     setTagHandler(name, tagHandlers[name]);
 }
+
+// replace config-specific strings
+cfg.translator.stringReplacements.forEach((replacementObject) => {
+    setStringReplacement(replacementObject.original, replacementObject.replacement);
+});
 
 // --- PLATFORM SPECIFIC IMPLEMENTATIONS
 cfg.FileStream = FileStream;
@@ -55,15 +60,22 @@ cfg.nodeLogFolder = path.join(app.getPath('userData'), 'logs');
 if (isDevEnv) {
     try {
         cfg.devAutologin = require('../../autologin.json'); // eslint-disable-line
+        cfg.debug = cfg.devAutologin.debug || cfg.debug;
     } catch (err) {
         // don't care
     }
 }
 
 // FOR DEV ENVIRONMENT ONLY
-// DEV MACHINE OVERRIDES SOCKET SERVER VALUE WITH THIS
-if (isDevEnv && process.env.PEERIO_STAGING_SOCKET_SERVER) {
-    cfg.socketServerUrl = process.env.PEERIO_STAGING_SOCKET_SERVER;
+if (isDevEnv) {
+    // DEV MACHINE OVERRIDES SOCKET SERVER VALUE WITH THIS
+    if (process.env.PEERIO_STAGING_SOCKET_SERVER) {
+        cfg.socketServerUrl = process.env.PEERIO_STAGING_SOCKET_SERVER;
+    }
+    // Allow overridding of whitelabel config.
+    if (process.env.PEERIO_WHITELABEL) {
+        cfg.whiteLabel.name = process.env.PEERIO_WHITELABEL;
+    }
 }
 
 // --- DIAGNOSTIC STARTUP LOG
@@ -77,5 +89,6 @@ try {
     console.log(err);
 }
 
+cfg.enableVolumes = true;
 
 module.exports = cfg;

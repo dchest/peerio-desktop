@@ -1,10 +1,8 @@
 // @ts-check
-const { action } = require('mobx');
 const Autolinker = require('autolinker');
 const htmlEncoder = require('html-entities').AllHtmlEntities;
 
 const { User, contactStore } = require('peerio-icebear');
-const uiStore = require('~/stores/ui-store');
 
 const { sanitizeChatMessage } = require('~/helpers/sanitizer');
 const { isUrlAllowed } = require('~/helpers/url');
@@ -16,11 +14,6 @@ emojione.ascii = true;
 emojione.imagePathPNG = './static/emoji/png/';
 emojione.sprites = false;
 emojione.greedyMatch = true;
-
-
-// @ts-ignore (legacy)
-window.legacyOpenContact = action(contactName => { uiStore.contactDialogUsername = contactName; });
-
 
 let ownMentionRegex;
 function highlightMentions(str) {

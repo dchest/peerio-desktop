@@ -2,7 +2,7 @@ const React = require('react');
 const { Component } = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Dialog } = require('~/peer-ui');
+const { Dialog } = require('peer-ui');
 const Terms = require('~/ui/shared-components/Terms');
 const { t } = require('peerio-translator');
 

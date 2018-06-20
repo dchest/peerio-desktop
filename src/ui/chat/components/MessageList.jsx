@@ -1,12 +1,12 @@
 const React = require('react');
 const { reaction, computed, observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Avatar, ProgressBar } = require('~/peer-ui');
-const T = require('~/ui/shared-components/T');
+const { ProgressBar } = require('peer-ui');
 const Message = require('./Message');
 const { chatStore, clientApp } = require('peerio-icebear');
 const { t } = require('peerio-translator');
-const IdentityVerificationNotice = require('~/ui/chat/components/IdentityVerificationNotice');
+const PendingDMHeader = require('~/ui/chat/components/PendingDMHeader');
+const ChatHeader = require('~/whitelabel/components/ChatHeader');
 
 @observer
 class MessageList extends React.Component {
@@ -208,21 +208,21 @@ class MessageList extends React.Component {
 
     renderChatStart() {
         const chat = chatStore.activeChat;
+
+        if (chat.isChatCreatedFromPendingDM) {
+            return (
+                <div className="messages-start">
+                    <PendingDMHeader
+                        isNewUser={chat.isNewUserFromInvite}
+                        contact={this.displayParticipants[0]}
+                    />
+                </div>
+            );
+        }
+
         if (chat.canGoUp || !chat.initialPageLoaded) return null;
         return (
-            <div className="messages-start">
-                <div className="avatars">
-                    {this.displayParticipants.map(
-                        c => <Avatar size="large" key={c.username} contact={c} tooltip clickable />
-                    )}
-                </div>
-                <T k={chat.isChannel ? 'title_chatBeginningRoom' : 'title_chatBeginning'} tag="div" className="title">
-                    {{
-                        chatName: chat.name
-                    }}
-                </T>
-                <IdentityVerificationNotice />
-            </div>
+            <ChatHeader />
         );
     }
 

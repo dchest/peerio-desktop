@@ -1,6 +1,7 @@
 const React = require('react');
 const { t } = require('peerio-translator');
-const { List, ListItem, Tooltip } = require('~/peer-ui');
+const { List, ListItem, Tooltip } = require('peer-ui');
+const PlusIcon = require('~/ui/shared-components/PlusIcon');
 const { action } = require('mobx');
 const { observer } = require('mobx-react');
 const routerStore = require('~/stores/router-store');
@@ -37,13 +38,9 @@ class Contacts extends React.Component {
                 <div className="feature-navigation-list">
                     <div className="list">
                         <List clickable>
-                            <div className="chat-item-add"
-                                onClick={this.toAddNew}
-                            >
-                                <div className="chat-item-title">{t('title_contacts')}</div>
-                                <div className="chat-item-add-icon" />
-                                <Tooltip text={t('button_addAContact')}
-                                    position="right" />
+                            <div>
+                                <PlusIcon onClick={this.toAddNew} label={t('title_contacts')} />
+                                <Tooltip text={t('button_addAContact')} position="right" />
                             </div>
                             <ListItem leftIcon="star"
                                 caption={`${t('title_favoriteContacts')} (${contactStore.addedContacts.length})`}

@@ -32,6 +32,12 @@ echo "[••••••••       ] tagging release"
 ./node_modules/.bin/standard-version
 git push && git push --follow-tags origin master
 
+if [[ $1 = "mandatory" ]]; then
+  node ./scripts/update_mandatory_version
+else
+  echo "Optional update"
+fi
+
 echo "[•••••••••••••••] building and publishing"
 echo '**'
 echo '** NOTE: on Windows, run: peerio-desktop-signer --shared Y:\ --certificate "certificate subject name"'

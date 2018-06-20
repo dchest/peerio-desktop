@@ -7,7 +7,10 @@ const { observer } = require('mobx-react');
         const { step, count } = this.props;
         const items = [];
         for (let i = 1; i <= count; ++i) {
-            const current = i === step ? <div className="current-step" /> : null;
+            const current = (i - 1 === step) || (i >= step && step >= count)
+                ? <div className="current-step" />
+                : null;
+
             items.push(<div key={`step_${i}`} className="signup-step">{current}</div>);
             (i < count) && items.push(<div key={`divider_${i}`} className="signup-step-divider" />);
         }

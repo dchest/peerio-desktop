@@ -4,7 +4,7 @@ const { observer } = require('mobx-react');
 const { shell, remote } = require('electron');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
-const { Dialog } = require('~/peer-ui');
+const { Dialog } = require('peer-ui');
 const updaterStore = require('~/stores/updater-store');
 const config = require('~/config');
 

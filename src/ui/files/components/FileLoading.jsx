@@ -1,5 +1,5 @@
 const React = require('react');
-const { MaterialIcon } = require('~/peer-ui');
+const { MaterialIcon } = require('peer-ui');
 
 function FileLoading(props) {
     return (

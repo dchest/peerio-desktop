@@ -1,7 +1,7 @@
 const React = require('react');
 const { when } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { t } = require('peerio-translator');
 const T = require('../../shared-components/T');
 const config = require('~/config');

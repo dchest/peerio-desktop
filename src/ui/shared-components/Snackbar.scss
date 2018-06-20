@@ -38,7 +38,7 @@ $snackbar-min-width: 288px;
   top: 0;
   padding: 0 $padding-default 0 24px;
   color: $text-light-default;
-  background: $darkblue;
+  background: $snackbar-background;
   border-radius: 2px;
 
   .p-button:not([disabled]) {

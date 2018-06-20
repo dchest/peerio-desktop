@@ -17,7 +17,7 @@ esac
 export NODE_ENV=production
 
 echo "Building and publishing staging"
-peerio-desktop-release --key ~/.peerio-updater/secret.key \
+../node_modules/.bin/peerio-desktop-release --key ~/.peerio-updater/secret.key \
                        --shared ~/Win \
                        --repository PeerioTechnologies/peerio-desktop \
                        --overrides PeerioTechnologies/peerio-desktop-staging \

@@ -1,5 +1,5 @@
 const React = require('react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { observer } = require('mobx-react');
 const autologin = require('~/helpers/autologin');
 const { t } = require('peerio-translator');

@@ -1,6 +1,6 @@
 const React = require('react');
 const { observer } = require('mobx-react');
-const { Button, List, ListItem } = require('~/peer-ui');
+const { Button, List, ListItem } = require('peer-ui');
 const { contactStore } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const moment = require('moment');

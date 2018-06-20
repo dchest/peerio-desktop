@@ -1,3 +1,11 @@
+.move-file-confirm-share {
+  .share-warning-toggle {
+    display: flex;
+    align-items: center;
+    margin-top: $margin-default;
+  }
+}
+
 .move-file-dialog {
   height: 75vh;
 
@@ -58,10 +66,6 @@
       @extend %hint-error-label;
       color: $text-dark-hint;
     }
-  }
-
-  .actions {
-    padding: $padding-large;
   }
 
   .search {

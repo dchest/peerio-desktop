@@ -1,10 +1,12 @@
 const React = require('react');
+const { observer } = require('mobx-react');
 const Croppie = require('croppie');
 const { observable } = require('mobx');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const electron = require('electron').remote;
 const { t } = require('peerio-translator');
 
+@observer
 class AvatarEditor extends React.Component {
     @observable static state = {
         showEditor: false,

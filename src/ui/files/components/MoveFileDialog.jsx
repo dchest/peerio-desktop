@@ -1,54 +1,76 @@
 const React = require('react');
-const { observable, action, computed } = require('mobx');
+const { observable, action, computed, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
-const { Button, Dialog, MaterialIcon } = require('~/peer-ui');
+const { Button, Dialog, MaterialIcon } = require('peer-ui');
 const { fileStore } = require('peerio-icebear');
 const Breadcrumb = require('./Breadcrumb');
 const Search = require('~/ui/shared-components/Search');
-const { getAttributeInParentChain } = require('~/helpers/dom');
 const css = require('classnames');
 const { getFolderByEvent } = require('~/helpers/icebear-dom');
+const ShareConfirmDialog = require('./ShareConfirmDialog');
 
 @observer
 class MoveFileDialog extends React.Component {
     @observable selectedFolder = null;
     @observable currentFolder = null;
 
-    componentWillMount() {
-        this.currentFolder = this.props.currentFolder;
+    @action.bound toggleShareWarning() {
+        this.shareWarningDisabled = !this.shareWarningDisabled;
     }
 
-    getFolder(ev) {
-        const id = getAttributeInParentChain(ev.target, 'data-folderid');
-        const folder = fileStore.folders.getById(id);
-        return folder;
+    componentWillMount() {
+        this.currentFolder = this.props.currentFolder;
+        this.deleteReaction = reaction(() => this.currentFolder.isDeleted, isDeleted => {
+            if (isDeleted) this.currentFolder = fileStore.folderStore.root;
+        });
+    }
+
+    componentWillUnmount() {
+        this.deleteReaction();
     }
 
     @action.bound selectionChange(ev) {
-        this.selectedFolder = this.getFolder(ev);
+        this.selectedFolder = getFolderByEvent(ev);
     }
 
     @action.bound setCurrentFolder(ev) {
-        this.currentFolder = this.getFolder(ev);
+        this.currentFolder = getFolderByEvent(ev);
     }
 
-    @action.bound handleMove() {
+    @action.bound async handleMove() {
         const { file, folder, onHide } = this.props;
         const target = this.selectedFolder || this.currentFolder;
-        target.moveInto(file || folder);
-        if (folder) fileStore.folders.save();
+
+        if (target.root.isShared) {
+            // we hide folder selection dialog immediately to prevent flicker
+            this.dialog.hideWithoutAnimation();
+            if (!await this.shareConfirmDialog.check()) {
+                // if user pressed cancel on confirmation, we show our dialog immediately
+                // to prevent flicker again
+                this.dialog.showWithoutAnimation();
+                return;
+            }
+        }
+
+        // TODO: needs refactoring
+        if (this.props.handleMove) {
+            this.props.handleMove(target);
+        } else {
+            fileStore.bulk.moveOne(file || folder, target);
+        }
+
         onHide();
     }
 
     @computed get visibleFolders() {
-        return fileStore.folderFilter ?
-            fileStore.visibleFolders
+        return fileStore.searchQuery ?
+            fileStore.foldersSearchResult
             : this.currentFolder.foldersSortedByName;
     }
 
     @action.bound handleSearch(query) {
-        fileStore.folderFilter = query;
+        fileStore.searchQuery = query;
     }
 
     @action.bound changeCurrentFolder(ev) {
@@ -58,11 +80,12 @@ class MoveFileDialog extends React.Component {
     getFolderRow = (folder) => {
         if (folder === this.props.folder) return null;
 
-        const hasFolders = fileStore.folders.getById(folder.folderId).folders.length > 0;
+        const hasFolders = folder.folders.length > 0;
 
         return (<div
-            key={`folder-${folder.folderId}`}
-            data-folderid={folder.folderId}
+            key={`folder-${folder.id}`}
+            data-folderid={folder.id}
+            data-storeid={folder.store.id}
             className="move-file-row">
             <Button
                 icon={this.selectedFolder === folder ?
@@ -71,13 +94,13 @@ class MoveFileDialog extends React.Component {
                 theme="small"
                 selected={this.selectedFolder === folder}
             />
-            <MaterialIcon icon="folder" className="folder-icon" />
+            <MaterialIcon icon={folder.isShared ? 'folder_shared' : 'folder'} className="folder-icon" />
             <div className={css('file-info', { clickable: hasFolders })}
                 onClick={this.setCurrentFolder}
             >
                 <div className="file-name clickable">{folder.name}</div>
             </div>
-            { hasFolders &&
+            {hasFolders &&
                 <Button
                     onClick={this.setCurrentFolder}
                     icon="keyboard_arrow_right"
@@ -86,6 +109,10 @@ class MoveFileDialog extends React.Component {
             }
         </div>);
     };
+
+    refShareConfirmDialog = ref => { this.shareConfirmDialog = ref; };
+
+    refDialog = ref => { this.dialog = ref; };
 
     render() {
         const { onHide, visible } = this.props;
@@ -99,25 +126,29 @@ class MoveFileDialog extends React.Component {
             .map(this.getFolderRow);
 
         return (
-            <Dialog
-                actions={actions}
-                onCancel={onHide}
-                active={visible}
-                title={t('title_moveFileTo')}
-                className="move-file-dialog">
-                <Search
-                    onChange={this.handleSearch}
-                    query={fileStore.folderFilter}
-                />
-                <Breadcrumb
-                    currentFolder={this.currentFolder}
-                    onSelectFolder={this.changeCurrentFolder}
-                    noActions
-                />
-                <div className="move-folders-container">
-                    {folders}
-                </div>
-            </Dialog>
+            <div>
+                <ShareConfirmDialog ref={this.refShareConfirmDialog} />
+                <Dialog
+                    ref={this.refDialog}
+                    actions={actions}
+                    onCancel={onHide}
+                    active={visible}
+                    title={t('title_moveFileTo')}
+                    className="move-file-dialog">
+                    <Search
+                        onChange={this.handleSearch}
+                        query={fileStore.searchQuery}
+                    />
+                    <Breadcrumb
+                        currentFolder={this.currentFolder}
+                        onSelectFolder={this.changeCurrentFolder}
+                        noActions
+                    />
+                    <div className="move-folders-container">
+                        {folders}
+                    </div>
+                </Dialog>
+            </div>
         );
     }
 }

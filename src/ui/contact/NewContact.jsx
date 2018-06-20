@@ -1,22 +1,27 @@
 const React = require('react');
-const { observable, action, when } = require('mobx');
+const { observable, action, computed } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button, Input, MaterialIcon } = require('~/peer-ui');
+const { Button, Input, MaterialIcon, ProgressBar } = require('peer-ui');
 const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
 const css = require('classnames');
 const { contactStore, User, warnings } = require('peerio-icebear');
+const UserSearchError = require('~/whitelabel/components/UserSearchError');
 const urls = require('peerio-icebear').config.translator.urlMap;
+
 const routerStore = require('~/stores/router-store');
 
 @observer
 class NewContact extends React.Component {
     @observable query = '';
     @observable notFound = false;
-    @observable legacyContactError = false;
     @observable suggestInviteEmail = '';
     @observable waiting = false;
     @observable isInviteView = false;
+
+    @computed get showSearchError() {
+        return this.notFound || !!this.suggestInviteEmail;
+    }
 
     // same component is used for add and invite,
     // when on invited zero state view - we want to render it slightly different
@@ -29,7 +34,7 @@ class NewContact extends React.Component {
         this.isInviteView = routerStore.currentRoute === routerStore.ROUTES.newInvite;
     }
     // Don't use onKeyUp - text change fires earlier
-    handleKeyDown = e => {
+    handleKeyDown = async e => {
         if (e.key === 'Enter' && this.query !== '') {
             if (this.isInviteView) this.invite();
             else this.tryAdd();
@@ -38,7 +43,6 @@ class NewContact extends React.Component {
 
     @action.bound handleTextChange(newVal) {
         this.notFound = false;
-        this.legacyContactError = false;
         this.query = newVal.toLocaleLowerCase().trim();
     }
 
@@ -47,34 +51,34 @@ class NewContact extends React.Component {
         input.focus();
     }
 
-    tryAdd = () => {
+    tryAdd = async () => {
         if (this.waiting) return;
         this.waiting = true;
         this.suggestInviteEmail = '';
         this.notFound = false;
-        this.legacyContactError = false;
-        const c = contactStore.getContactAndSave(this.query);
-        when(() => !c.loading, () => {
-            if (c.notFound) {
-                this.notFound = true;
-                this.legacyContactError = c.isLegacy;
-                const atInd = this.query.indexOf('@');
-                const isEmail = atInd > -1 && atInd === this.query.lastIndexOf('@');
-                if (isEmail) {
-                    this.suggestInviteEmail = this.query;
-                    this.query = '';
-                }
-            } else {
+
+        const c = await contactStore.whitelabel.getContact(this.query, 'addcontact');
+
+        if (c.notFound || c.isHidden) {
+            this.notFound = true;
+            const atInd = this.query.indexOf('@');
+            const isEmail = atInd > -1 && atInd === this.query.lastIndexOf('@');
+            if (isEmail) {
+                this.suggestInviteEmail = this.query;
                 this.query = '';
-                warnings.add(t('title_contactAdded', { name: c.fullNameAndUsername }));
             }
-            this.waiting = false;
-        });
+        } else {
+            this.query = '';
+            contactStore.getContactAndSave(c.username);
+            warnings.add(t('title_contactAdded', { name: c.fullNameAndUsername }));
+        }
+        this.waiting = false;
     };
 
-    invite = () => {
-        contactStore.invite(this.isInviteView ? this.query : this.suggestInviteEmail);
+    invite = (context) => {
+        contactStore.invite(this.isInviteView ? this.query : this.suggestInviteEmail, context);
         this.suggestInviteEmail = '';
+        this.notFound = false;
         if (this.isInviteView) this.query = '';
     };
 
@@ -138,21 +142,19 @@ class NewContact extends React.Component {
                                     onClick={this.isInviteView ? this.invite : this.tryAdd}
                                     theme="affirmative"
                                 />
+                                {this.waiting &&
+                                    <ProgressBar type="circular" mode="indeterminate" theme="small" />
+                                }
                             </div>
-                            {this.notFound
-                                ? <T k={this.legacyContactError ? 'title_inviteLegacy' : 'error_userNotFound'}
-                                    tag="div" className="error-search" />
+                            {this.showSearchError
+                                ? <UserSearchError
+                                    userNotFound={this.notFound ? this.query : null}
+                                    suggestInviteEmail={this.suggestInviteEmail}
+                                    onInvite={this.invite}
+                                    isChannel={routerStore.isNewChannel}
+                                />
                                 : null
                             }
-                            {this.suggestInviteEmail ?
-                                <div className="email-invite-container">
-                                    <div className="email-invite">{this.suggestInviteEmail}</div>
-                                    <Button
-                                        onClick={this.invite}
-                                        label={t('button_inviteEmailContact')}
-                                    />
-                                </div>
-                                : null}
                         </div>
                         <div className="invite-elsewhere">
                             <T k="title_shareSocial" tag="strong" />

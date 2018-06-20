@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 const React = require('react');
 const { Component } = require('react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { config, socket, User, validation, warnings } = require('peerio-icebear');
 const { observable, computed, when } = require('mobx');
 const { observer } = require('mobx-react');
 const { t } = require('peerio-translator');
-const { Link } = require('react-router');
 const ValidatedInput = require('~/ui/shared-components/ValidatedInput');
 const FullCoverLoader = require('~/ui/shared-components/FullCoverLoader');
 const T = require('~/ui/shared-components/T');
@@ -15,6 +14,9 @@ const css = require('classnames');
 const autologin = require('~/helpers/autologin');
 const routerStore = require('~/stores/router-store');
 const updaterStore = require('~/stores/updater-store');
+
+const PoweredByLogin = require('~/whitelabel/components/PoweredByLogin');
+const SignupLink = require('~/whitelabel/components/SignupLink');
 
 const { validators } = validation; // use common validation from core
 
@@ -180,6 +182,7 @@ class LoginStore extends OrderedFormStore {
                 <FullCoverLoader show={this.loginStore.busy} />
                 <div className="login">
                     <img alt="Peerio logo" className="logo" src="static/img/logo-mark.svg" />
+                    <PoweredByLogin />
                     {this.loginStore.lastAuthenticatedUser ? this.getWelcomeBlock() : ''}
                     <div className="login-form">
                         <div className={css('title', { banish: this.loginStore.lastAuthenticatedUser })}>
@@ -226,9 +229,7 @@ class LoginStore extends OrderedFormStore {
                         theme="affirmative"
                     />
 
-                    <div>
-                        {t('title_newUser')} &nbsp; <Link to="/signup">{t('button_CreateAccount')}</Link>
-                    </div>
+                    <SignupLink />
                 </div>
             </div>
         );

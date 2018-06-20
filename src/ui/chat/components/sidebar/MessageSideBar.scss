@@ -15,8 +15,13 @@
 
   .title {
     @extend %flex-row;
+    align-items: center;
     justify-content: space-between;
     overflow: hidden;
+
+    .p-button {
+      margin-right: $margin-default;
+    }
   }
 
   .p-list-heading {
@@ -24,12 +29,6 @@
     height: auto;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .close-button {
-    @extend %flex-shrink-0;
-    margin-right: $margin-default;
-    text-align: right;
   }
 
   .receipts {

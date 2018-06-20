@@ -108,15 +108,33 @@
         color: $text-light-default;
       }
 
+      .card-header,
       .card-footer {
-        @extend %flex-row;
-        @extend %flex-align-center;
-        @extend %flex-shrink-0;
         position: absolute;
-        height: 48px;
+        z-index: 1;
+      }
+
+      .card-header {
+        left: 0;
+        top: 0;
+        padding-left: $padding-default;
+        padding-top: $padding-default;
+        color: $text-light-default;
+
+        .full-name {
+          font-weight: $font-weight-semibold;
+        }
+
+        .username {
+          @extend %hint-error-label;
+        }
+      }
+
+      .card-footer {
         right: 0;
         bottom: 0;
         padding-right: $padding-small;
+        padding-bottom: $padding-small;
 
         .material-icons {
           color: $icon-light-inactive;

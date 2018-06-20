@@ -1,6 +1,5 @@
 const { observable, when } = require('mobx');
 const { ipcRenderer } = require('electron');
-const { app } = require('electron').remote;
 const { clientApp, warnings } = require('peerio-icebear');
 
 class UpdaterStore {
@@ -61,7 +60,7 @@ class UpdaterStore {
 
         ipcRenderer.on('update-downloaded', (ev, downloadedFile, manifest, mandatory) => {
             console.log('Update downloaded');
-            this.mandatory = mandatory;
+            this.mandatory = mandatory || clientApp.clientVersionDeprecated;
             this.readyToInstall = true;
             this.scheduleInstallOnQuit();
             if (this.mandatory) {
@@ -77,7 +76,7 @@ class UpdaterStore {
                         this.mandatory = true;
                     }
                     this.askToInstall = true;
-                }, 60 * 1000);
+                }, 12 * 60 * 60 * 1000);
                 warnings.add('title_updateWillBeInstalled');
             }
         });
@@ -137,7 +136,7 @@ class UpdaterStore {
     }
 
     quitAndRetryInstall() {
-        if (this.installing) return;
+        if (this.installing || this.checking || this.downloading) return;
         this.readyToInstall = false;
         this.installing = true;
         ipcRenderer.send('update-retry-install');

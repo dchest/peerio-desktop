@@ -1,7 +1,8 @@
 const React = require('react');
-const { observable, computed, when, transaction } = require('mobx');
+const { observable, computed, when, transaction, reaction } = require('mobx');
 const { observer } = require('mobx-react');
-const { Avatar, Button, Chip, Input, List, ListHeading, ListItem, MaterialIcon, ProgressBar } = require('~/peer-ui');
+const { Avatar, Button, Chip, Input, List, ListHeading, ListItem, MaterialIcon, ProgressBar } = require('peer-ui');
+const UserSearchError = require('~/whitelabel/components/UserSearchError');
 const { t } = require('peerio-translator');
 const { fileStore, contactStore, User } = require('peerio-icebear');
 const css = require('classnames');
@@ -18,7 +19,6 @@ class UserPicker extends React.Component {
     @observable showNotFoundError;
     @observable userAlreadyAdded = '';
     @observable foundContact;
-    legacyContactError = false; // not observable bcs changes only with showNotFoundError
     @observable contactLoading = false;
     @observable _searchUsernameTimeout = false;
 
@@ -26,14 +26,31 @@ class UserPicker extends React.Component {
         return this.suggestInviteEmail || this.showNotFoundError || this.userAlreadyAdded;
     }
 
+    @computed get isRoomCreation() {
+        return routerStore.isNewChannel
+            || routerStore.isNewPatient
+            || routerStore.isNewPatientRoom
+            || routerStore.isNewInternalRoom;
+    }
+
     componentDidMount() {
         if (this.props.onChange) {
             this.selected.observe(() => this.props.onChange(this.selected));
         }
+
+        // Reset search and selection when changing between two views that both use UserPicker
+        this.disposer = reaction(() => routerStore.currentRoute, () => {
+            this.reset();
+            this.selected = [];
+        });
+    }
+
+    componentWillUnmount() {
+        this.disposer();
     }
 
     @computed get options() {
-        const ret = contactStore.filter(this.query).filter(this.filterOptions);
+        const ret = contactStore.whitelabel.filter(this.query, this.props.context).filter(this.filterOptions);
         const favorites = ret.filter(s => s.isAdded);
         const normal = ret.filter(s => !s.isAdded);
         return {
@@ -43,7 +60,7 @@ class UserPicker extends React.Component {
     }
 
     @computed get isValid() {
-        return !this.selected.find(s => s.loading || s.notFound);
+        return !this.selected.find(s => s.loading || s.notFound || s.isHidden);
     }
 
     @computed get selectedSelfless() {
@@ -73,7 +90,6 @@ class UserPicker extends React.Component {
     }
 
     reset() {
-        this.legacyContactError = false;
         this.showNotFoundError = false;
         this.userAlreadyAdded = '';
         this.suggestInviteEmail = '';
@@ -98,13 +114,13 @@ class UserPicker extends React.Component {
 
     // Don't use onKeyPress it won't catch backspace
     // Don't use onKeyUp - text change fires earlier
-    handleKeyDown = e => {
+    handleKeyDown = async e => {
         if (e.key === 'Enter' && this.query !== '') {
             // if we are in 1-1 DM selection and user hits enter
             if (this.props.limit === 1) {
-                const c = this.foundContact || this.searchUsername(this.query);
+                const c = this.foundContact || await this.searchUsername(this.query);
                 // if we know for sure contact is there, then go to DM immediately
-                if (c && !c.loading && !c.notFound) {
+                if (c && !c.loading && !c.notFound && !c.isHidden) {
                     this.query = '';
                     this.selected = [c];
                     this.accept();
@@ -132,30 +148,29 @@ class UserPicker extends React.Component {
         }, 1000);
     }
 
-    searchUsername(q) {
+    async searchUsername(q) {
         if (!q) return null;
-        const c = contactStore.getContact(q);
+        this.contactLoading = true;
+        let c = await contactStore.whitelabel.getContact(q, this.props.context);
         if (this.isExcluded(c)) {
             this.userAlreadyAdded = this.query;
-            return null;
-        }
-        this.contactLoading = true;
-        when(() => !c.loading, () => {
+            c = null;
+        } else {
             const atInd = q.indexOf('@');
             const isEmail = atInd > -1 && atInd === q.lastIndexOf('@');
-            this.userNotFound = c.notFound ? q : '';
-            this.suggestInviteEmail = (c.notFound && isEmail && !this.props.noInvite) ? q : '';
-            this.legacyContactError = c.isLegacy;
-            this.showNotFoundError = c.notFound;
-            this.foundContact = !c.notFound && c;
-            this.contactLoading = false;
-        });
+            const userHiddenOrNotFound = c.notFound || c.isHidden;
+            this.userNotFound = userHiddenOrNotFound ? q : '';
+            this.suggestInviteEmail = (userHiddenOrNotFound && isEmail && !this.props.noInvite) ? q : '';
+            this.showNotFoundError = userHiddenOrNotFound;
+            this.foundContact = !userHiddenOrNotFound && c;
+        }
+        this.contactLoading = false;
         return c;
     }
 
     async tryAcceptUsername() {
         this.reset();
-        const c = this.searchUsername(this.query);
+        const c = await this.searchUsername(this.query);
         if (c === null || this.selected.find(s => s.username === this.query)) {
             return;
         }
@@ -166,7 +181,7 @@ class UserPicker extends React.Component {
         this.selected.push(c);
         when(() => !c.loading, () => {
             setTimeout(() => {
-                if (c.notFound) this.selected.remove(c);
+                if (c.notFound || c.isHidden) this.selected.remove(c);
             }, 1000);
         });
     }
@@ -179,7 +194,7 @@ class UserPicker extends React.Component {
         if (this.props.onlyPick || this.accepted || !this.isValid) return;
         this.accepted = true;
         this.selected.forEach(s => {
-            if (s.notFound) this.selected.remove(s);
+            if (s.notFound || s.isHidden) this.selected.remove(s);
         });
         this.props.onAccept(this.selected);
     };
@@ -212,8 +227,8 @@ class UserPicker extends React.Component {
         });
     };
 
-    invite = () => {
-        contactStore.invite(this.suggestInviteEmail);
+    invite = (context) => {
+        contactStore.invite(this.suggestInviteEmail, context);
         this.query = '';
         this.reset();
     }
@@ -237,7 +252,7 @@ class UserPicker extends React.Component {
     }
 
     render() {
-        const selectedFiles = fileStore.getSelectedFiles();
+        const selectedFiles = fileStore.selectedFiles;
 
         return (
             <div className="user-picker">
@@ -279,7 +294,7 @@ class UserPicker extends React.Component {
                                         <div className="chip-wrapper">
                                             {this.selected.map(c =>
                                                 (<Chip key={c.username}
-                                                    className={css({ 'not-found': c.notFound })}
+                                                    className={css({ 'not-found': c.notFound || c.isHidden })}
                                                     onDeleteClick={() => this.selected.remove(c)} deletable>
                                                     {c.loading
                                                         ? <ProgressBar type="linear" mode="indeterminate" />
@@ -288,14 +303,16 @@ class UserPicker extends React.Component {
                                             )}
                                             <Input innerRef={this.onInputMount}
                                                 placeholder={
-                                                    routerStore.isNewChannel
+                                                    routerStore.isNewChannel || routerStore.isPatientSpace
                                                         ? t('title_Members')
-                                                        : t('title_userSearch')
+                                                        : routerStore.isNewPatient
+                                                            ? t('mcr_title_newPatientRecord')
+                                                            : t('title_userSearch')
                                                 }
                                                 value={this.query} onChange={this.handleTextChange}
                                                 onKeyDown={this.handleKeyDown} />
                                         </div>
-                                        {this.props.limit !== 1 && this.props.onAccept && !routerStore.isNewChannel &&
+                                        {this.props.limit !== 1 && this.props.onAccept && !this.isRoomCreation &&
                                             <Button
                                                 label={this.props.button || t('button_go')}
                                                 onClick={this.accept}
@@ -305,17 +322,17 @@ class UserPicker extends React.Component {
                                             />
                                         }
                                         {(this.contactLoading || this._searchUsernameTimeout) &&
-                                            <ProgressBar type="circular" mode="indeterminate" theme="small" />
+                                            <ProgressBar type="circular" mode="indeterminate" size="small" />
                                         }
                                     </div>
                                 </div>
-                                {routerStore.isNewChannel &&
+                                {this.isRoomCreation &&
                                     <div className="helper-text">
                                         <T k="title_userSearch" />. <T k="title_optional" />
                                     </div>
                                 }
                             </div>
-                            {routerStore.isNewChannel &&
+                            {this.isRoomCreation &&
                                 <div className="new-channel-button-container">
                                     <Button
                                         label={t('button_open')}
@@ -326,39 +343,19 @@ class UserPicker extends React.Component {
                                 </div>
                             }
                         </div>
+                        {this.showSearchError &&
+                            <div className="user-search-error-container">
+                                <UserSearchError
+                                    userAlreadyAdded={this.userAlreadyAdded}
+                                    userNotFound={
+                                        (this.showNotFoundError && !this.suggestInviteEmail) ? this.userNotFound : null
+                                    }
+                                    suggestInviteEmail={this.suggestInviteEmail}
+                                    onInvite={this.invite}
+                                />
+                            </div>
+                        }
                         <div className="user-list-container">
-                            {this.showSearchError &&
-                                <div className="user-search-error-container">
-                                    <div className="user-search-error">
-                                        <div className="search-error-text">
-                                            <MaterialIcon icon="help_outline" />
-                                            {this.suggestInviteEmail &&
-                                                <T k="title_inviteContactByEmail">
-                                                    {{ email: this.suggestInviteEmail }}
-                                                </T>
-                                            }
-                                            {this.showNotFoundError && !this.suggestInviteEmail &&
-                                                <T k={this.legacyContactError ?
-                                                    'title_inviteLegacy' : 'error_userNotFoundTryEmail'} tag="div">
-                                                    {{ user: this.userNotFound }}
-                                                </T>
-                                            }
-                                            {this.userAlreadyAdded &&
-                                                <T k="error_userAlreadyAdded" tag="div">
-                                                    {{ user: this.userAlreadyAdded }}
-                                                </T>
-                                            }
-                                        </div>
-                                        {this.suggestInviteEmail &&
-                                            <Button
-                                                onClick={this.invite}
-                                                label={t('button_send')}
-                                                theme="affirmative"
-                                            />
-                                        }
-                                    </div>
-                                </div>
-                            }
                             <List theme="large" clickable>
                                 {this.foundContact && this.renderList(null, [this.foundContact])}
                                 {!this.foundContact

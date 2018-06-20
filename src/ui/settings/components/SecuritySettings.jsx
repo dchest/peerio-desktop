@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button, Dialog, MaterialIcon, Switch, ProgressBar } = require('~/peer-ui');
+const { Button, Dialog, MaterialIcon, Switch, ProgressBar } = require('peer-ui');
 const { User } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const autologin = require('~/helpers/autologin');

@@ -1,12 +1,13 @@
 const React = require('react');
-const { reaction } = require('mobx');
+const { action, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 const { chatStore, systemMessages, contactStore } = require('peerio-icebear');
 const uiStore = require('~/stores/ui-store');
-const { Avatar, Button, List, ListItem } = require('~/peer-ui');
+const { Avatar, Button, List, ListItem } = require('peer-ui');
+const AvatarWithPopup = require('~/ui/contact/components/AvatarWithPopup');
+const ContactProfile = require('~/ui/contact/components/ContactProfile');
 const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
-const { getAttributeInParentChain } = require('~/helpers/dom');
 
 @observer
 class MessageSideBar extends React.Component {
@@ -28,10 +29,16 @@ class MessageSideBar extends React.Component {
         this.reactionsToDispose.forEach(d => d());
     }
 
-    openContact(ev) {
-        const username = getAttributeInParentChain(ev.target, 'data-username');
-        uiStore.contactDialogUsername = username;
+    setContactProfileRef = (ref) => {
+        if (ref) this.contactProfileRef = ref;
     }
+
+    @observable clickedContact;
+    @action.bound openContact(ev) {
+        this.clickedContact = contactStore.getContact(ev.currentTarget.attributes['data-username'].value);
+        this.contactProfileRef.openDialog();
+    }
+
     close() {
         setTimeout(() => {
             uiStore.selectedMessage = null;
@@ -87,13 +94,11 @@ class MessageSideBar extends React.Component {
                     <List theme="large no-hover">
                         <div className="title">
                             <T k="title_messageInfo" tag="div" className="p-list-heading" />
-                            <div className="close-button">
-                                <Button icon="close" onClick={this.close} />
-                            </div>
+                            <Button icon="close" onClick={this.close} />
                         </div>
                         <ListItem
                             leftContent={
-                                <Avatar key="a" contact={msg.sender} size="small" clickable tooltip />
+                                <AvatarWithPopup key="a" contact={msg.sender} size="small" tooltip />
                             }
                             caption={msg.sender.fullName}
                             legend={this.renderMessage(msg)}
@@ -105,6 +110,11 @@ class MessageSideBar extends React.Component {
                 <List className="receipts" clickable>
                     {this.getReceipts(msg)}
                 </List>
+
+                <ContactProfile
+                    ref={this.setContactProfileRef}
+                    contact={this.clickedContact}
+                />
             </div>
         );
     }

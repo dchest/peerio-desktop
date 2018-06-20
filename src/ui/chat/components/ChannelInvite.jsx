@@ -1,21 +1,34 @@
 const React = require('react');
 
-const { action, observable } = require('mobx');
+const { action, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
 
-const { chatInviteStore, contactStore, User } = require('peerio-icebear');
+const { chatStore, chatInviteStore, contactStore, User } = require('peerio-icebear');
 const urls = require('~/config').translator.urlMap;
 
 const css = require('classnames');
 const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
-const { Avatar, Button, Divider } = require('~/peer-ui');
+const { Button, Divider } = require('peer-ui');
+const AvatarWithPopup = require('~/ui/contact/components/AvatarWithPopup');
 const routerStore = require('~/stores/router-store');
-const { ProgressBar } = require('~/peer-ui');
+const { ProgressBar } = require('peer-ui');
+const EmojiImage = require('~/ui/emoji/Image');
 
 @observer
 class ChannelInvite extends React.Component {
     @observable inProgress = false;
+
+    componentDidMount() {
+        // TODO: refactor when better server/sdk support for room invites
+        this.disposer = reaction(() => !chatStore.chats.length && !chatInviteStore.received.length, () => {
+            routerStore.navigateTo(routerStore.ROUTES.zeroChats);
+        });
+    }
+
+    componentWillUnmount() {
+        this.disposer();
+    }
 
     @action.bound async acceptInvite() {
         const kegDbId = chatInviteStore.activeInvite.kegDbId;
@@ -42,7 +55,7 @@ class ChannelInvite extends React.Component {
         return (
             <div className={css('channel-invite', this.props.className)}>
                 <div className="invite-content decline-content">
-                    <div className="emoji-double emojione-32-diversity _270c-1f3fc" alt="✌️" title=":v:" />
+                    <EmojiImage emoji="v" size="large" />
                     <div className="text">
                         {t('title_userOut', { name: User.current.username })}
                     </div>
@@ -51,16 +64,56 @@ class ChannelInvite extends React.Component {
         );
     }
 
+    minParticipants = 2;
+    maxAvatars = 4;
+    maxParticipants = 6;
+
+    get renderParticipants() {
+        const { channelName, participants, username } = chatInviteStore.activeInvite;
+        if (participants.length <= this.minParticipants) return null;
+
+        const participantsToShow = [];
+
+        for (let i = 0; i < participants.length && participantsToShow.length < this.maxAvatars; i++) {
+            const participant = participants[i];
+
+            if (participant !== username && participant !== User.current.username) {
+                participantsToShow.push(
+                    <AvatarWithPopup key={participant} contact={contactStore.getContact(participant)} tooltip />
+                );
+            }
+        }
+
+        return (
+            <div className="participant-list">
+                <span>
+                    <T k="title_whoIsAlreadyIn" className="already-in-room" tag="span" />&nbsp;
+                    <span className="room-name">{`# ${channelName}`}</span>
+                </span>
+                <div className="avatars">
+                    {participantsToShow}
+                    {participants.length > this.maxParticipants
+                        ? <div className="more-participants">
+                            +{participants.length - this.maxParticipants}
+                        </div>
+                        : null
+                    }
+                </div>
+            </div>);
+        // }
+    }
+
     render() {
         if (chatInviteStore.activeInvite && chatInviteStore.activeInvite.declined) return this.declineControl;
         if (this.inProgress) return <ProgressBar mode="indeterminate" />;
         const { activeInvite } = chatInviteStore;
         if (!activeInvite) return null;
         const { channelName, username } = activeInvite;
+        const contact = contactStore.getContact(username);
         return (
             <div className={css('channel-invite', this.props.className)}>
                 <div className="invite-content">
-                    <div className="emoji-double emojione-32-objects _1f389" alt="🎉" title=":tada:" />
+                    <EmojiImage emoji="tada" size="large" />
                     <div className="text">
                         <T k="title_roomInviteHeading" />&nbsp;
                         <span className="channel-name"># {channelName}</span>
@@ -100,12 +153,13 @@ class ChannelInvite extends React.Component {
                         <div className="participant-list">
                             <span>
                                 <T k="title_hostedBy" className="hosted-by" tag="span" />&nbsp;
-                                <span className="host-username">{contactStore.getContact(username).fullName}</span>
+                                <span className="host-username">{contact.fullName}</span>
                             </span>
                             <div className="avatars">
-                                <Avatar username={username} clickable tooltip />
+                                <AvatarWithPopup contact={contact} tooltip />
                             </div>
                         </div>
+                        {this.renderParticipants}
                     </div>
                     : null
                 }

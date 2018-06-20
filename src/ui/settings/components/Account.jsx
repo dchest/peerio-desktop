@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button, Dialog, Switch } = require('~/peer-ui');
+const { Button, Dialog, Switch } = require('peer-ui');
 const { t } = require('peerio-translator');
 const { User } = require('peerio-icebear');
 const T = require('~/ui/shared-components/T');
@@ -82,7 +82,7 @@ class Account extends React.Component {
                     <Button label={t('button_accountDelete')} onClick={this.showConfirmDelete} />
                 </section>
                 <Dialog active={this.deleteAccountDialogActive} actions={dialogActions}
-                    onCancel={this.hideConfirmDelete} title={t('title_accountDelete')} type="normal" >
+                    onCancel={this.hideConfirmDelete} title={t('title_accountDelete')}>
                     <T k="title_accountDeleteDescription1" tag="p" /><br />
                     <T k="title_accountDeleteDescription2" tag="p" /><br />
                     <T k="title_accountDeleteDescription3" tag="p" />

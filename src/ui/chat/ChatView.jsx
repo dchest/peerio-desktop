@@ -1,23 +1,27 @@
 const React = require('react');
 const { action, computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('~/peer-ui');
-const MessageInput = require('./components/MessageInput');
-const MessageList = require('./components/MessageList');
+const { Button, CustomIcon, MaterialIcon, ProgressBar, Tooltip } = require('peer-ui');
 const { chatStore, chatInviteStore } = require('peerio-icebear');
 const routerStore = require('~/stores/router-store');
 const sounds = require('~/helpers/sounds');
 const uiStore = require('~/stores/ui-store');
-const UploadInChatProgress = require('./components/UploadInChatProgress');
 const { t } = require('peerio-translator');
 const css = require('classnames');
+
+const MessageInput = require('./components/MessageInput');
+const MessageList = require('./components/MessageList');
 const MessageSideBar = require('./components/sidebar/MessageSideBar');
 const ChatSideBar = require('./components/sidebar/ChatSideBar');
 const ChannelSideBar = require('./components/sidebar/ChannelSideBar');
 const ChatNameEditor = require('./components/ChatNameEditor');
+const UploadInChatProgress = require('./components/UploadInChatProgress');
+
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const FullCoverLoader = require('~/ui/shared-components/FullCoverLoader');
-const { Dialog } = require('~/peer-ui');
+const PendingDM = require('./components/PendingDM');
+const { Dialog } = require('peer-ui');
+const ELEMENTS = require('~/whitelabel/helpers/elements');
 
 @observer
 class ChatView extends React.Component {
@@ -27,16 +31,22 @@ class ChatView extends React.Component {
     componentDidMount() {
         this.reactionsToDispose = [
             reaction(() => chatStore.activeChat, () => { this.showUserPicker = false; })
+
+            // TODO: refactor when SDK is there for chat invites
+            // reaction(() => !chatStore.chats.length && !chatInviteStore.received.length, () => {
+            //     routerStore.navigateTo(routerStore.ROUTES.zeroChats);
+            // }, true)
         ];
 
         if (chatInviteStore.activeInvite) {
             routerStore.navigateTo(routerStore.ROUTES.channelInvite);
         }
 
-        // TODO: refactor when SDK is there for chat invites
         if (!chatStore.chats.length && !chatInviteStore.received.length) {
             routerStore.navigateTo(routerStore.ROUTES.zeroChats);
         }
+
+        ELEMENTS.chatView.checkActiveSpace();
     }
 
     componentWillUnmount() {
@@ -79,9 +89,9 @@ class ChatView extends React.Component {
         }
     }
 
-    shareFiles = (files) => {
+    shareFilesAndFolders = (filesAndFolders) => {
         try {
-            chatStore.activeChat.shareFiles(files)
+            chatStore.activeChat.shareFilesAndFolders(filesAndFolders)
                 .catch(() => ChatView.playErrorSound());
         } catch (err) {
             console.error(err);
@@ -162,9 +172,10 @@ class ChatView extends React.Component {
                                     onBlur={this.hideChatNameEditor} />
                                 : <div className="name-editor-inner">
                                     {chat.canIAdmin && chat.isChannel ? <MaterialIcon icon="edit" /> : null}
-                                    <div className="title-content">
-                                        {chat.name}
-                                    </div>
+                                    {chat.isChannel
+                                        ? ELEMENTS.chatView.title(ELEMENTS.chatEditor.displayName(chat))
+                                        : <div className="title-content">{chat.name}</div>
+                                    }
                                 </div>
                         }
                     </div>
@@ -178,7 +189,7 @@ class ChatView extends React.Component {
                                 {chat.allParticipants.length || ''}
                             </div>
                             : (chat.changingFavState
-                                ? <ProgressBar type="circular" mode="indeterminate" theme="small" />
+                                ? <ProgressBar type="circular" mode="indeterminate" size="small" />
                                 :
                                 <div
                                     onClick={chat.toggleFavoriteState}
@@ -268,6 +279,12 @@ class ChatView extends React.Component {
         const chat = chatStore.activeChat;
         if (!chat) return null;
 
+        if (chat.isInvite) {
+            return (
+                <PendingDM />
+            );
+        }
+
         const jitsiActions = [
             { label: t('button_cancel'), onClick: this.toggleJitsiDialog },
             { label: t('button_startVideoCall'), onClick: this.postJitsiLink }
@@ -285,7 +302,10 @@ class ChatView extends React.Component {
                                     onClose={this.closeUserPicker}
                                     onAccept={this.addParticipants}
                                     exceptContacts={chat.allParticipants}
-                                    title={t('title_addParticipants')} noDeleted />
+                                    title={t('title_addParticipants')}
+                                    noDeleted
+                                    context={ELEMENTS.chatView.currentContext}
+                                />
                             </div>
                             : <div className="messages-container">
                                 {chatStore.chats.length === 0 && !chatStore.loading
@@ -308,7 +328,7 @@ class ChatView extends React.Component {
                                     }
                                     onSend={this.sendRichTextMessage}
                                     onAck={this.sendAck}
-                                    onFileShare={this.shareFiles}
+                                    onFileShare={this.shareFilesAndFolders}
                                     messageListScrolledUp={this.pageScrolledUp}
                                     onJumpToBottom={this.jumpToBottom}
                                 />

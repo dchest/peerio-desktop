@@ -1,6 +1,6 @@
 const React = require('react');
 const { Component } = require('react');
-const { MaterialIcon } = require('~/peer-ui');
+const { MaterialIcon } = require('peer-ui');
 const { observer } = require('mobx-react');
 const AvatarDialog = require('./AvatarDialog');
 const { t } = require('peerio-translator');

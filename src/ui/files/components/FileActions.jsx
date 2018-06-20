@@ -1,6 +1,6 @@
 const React = require('react');
 const { observer } = require('mobx-react');
-const { Divider, Menu, MenuItem } = require('~/peer-ui');
+const { Divider, Menu, MenuItem } = require('peer-ui');
 const { t } = require('peerio-translator');
 const { getDataProps } = require('~/helpers/dom');
 
@@ -22,14 +22,22 @@ class FileActions extends React.Component {
                 icon="more_vert"
                 position="bottom-right"
                 onClick={this.props.onMenuClick}
+                disabled={this.props.disabled}
                 {...getDataProps(this.props)}
             >
+                {this.props.limitedActions
+                    ? <MenuItem caption={t('button_learnMore')}
+                        icon="info"
+                        onClick={this.props.onClickMoreInfo}
+                    />
+                    : null
+                }
+
                 {this.props.shareable
                     ? <MenuItem caption={t('button_share')}
-                        icon="reply"
+                        icon="person_add"
                         onClick={this.props.onShare}
-                        className="reverse-icon"
-                        disabled={this.props.shareDisabled}
+                        disabled={this.props.shareDisabled || this.props.limitedActions}
                     />
                     : null
                 }
@@ -53,11 +61,18 @@ class FileActions extends React.Component {
                     />
                     : null
                 }
-                {this.props.deleteable ? <Divider /> : null }
+                {this.props.deleteable ? <Divider /> : null}
                 {this.props.deleteable
                     ? <MenuItem caption={t('button_delete')}
                         icon="delete"
                         onClick={this.props.onDelete}
+                    />
+                    : null
+                }
+                {this.props.unshareable
+                    ? <MenuItem caption={t('button_unshare')}
+                        icon="remove_circle_outline"
+                        onClick={this.props.onUnshare}
                     />
                     : null
                 }

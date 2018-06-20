@@ -4,6 +4,7 @@ const { observer } = require('mobx-react');
 const BetterInput = require('~/ui/shared-components/BetterInput');
 const { chatStore, config } = require('peerio-icebear');
 const { t } = require('peerio-translator');
+const ELEMENTS = require('~/whitelabel/helpers/elements');
 
 @observer
 class ChatNameEditor extends React.Component {
@@ -17,7 +18,7 @@ class ChatNameEditor extends React.Component {
             if (this.props.purpose) {
                 chatStore.activeChat.changePurpose(val);
             } else {
-                chatStore.activeChat.rename(val);
+                ELEMENTS.chatEditor.saveNameChanges(val);
             }
         } catch (err) {
             console.error(err);
@@ -30,8 +31,7 @@ class ChatNameEditor extends React.Component {
 
         const hint = this.props.purpose ? 'title_chatPurposeHint' : 'title_chatNameHint';
         const label = this.props.purpose ? 'title_purpose' : 'title_title';
-        const value = this.props.purpose ? chat.chatHead.purpose : chat.chatHead.chatName;
-        const displayValue = this.props.purpose ? chat.purpose : chat.name;
+        const value = this.props.purpose ? chat.purpose : ELEMENTS.chatEditor.displayName(chat);
         return (
             <BetterInput label={this.props.showLabel ? t(label) : null}
                 hint={t(hint)}
@@ -43,7 +43,6 @@ class ChatNameEditor extends React.Component {
                 onKeyDown={this.props.onKeyDown}
                 innerRef={this.setRef}
                 value={value}
-                displayValue={displayValue}
                 tabIndex={this.props.tabIndex}
                 readOnly={this.props.readOnly}
                 multiline={this.props.multiline}

@@ -1,19 +1,26 @@
 const React = require('react');
+const { action, observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Avatar, List, ListHeading, ListItem, Menu, MenuItem } = require('~/peer-ui');
+const { Avatar, List, ListHeading, ListItem, Menu, MenuItem } = require('peer-ui');
+const ContactProfile = require('~/ui/contact/components/ContactProfile');
 const { chatStore, contactStore, chatInviteStore, User } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const { getAttributeInParentChain } = require('~/helpers/dom');
-const uiStore = require('~/stores/ui-store');
 const T = require('~/ui/shared-components/T');
 const SideBarSection = require('./SideBarSection');
 const css = require('classnames');
+const ELEMENTS = require('~/whitelabel/helpers/elements');
 
 @observer
 class MembersSection extends React.Component {
-    openContact(ev) {
-        const username = getAttributeInParentChain(ev.target, 'data-username');
-        uiStore.contactDialogUsername = username;
+    setContactProfileRef = (ref) => {
+        if (ref) this.contactProfileRef = ref;
+    }
+
+    @observable clickedContact;
+    @action.bound openContact(ev) {
+        this.clickedContact = contactStore.getContact(ev.currentTarget.attributes['data-username'].value);
+        this.contactProfileRef.openDialog();
     }
 
     deleteInvite(ev) {
@@ -44,7 +51,25 @@ class MembersSection extends React.Component {
         ev.stopPropagation();
     }
 
+    handleClickUserMenu = () => {
+
+    }
+
     userMenu(username) {
+        const menuItems = [];
+
+        ELEMENTS.membersSection.userMenuItems(username).forEach(item => {
+            menuItems.push(
+                <MenuItem
+                    key={item.key}
+                    value={item.value}
+                    icon={item.icon}
+                    caption={t(item.caption)}
+                    onClick={this[item.onClick]}
+                />
+            );
+        });
+
         return (
             <Menu
                 icon="more_vert"
@@ -52,10 +77,7 @@ class MembersSection extends React.Component {
                 onClick={this.stopPropagation}
                 data-username={username}
             >
-                <MenuItem value="make_admin" icon="account_balance" caption={t('button_makeAdmin')}
-                    onClick={this.makeAdmin} />
-                <MenuItem value="delete" icon="remove_circle_outline" caption={t('button_remove')}
-                    onClick={this.deleteParticipant} />
+                {menuItems}
             </Menu>
         );
     }
@@ -168,6 +190,10 @@ class MembersSection extends React.Component {
                             : null}
                     </List>
                 </div>
+                <ContactProfile
+                    ref={this.setContactProfileRef}
+                    contact={this.clickedContact}
+                />
             </SideBarSection>
         );
     }

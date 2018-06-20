@@ -1,13 +1,14 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Button, Dialog } = require('~/peer-ui');
+const { Button, Dialog } = require('peer-ui');
 const { t } = require('peerio-translator');
 const version = require('electron').remote.app.getVersion();
 const Terms = require('~/ui/shared-components/Terms');
 const { socket } = require('peerio-icebear');
-const config = require('~/config');
 
+const Copyright = require('~/whitelabel/components/Copyright');
+const PoweredBySettings = require('~/whitelabel/components/PoweredBySettings');
 
 @observer
 class About extends React.Component {
@@ -29,6 +30,7 @@ class About extends React.Component {
             <div>
                 <section className="section-divider">
                     <img className="logo" src="static/img/logo-withtext.svg" />
+                    <PoweredBySettings />
                     <p>
                         {t('title_version')} <strong>{version}</strong>
                     </p>
@@ -38,10 +40,7 @@ class About extends React.Component {
 
                 </section>
                 <section>
-                    {config.whiteLabelBuild
-                        ? null
-                        : <span>&copy; 2017 Peerio Technologies, Inc. All rights reserved.</span>
-                    }
+                    <Copyright />
                     <div className="settings-terms">
                         {t('title_appName')}
                         <Button

@@ -1,5 +1,5 @@
 const React = require('react');
-// const { Menu, MenuItem } = require('~/peer-ui');
+// const { Menu, MenuItem } = require('peer-ui');
 const css = require('classnames');
 const { ghostStore } = require('peerio-icebear');
 

@@ -16,13 +16,6 @@
   .invite-content {
     margin-top: 256px;
 
-    ._1f389 {
-      height: 48px;
-      width: 48px;
-      background-position: -99px 0;
-      background-size: 691.5px 642px;
-    }
-
     .text {
       @extend %headline;
       line-height: 33px;
@@ -66,15 +59,6 @@
     }
   }
 
-  .decline-content {
-    ._270c-1f3fc {
-      height: 48px;
-      width: 48px;
-      background-position: 0 -1584px;
-      background-size: 1632px 1632px;
-    }
-  }
-
   .participants {
     padding-top: $padding-xl;
     margin: auto 0;
@@ -87,12 +71,36 @@
     .participant-list {
       margin-top: $margin-default;
 
-      .hosted-by {
-        color: $text-dark-inactive;
+      .hosted-by,
+      .already-in-room {
+        color: $text-dark-secondary;
+      }
+
+      .room-name {
+        font-weight: $font-weight-semibold;
+        color: $text-dark-secondary;
       }
 
       .avatars {
+        display: flex;
         margin-top: $margin-small;
+
+        .p-avatar + div {
+          margin-left: 8px;
+        }
+
+        .more-participants {
+          @extend %hint-error-label;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 40px;
+          width: 40px;
+          font-weight: $font-weight-semibold;
+          color: $text-light-default;
+          background-color: $icon-dark-active;
+          border-radius: 100%;
+        }
       }
     }
   }

@@ -17,7 +17,8 @@
                 "useBuiltIns": true
             }
         ],
-        "transform-react-jsx"
+        "transform-react-jsx",
+        "transform-async-to-bluebird"
     ],
     "env": {
         "production": {

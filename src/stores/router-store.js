@@ -26,6 +26,10 @@ class RouterStore {
 
     get isNewChat() { return this.currentRoute === this.ROUTES.newChat; }
     get isNewChannel() { return this.currentRoute === this.ROUTES.newChannel; }
+    get isPatientSpace() { return this.currentRoute.startsWith('/app/patients'); }
+    get isNewPatient() { return this.currentRoute === this.ROUTES.newPatient; }
+    get isNewPatientRoom() { return this.currentRoute === this.ROUTES.newPatientRoom; }
+    get isNewInternalRoom() { return this.currentRoute === this.ROUTES.newInternalRoom; }
 
     get ROUTES() {
         return {
@@ -35,6 +39,13 @@ class RouterStore {
             newChat: '/app/chats/new-chat',
             newChannel: '/app/chats/new-channel',
             channelInvite: '/app/chats/channel-invite',
+            pendingDMDismissed: '/app/chats/pending-dm-dismissed',
+
+            newPatient: '/app/chats/new-patient',
+            patients: '/app/patients',
+            newInternalRoom: '/app/patients/new-internal-room',
+            newPatientRoom: '/app/patients/new-patient-room',
+
             onboarding: '/app/onboarding',
             mail: '/app/mail',
             files: '/app/files',
@@ -50,6 +61,17 @@ class RouterStore {
             help: '/app/settings/help',
             devSettings: '/app/settings/dev'
         };
+    }
+
+    get ROUTES_INVERSE() {
+        const routesArray = Object.keys(this.ROUTES);
+        const obj = {};
+
+        for (const k in routesArray) {
+            obj[this.ROUTES[routesArray[k]]] = routesArray[k];
+        }
+
+        return obj;
     }
 }
 

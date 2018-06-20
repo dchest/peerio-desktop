@@ -1,7 +1,8 @@
 const React = require('react');
 const { computed, observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
-const { MaterialIcon } = require('~/peer-ui');
+const { MaterialIcon } = require('peer-ui');
+const T = require('~/ui/shared-components/T');
 const { t } = require('peerio-translator');
 const FolderActions = require('./FolderActions');
 
@@ -129,32 +130,61 @@ class Breadcrumb extends React.Component {
 
     render() {
         const { folderPath } = this;
-        // TODO: add unique id for root folder
+        const currentFolder = this.props.currentFolder;
         return (
             <div className="breadcrumb-container">
-                <div className="breadcrumb">
-                    {this.folderPath.map((folder, i) => (
-                        <div key={`${folder.folderId}-${folder.name}`}
-                            data-folderid={folder.folderId || 'root'}
-                            className="breadcrumb-entry">
-                            <a className="folder-link clickable"
-                                onClick={this.props.onSelectFolder}>
-                                {i > this.foldersToEllipsize
-                                    ? folder.name || t('title_files')
-                                    : '...'
-                                }
+                {this.props.bulkSelected
+                    ? <div className="breadcrumb">
+                        <div className="breadcrumb-entry" data-storeid="main" data-folderid="root">
+                            <a className="folder-name clickable" onClick={this.props.onSelectFolder}>
+                                {t('title_files')}
                             </a>
-                            {i !== folderPath.length - 1 && <MaterialIcon icon="keyboard_arrow_right" />}
+                            <MaterialIcon icon="keyboard_arrow_right" />
                         </div>
-                    ))}
-                </div>
-                {!this.props.currentFolder.isRoot && !this.props.noActions &&
-                    <FolderActions
-                        data-folderid={this.props.currentFolder.folderId}
+                        {currentFolder.isRoot && !currentFolder.isShared
+                            ? null
+                            : <div className="breadcrumb-entry">
+                                <span className="folder-name">
+                                    ...
+                                </span>
+                                <MaterialIcon icon="keyboard_arrow_right" />
+                            </div>
+                        }
+                        <div className="breadcrumb-entry">
+                            <span className="folder-name selected-count">
+                                <T k="title_selected" tag="span" /> ({this.props.bulkSelected})
+                            </span>
+                        </div>
+                    </div>
+                    : <div className="breadcrumb">
+                        {this.folderPath.map((folder, i) => (
+                            <div key={`${folder.id}-${folder.name}`}
+                                data-folderid={folder.id}
+                                data-storeid={folder.store.id}
+                                className="breadcrumb-entry">
+                                <a className="folder-name clickable"
+                                    onClick={this.props.onSelectFolder}>
+                                    {i > this.foldersToEllipsize
+                                        ? folder.name || t('title_files')
+                                        : '...'
+                                    }
+                                </a>
+                                {i !== folderPath.length - 1 && <MaterialIcon icon="keyboard_arrow_right" />}
+                            </div>
+                        ))}
+                    </div>
+                }
+                {(currentFolder.isRoot && !currentFolder.isShared) || this.props.noActions || this.props.bulkSelected
+                    ? null
+                    : <FolderActions
+                        data-folderid={currentFolder.id}
+                        data-storeid={currentFolder.store.id}
                         moveable
-                        onMove={this.props.onMove}
+                        onMove={currentFolder.isShared ? null : this.props.onMoveFolder}
                         onDelete={this.props.onDelete}
                         onRename={this.props.onRename}
+                        onShare={(currentFolder.isShared || currentFolder.canShare) ? this.props.onShare : null}
+                        onDownload={this.props.onDownload}
                         position="top-right"
                     />
                 }

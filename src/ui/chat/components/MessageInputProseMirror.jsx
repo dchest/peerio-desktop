@@ -40,7 +40,7 @@ const { linkify } = require('~/helpers/chat/prosemirror/linkify-text');
 const { ensureMentions } = require('~/helpers/chat/prosemirror/ensure-mentions');
 
 const { t } = require('peerio-translator');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { chatStore } = require('peerio-icebear');
 const uiStore = require('~/stores/ui-store');
 

@@ -1,6 +1,7 @@
 const React = require('react');
+const { action } = require('mobx');
 const { observer } = require('mobx-react');
-const { List, ListItem, Menu, MenuItem } = require('~/peer-ui');
+const { List, ListItem, Menu, MenuItem } = require('peer-ui');
 const { chatStore, fileStore } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const T = require('~/ui/shared-components/T');
@@ -9,24 +10,33 @@ const SideBarSection = require('./SideBarSection');
 const { downloadFile, pickLocalFiles } = require('~/helpers/file');
 const moment = require('moment');
 const FileSpriteIcon = require('~/ui/shared-components/FileSpriteIcon');
+const ShareWithMultipleDialog = require('~/ui/shared-components/ShareWithMultipleDialog');
 
 @observer
 class FilesSection extends React.Component {
-    share(ev) {
+    refShareWithMultipleDialog = ref => { this.shareWithMultipleDialog = ref; };
+
+    @action.bound async share(ev) {
         ev.stopPropagation();
         const fileId = getAttributeInParentChain(ev.target, 'data-fileid');
-        const file = fileStore.getById(fileId);
-        if (!file) return;
-        fileStore.clearSelection();
-        file.selected = true;
-        window.router.push('/app/sharefiles');
+        const file = fileStore.getByIdInChat(fileId, chatStore.activeChat.id);
+        await file.ensureLoaded();
+        if (this.isUnmounted || file.deleted) return;
+        const contacts = await this.shareWithMultipleDialog.show();
+        if (!contacts || !contacts.length) return;
+        contacts.forEach(c => chatStore.startChatAndShareFiles([c], file));
     }
 
-    download(ev) {
+    componentWillUnmount() {
+        this.isUnmounted = true;
+    }
+
+    @action.bound async download(ev) {
         ev.stopPropagation();
         const fileId = getAttributeInParentChain(ev.target, 'data-fileid');
-        const file = fileStore.getById(fileId);
-        if (!file) return;
+        const file = fileStore.getByIdInChat(fileId, chatStore.activeChat.id);
+        await file.ensureLoaded();
+        if (file.deleted) return;
         downloadFile(file);
     }
 
@@ -43,13 +53,13 @@ class FilesSection extends React.Component {
         });
     };
 
-    menu(fileId) {
+    menu(file) {
         return (
             <Menu
                 icon="more_vert"
                 position="bottom-right"
                 onClick={this.stopPropagation}
-                data-fileid={fileId}
+                data-fileid={file.fileId}
             >
                 <MenuItem
                     caption={t('title_download')}
@@ -58,23 +68,21 @@ class FilesSection extends React.Component {
                 />
                 <MenuItem
                     caption={t('button_share')}
-                    icon="reply"
+                    icon="person_add"
                     onClick={this.share}
+                    disabled={!file.canShare}
                 />
             </Menu>
         );
     }
 
-    renderFileItem = id => {
-        const file = fileStore.getById(id);
-        if (!file) return null;
-
+    renderFileItem = file => {
         return (
-            <ListItem key={id} data-fileid={id}
+            <ListItem key={file.fileId} data-fileid={file.fileId}
                 className="sidebar-file-container"
                 onClick={this.download}
                 leftContent={<FileSpriteIcon type={file.iconType} size="large" />}
-                rightContent={this.menu(id)}
+                rightContent={this.menu(file)}
             >
                 <div className="meta">
                     <div className="file-name-container">
@@ -85,8 +93,8 @@ class FilesSection extends React.Component {
                     </div>
                     <div className="file-shared-by">{file.fileOwner}</div>
                     <div className="file-shared-date">
-                        {moment(file.uploadedAt).format(
-                            Date.now() - file.uploadedAt > 24 * 60 * 60 * 1000
+                        {moment(file.kegCreatedAt).format(
+                            Date.now() - file.kegCreatedAt > 24 * 60 * 60 * 1000
                                 ? 'll'
                                 : 'll [|] h:mmA'
                         )}
@@ -111,11 +119,12 @@ class FilesSection extends React.Component {
                         {chat.recentFiles.map(this.renderFileItem)}
                     </List>
                 </div>
-                {!chat.recentFiles || !chat.recentFiles.length &&
+                {!chat.recentFiles.length &&
                     <div className="sidebar-zero-files">
                         <T k="title_noRecentFiles">{textParser}</T>
                     </div>
                 }
+                <ShareWithMultipleDialog ref={this.refShareWithMultipleDialog} context="sharefiles" />
             </SideBarSection>
         );
     }

@@ -1,8 +1,8 @@
 const React = require('react');
-const { fileStore } = require('peerio-icebear');
+const { fileStore, chatStore } = require('peerio-icebear');
 const { observer } = require('mobx-react');
 const { observable, computed, action } = require('mobx');
-const { Dialog, ProgressBar } = require('~/peer-ui');
+const { Dialog, ProgressBar } = require('peer-ui');
 const FileLine = require('./FileLine');
 const FolderLine = require('./FolderLine');
 const Search = require('~/ui/shared-components/Search');
@@ -14,13 +14,13 @@ const DEFAULT_RENDERED_ITEMS_COUNT = 15;
 
 @observer
 class FilePicker extends React.Component {
-    @observable currentFolder = fileStore.folders.root;
+    @observable currentFolder = fileStore.folderStore.root;
 
     @observable renderedItemsCount = DEFAULT_RENDERED_ITEMS_COUNT;
     pageSize = DEFAULT_RENDERED_ITEMS_COUNT;
 
     componentWillUnmount() {
-        fileStore.clearFilter();
+        fileStore.searchQuery = '';
     }
 
     checkScrollPosition = () => {
@@ -53,24 +53,21 @@ class FilePicker extends React.Component {
 
     handleClose = () => {
         fileStore.clearSelection();
-        fileStore.clearFilter();
+        fileStore.searchQuery = '';
         this.props.onClose();
         this.renderedItemsCount = DEFAULT_RENDERED_ITEMS_COUNT;
     };
 
     handleShare = () => {
-        const selected = fileStore.getSelectedFiles();
+        const selected = fileStore.selectedFilesOrFolders;
         if (!selected.length) return;
         this.props.onShare(selected);
-        fileStore.clearFilter();
+        fileStore.clearSelection();
+        fileStore.searchQuery = '';
     };
 
     handleSearch = val => {
-        if (val === '') {
-            fileStore.clearFilter();
-            return;
-        }
-        fileStore.filterByName(val);
+        fileStore.searchQuery = val;
     };
 
     get breadCrumbsHeader() {
@@ -89,9 +86,9 @@ class FilePicker extends React.Component {
     }
 
     @computed get items() {
-        return fileStore.currentFilter ?
-            fileStore.visibleFilesAndFolders
-            : this.currentFolder.foldersAndFilesDefaultSorting;
+        return fileStore.searchQuery ?
+            fileStore.filesAndFoldersSearchResult
+            : this.currentFolder.filesAndFoldersDefaultSorting;
     }
 
     render() {
@@ -101,21 +98,27 @@ class FilePicker extends React.Component {
                 label: t('button_share'),
                 onClick: this.handleShare,
                 primary: true,
-                disabled: !fileStore.hasSelectedFiles
+                disabled: !fileStore.hasSelectedFilesOrFolders
             }
         ];
 
         const { currentFolder } = this;
         const items = [];
         const data = this.items;
+        const canShareFolder = chatStore.activeChat && !chatStore.activeChat.isChannel;
         for (let i = 0; i < this.renderedItemsCount && i < data.length; i++) {
             const f = data[i];
+            if (f.isLegacy && this.props.hideLegacy) continue;
+
             items.push(f.isFolder ?
                 <FolderLine
-                    key={f.folderId}
+                    key={f.id}
                     folder={f}
                     onChangeFolder={this.changeFolder}
-                    checkboxPlaceholder
+                    checkbox
+                    disabledCheckbox={(!f.isShared && f.root.isShared) || !canShareFolder}
+                    selected={f.selected}
+                    onToggleSelect={this.toggleSelectFolder}
                 /> :
                 <FileLine
                     key={f.fileId}
@@ -136,8 +139,8 @@ class FilePicker extends React.Component {
                 onCancel={this.handleClose}>
                 {!fileStore.loading && this.props.active ?
                     <div className="file-picker-body">
-                        <Search onChange={this.handleSearch} query={fileStore.currentFilter} />
-                        {fileStore.currentFilter ? this.searchResultsHeader : this.breadCrumbsHeader}
+                        <Search onChange={this.handleSearch} query={fileStore.searchQuery} />
+                        {fileStore.searchQuery ? this.searchResultsHeader : this.breadCrumbsHeader}
                         <div ref={this.setScrollerRef} className="file-table-wrapper">
                             <div className="file-table-body">
                                 {items}
@@ -160,7 +163,12 @@ class FilePicker extends React.Component {
     @action.bound changeFolder(ev) {
         const folder = getFolderByEvent(ev);
         this.currentFolder = folder;
-        fileStore.clearFilter();
+        fileStore.searchQuery = '';
+    }
+
+    @action.bound toggleSelectFolder(ev) {
+        const folder = getFolderByEvent(ev);
+        folder.selected = !folder.selected;
     }
 
     @action.bound toggleSelect(ev) {

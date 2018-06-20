@@ -32,9 +32,15 @@ $black-03: rgba(0, 0, 0, .03);
 $background-root: $white;
 $background-hover-default: rgba($darkblue, .05);
 $background-hover-default-solid: #f2f2f5;
+$background-hover-accent: rgba($peerio-blue, .05);
 $background-selected: rgba($peerio-blue, .15);
 $background-neutral: $black-12;
 $background-overlay: rgba($darkblue, .3);
+$hover-bg: rgba($white, .15);
+$background-list: $darkblue;
+$badge-bg-color: $peerio-blue;
+$background-highlighted: rgba($peerio-purple, .45);
+$background-disabled: $black-12;
 
 //// FONT COLORS
 // Text
@@ -45,10 +51,13 @@ $text-dark-hint: $black-38;
 $text-light-default: $white;
 $text-light-inactive: $white-70;
 $text-light-disabled: $white-38;
+$text-header: $text-light-default;
+$text-unread-color: $darkblue;
+$text-badge-color: $darkblue;
 
 // Icons
 $icon-dark-active: $black-54;
-$icon-dark-inactive: $black-38;
+$icon-dark-inactive: $black-12;
 $icon-light-active: $white;
 $icon-light-inactive: $white-70;
 

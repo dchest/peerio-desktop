@@ -38,6 +38,11 @@
 
   .login-button {
     margin: 48px 0;
+
+    &:disabled {
+      color: $text-light-disabled;
+      background-color: transparent;
+    }
   }
 
   .welcome-back-wrapper {

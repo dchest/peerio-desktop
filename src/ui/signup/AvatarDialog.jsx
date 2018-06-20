@@ -2,7 +2,7 @@ const React = require('react');
 const { Component } = require('react');
 const { observable, reaction } = require('mobx');
 const { observer } = require('mobx-react');
-const { Dialog } = require('~/peer-ui');
+const { Dialog } = require('peer-ui');
 const AvatarEditor = require('~/ui/settings/components/AvatarEditor');
 
 @observer class AvatarDialog extends Component {

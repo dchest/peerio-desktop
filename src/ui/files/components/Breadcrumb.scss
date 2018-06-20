@@ -21,7 +21,7 @@
         font-size: 32px;
       }
 
-      a {
+      .folder-name {
         @extend %title;
         align-items: center;
         max-width: 120px;
@@ -29,6 +29,14 @@
         text-decoration: none;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: $text-dark-secondary;
+
+        &.selected-count {
+          max-width: none;
+        }
+      }
+
+      a.folder-name {
         color: $peerio-blue;
       }
 

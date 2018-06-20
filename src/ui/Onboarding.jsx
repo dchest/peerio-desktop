@@ -2,7 +2,7 @@ const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
 const css = require('classnames');
-const { MaterialIcon } = require('~/peer-ui');
+const { MaterialIcon } = require('peer-ui');
 const UsageCloud = require('~/ui/shared-components/UsageCloud');
 const { User } = require('peerio-icebear');
 const T = require('~/ui/shared-components/T');
@@ -49,9 +49,7 @@ class Onboarding extends React.Component {
                 t('title_onboardingCreateARoomContent'),
                 t('title_onboardingStorageUnlocked', { amount: '100' }),
                 () => User.current.hasCreatedRoomBonus,
-                () => window.router.push('/app/chats/new-channel'),
-                'chat-item-add',
-                <div className="chat-item-add-icon" />
+                () => window.router.push('/app/chats/new-channel')
             ),
             createOnboardingItem(
                 'person_add',

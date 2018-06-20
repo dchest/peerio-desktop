@@ -5,7 +5,7 @@ Peerio is configured in `app/package.json` under "peerio" key, which
 contains the following keys:
 
 * appId (string) — application identifier, must be the same as in root package.json.
-* whiteLabelBuild (boolean) — for internal peerio whitelabel builds like staging - keep this 'false'
+* whiteLabel (object) — for internal peerio whitelabel builds like staging - keep name == ""
 * keychainService (string) — app-unique name of keychain service for storing Account Key.
   (IMPORTANT: Changing this for the same app will invalidate autologin for all users.)
 * socketServerUrl (string) — URL for socket server

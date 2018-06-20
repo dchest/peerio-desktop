@@ -96,34 +96,31 @@ $zero-chats-break: 984px;
 
   // ~~~~~~ BUTTONS ~~~~~~
   // buttons for Create Room and Create Direct Messages
-  // modified from common component chat-item-add.scss
-  .chat-item-add {
-    padding: 0;
+  // modified from common component PlusIcon
+  .plus-icon-container {
+    .label {
+      @extend %display-1;
+      color: $peerio-blue;
+    }
 
-    .chat-item-add-icon {
+    .plus-icon {
       display: flex;
       align-items: center;
+      position: absolute;
       height: 40px;
       width: 40px;
       margin-left: -56px; // 40px + margin-default
       margin-right: $margin-default;
+      line-height: 40px;
+      font-size: 40px;
+      color: $peerio-blue;
       border-color: $peerio-blue;
       border-radius: 6px;
       border-width: 3px;
-
-      &::after {
-        height: 40px;
-        width: 40px;
-        line-height: 40px;
-        font-size: 40px;
-        color: $peerio-blue;
-      }
     }
 
-    .chat-item-title {
-      @extend %display-1;
+    &:hover .label {
       color: $peerio-blue;
-      border: none;
     }
   }
 
@@ -181,5 +178,74 @@ $zero-chats-break: 984px;
       z-index: 2;
     }
   }
+
+  // `condensed` version e.g. ZeroChats with ChatList. less horizontal room so hide images, adjust spacing, etc.
+  &.condensed {
+    .instructions-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .instructions {
+        width: 456px;
+      }
+    }
+  }
 }
 /* stylelint-enable */
+
+// Specific to Medcryptor zero state
+.zero-chats-container.medcryptor {
+  .header {
+    .welcome-title {
+      margin-bottom: $margin-small;
+      font-size: 45px;
+      font-weight: $font-weight-semibold;
+      color: $text-dark-secondary;
+    }
+
+    .subtitle {
+      @extend %headline;
+      font-weight: $font-weight-regular;
+    }
+  }
+
+  .zero-chats-content {
+    position: relative;
+  }
+
+  .images {
+    $zero-header-height: 148px;
+    position: absolute;
+    z-index: -1;
+    height: calc(100vh - #{$zero-header-height} - #{$padding-large});
+    width: 50%;
+    right: 0;
+    top: 0;
+    margin-top: $zero-header-height;
+    margin-bottom: $padding-large;
+
+    img {
+      position: absolute;
+      height: 50%;
+      width: auto;
+      right: 0;
+      bottom: 0;
+
+      &:first-child {
+        top: 0;
+        bottom: auto;
+      }
+    }
+  }
+
+  .instructions {
+    padding: $padding-default 0;
+    margin-bottom: 0;
+
+    &.create-dms {
+      justify-content: flex-start;
+      margin-top: 0;
+    }
+  }
+}

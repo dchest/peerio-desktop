@@ -5,24 +5,25 @@
 @import './static/emoji/sprites/emojione.css';
 
 // Brand/identity
-@import './vars/_branding';
+@import 'app/node_modules/peer-ui/src/scss/_branding';
+@import './font';
 @import './whitelabel'; // variable overrides for whitelabel releases
 
 // Variables
-@import './vars/_colors';
-@import './vars/_grid';
-@import './vars/_layout';
-@import './vars/_shadows';
-@import './vars/transitions';
-@import './vars/_typography';
+@import 'app/node_modules/peer-ui/src/scss/_colors';
+@import './vars/_colors-white-label'; // variable overrides for whitelabel releases
+@import 'app/node_modules/peer-ui/src/scss/_grid';
+@import 'app/node_modules/peer-ui/src/scss/_layout';
+@import 'app/node_modules/peer-ui/src/scss/_shadows';
+@import 'app/node_modules/peer-ui/src/scss/_transitions';
+@import 'app/node_modules/peer-ui/src/scss/_typography';
 
 // PeerUI components
-@import '../ui-library/_all';
+@import 'app/node_modules/peer-ui/src/components/_all';
 
 // Components that get reused between views
 @import './components/grid';
 @import './components/chip-wrapper';
-@import './components/chat-item-add';
 @import './components/notifications';
 @import './components/list';
 
@@ -44,6 +45,9 @@
 @import '../ui/settings/_all';
 @import '../ui/signup/_all';
 @import '../ui/updater/_all';
+
+// Whitelabel component styles
+@import '../ui/whitelabel/_all';
 
 // General styles and overrides
 @import './misc';
@@ -78,7 +82,7 @@ a {
 }
 
 body {
-  background-color: $darkblue;
+  background-color: $start-screen-bg;
 }
 
 body,

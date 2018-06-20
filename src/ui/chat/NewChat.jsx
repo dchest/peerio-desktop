@@ -4,8 +4,8 @@ const { observer } = require('mobx-react');
 const { chatStore } = require('peerio-icebear');
 const UserPicker = require('~/ui/shared-components/UserPicker');
 const { t } = require('peerio-translator');
-const T = require('~/ui/shared-components/T');
 const FullCoverLoader = require('~/ui/shared-components/FullCoverLoader');
+const ELEMENTS = require('~/whitelabel/helpers/elements');
 
 @observer
 class NewChat extends React.Component {
@@ -16,13 +16,13 @@ class NewChat extends React.Component {
         chatStore.deactivateCurrentChat();
     }
 
-    handleAccept = (selected) => {
+    handleAccept = async (selected) => {
         this.waiting = true;
         if (!selected.length || selected.filter(c => c.notFound).length) {
             this.waiting = false;
             return;
         }
-        const chat = chatStore.startChat(selected);
+        const chat = await chatStore.startChat(selected);
         if (!chat) {
             this.waiting = false;
             return;
@@ -37,31 +37,18 @@ class NewChat extends React.Component {
         window.router.push('/app/chats');
     }
 
-    gotoNewChannel() {
-        window.router.push('/app/chats/new-channel');
-    }
-
-    setRef = (ref) => {
-        this.picker = ref;
-    }
-
     render() {
-        const textParser = {
-            toCreateRoom: text => <a className="clickable" onClick={this.gotoNewChannel}>{text}</a>
-        };
         return (
             <div className="new-dm create-new-chat">
                 <div className="user-picker-container">
                     <UserPicker
-                        ref={this.setRef}
                         title={t('title_newDirectMessage')}
-                        description={
-                            <T k="title_newDirectMessageDescription">{textParser}</T>
-                        }
+                        description={ELEMENTS.newChat.description}
                         limit={1}
                         onAccept={this.handleAccept}
                         onClose={this.handleClose}
                         isDM
+                        context="newchat"
                     />
                 </div>
                 <FullCoverLoader show={this.waiting} />

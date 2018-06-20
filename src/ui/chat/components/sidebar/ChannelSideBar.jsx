@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { CustomIcon, List, ListItem } = require('~/peer-ui');
+const { CustomIcon, List, ListItem } = require('peer-ui');
 const { chatStore } = require('peerio-icebear');
 const { t } = require('peerio-translator');
 const css = require('classnames');
@@ -9,6 +9,7 @@ const ChatNameEditor = require('~/ui/chat/components/ChatNameEditor');
 const T = require('~/ui/shared-components/T');
 const MembersSection = require('./MembersSection');
 const FilesSection = require('./FilesSection');
+const ELEMENTS = require('~/whitelabel/helpers/elements');
 
 const MEMBERS = 'members';
 const FILES = 'files';
@@ -39,7 +40,7 @@ class ChannelSideBar extends React.Component {
         if (!chat) return;
         if (confirm(t('title_confirmChannelLeave'))) {
             try {
-                chat.leave();
+                chat.leave().then(chatStore.switchToFirstChat);
             } catch (err) {
                 console.error(err);
             }
@@ -87,8 +88,9 @@ class ChannelSideBar extends React.Component {
 
     render() {
         const chat = chatStore.activeChat;
-        if (!chat) return null;
-        const { canIAdmin, canILeave } = chat;
+        if (!chat || !chatStore.loaded) return null;
+        const { canIAdmin } = chat;
+        const canILeave = ELEMENTS.channelSideBar.canILeave(chat.canILeave);
         const hasFiles = chat.recentFiles.length;
 
         return (
@@ -111,9 +113,9 @@ class ChannelSideBar extends React.Component {
                                         className="purpose-editor"
                                         innerRef={this.chatPurposeEditorRef} />
                                     : <div className="purpose-container">
-                                        {chat.chatHead && chat.chatHead.purpose
+                                        {chat.purpose
                                             ? [<T tag="div" k="title_purpose" className="purpose-label" key="1" />,
-                                                <div key="2" className="purpose-text">{chat.chatHead.purpose}</div>]
+                                                <div key="2" className="purpose-text">{chat.purpose}</div>]
                                             : <T tag="div" k="title_purpose" className="purpose-label-big" />}
                                     </div>
                             }
@@ -146,7 +148,7 @@ class ChannelSideBar extends React.Component {
                 {hasFiles
                     ? <FilesSection onToggle={() => this.onToggleSection(FILES)}
                         open={this.openSection === FILES} />
-                    : null }
+                    : null}
             </div>
         );
     }

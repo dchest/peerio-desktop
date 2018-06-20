@@ -1,6 +1,6 @@
 const React = require('react');
 const { observer } = require('mobx-react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { User } = require('peerio-icebear');
 
 @observer

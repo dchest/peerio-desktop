@@ -1,7 +1,7 @@
 const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
-const { Input } = require('~/peer-ui');
+const { Input } = require('peer-ui');
 const { t } = require('peerio-translator');
 const { User } = require('peerio-icebear');
 const _ = require('lodash');

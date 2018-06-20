@@ -1,7 +1,7 @@
 const React = require('react');
 const { Component } = require('react');
 const { observer } = require('mobx-react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const { clipboard } = require('electron').remote;
 const PDFSaver = require('~/ui/shared-components/PDFSaver');
 const AvatarControl = require('./AvatarControl');

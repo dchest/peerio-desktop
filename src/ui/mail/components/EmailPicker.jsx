@@ -2,7 +2,7 @@ const React = require('react');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');
 const { validation } = require('peerio-icebear');
-const { Chip, Input } = require('~/peer-ui');
+const { Chip, Input } = require('peer-ui');
 const { t } = require('peerio-translator');
 
 const emailFormatFn = validation.validators.emailFormat.action;

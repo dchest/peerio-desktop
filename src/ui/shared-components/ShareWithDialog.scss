@@ -80,4 +80,21 @@ $list-header-height: 48px;
       min-height: 24px;
     }
   }
+
+  .receipt-wrapper {
+    @extend %flex-row;
+    align-items: center;
+    height: 48px;
+    min-height: 48px;
+    padding: $padding-default 0;
+    margin-left: $margin-xl;
+    border-top: 1px solid $divider-dark;
+  }
+}
+
+// 'Share folder' styles: ShareWithMultipleDialog & ModifyShareDialog
+.share-with-dialog.share-folder {
+  .p-list li .username {
+    color: $text-dark-secondary;
+  }
 }

@@ -15,13 +15,13 @@
       align-items: center;
       justify-content: center;
       position: absolute;
-      height: 24px;
-      width: 24px;
-      right: 8px;
-      top: 8px;
-      background: $color-error;
+      height: 16px;
+      width: 16px;
+      right: 12px;
+      top: 12px;
+      background: $look-at-me;
       border: 2px solid $darkteal;
-      border-radius: 12px;
+      border-radius: 8px;
     }
 
     &.active .look-at-me {

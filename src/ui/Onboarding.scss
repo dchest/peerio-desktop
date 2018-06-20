@@ -47,10 +47,6 @@
       @extend %flex-row;
       pointer-events: none;
 
-      .chat-item-add-icon {
-        display: none;
-      }
-
       a {
         text-decoration: none;
       }
@@ -64,15 +60,6 @@
       height: 29px;
       margin-right: $spacing-default;
       margin-top: 3px;
-    }
-
-    .chat-item-add {
-      height: 29px;
-      padding-left: 0;
-
-      .chat-item-add-icon {
-        margin-left: $margin-small;
-      }
     }
 
     .title {

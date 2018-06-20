@@ -2,7 +2,7 @@
 const React = require('react');
 const { chatStore, contactStore } = require('peerio-icebear');
 const Suggestions = require('./Suggestions');
-const { Avatar } = require('~/peer-ui');
+const { Avatar } = require('peer-ui');
 const { chatSchema } = require('~/helpers/chat/prosemirror/chat-schema');
 
 const { EditorView } = require('prosemirror-view'); // eslint-disable-line no-unused-vars, (for typechecking)

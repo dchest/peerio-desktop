@@ -1,5 +1,5 @@
 const React = require('react');
-const { Button } = require('~/peer-ui');
+const { Button } = require('peer-ui');
 const css = require('classnames');
 const { observer } = require('mobx-react');
 
@@ -13,9 +13,7 @@ class AppNav extends React.Component {
                     tooltipPosition="right"
                     icon={this.props.icon}
                 />
-                <div className={this.props.showBadge ? 'look-at-me' : 'banish'}>
-                    {this.props.badge}
-                </div>
+                <div className={this.props.showBadge ? 'look-at-me' : 'banish'} />
             </div>
         );
     }

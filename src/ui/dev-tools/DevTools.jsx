@@ -1,5 +1,5 @@
 const React = require('react');
-const { Button, Chip, Divider, MaterialIcon, Menu, MenuItem } = require('~/peer-ui');
+const { Button, Chip, Divider, MaterialIcon, Menu, MenuItem } = require('peer-ui');
 const { User, socket, util } = require('peerio-icebear');
 const { observable } = require('mobx');
 const { observer } = require('mobx-react');

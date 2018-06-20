@@ -1,5 +1,5 @@
 const React = require('react');
-const { ProgressBar } = require('~/peer-ui');
+const { ProgressBar } = require('peer-ui');
 
 function FullCoverLoader(props) {
     return props.show ? (

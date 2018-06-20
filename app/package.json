@@ -1,7 +1,7 @@
 {
   "name": "peerio-2",
   "productName": "Peerio 2",
-  "version": "2.710.2",
+  "version": "3.0.1",
   "description": "Peerio desktop client",
   "main": "build/main.js",
   "repository": {
@@ -24,11 +24,13 @@
   },
   "peerio": {
     "appId": "com.peerio.desktop",
-    "whiteLabelBuild": false,
     "keychainService": "PeerioMessenger",
     "socketServerUrl": "",
     "ghostFrontendUrl": "https://mail.peerio.com",
     "disablePayments": false,
+    "whiteLabel": {
+      "name": ""
+    },
     "contacts": {
       "supportUser": "support",
       "supportEmail": "support@peerio.com",
@@ -58,13 +60,13 @@
         "download": "https://peerio.com",
         "learnUrlTracking": "https://peerio.zendesk.com/hc/en-us/articles/115005090766",
         "identityVerification": "https://peerio.zendesk.com/hc/en-us/articles/204480655-Verifying-a-Peerio-ID-",
-        "jitsiLink": "https://jitsi.org/"
+        "jitsiLink": "https://jitsi.org/",
+        "limitedActions": "https://www.peerio.com/blog/posts/new-filesystem/"
       }
     }
   },
   "dependencies": {
-    "@peerio/updater": "0.14.0",
-    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#dev",
+    "@peerio/updater": "0.14.1",
     "autolinker": "1.4.4",
     "cheerio": "1.0.0-rc.2",
     "classnames": "2.2.5",
@@ -78,6 +80,8 @@
     "mobx-react": "4.4.2",
     "normalize.css": "7.0.0",
     "peerio-copy": "github:PeerioTechnologies/peerio-copy#icebear",
+    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#dev",
+    "peer-ui": "github:PeerioTechnologies/ui-library#v1.1.0",
     "prosemirror-commands": "1.0.1",
     "prosemirror-dropcursor": "1.0.0",
     "prosemirror-gapcursor": "1.0.0",
@@ -90,9 +94,9 @@
     "prosemirror-transform": "1.0.1",
     "prosemirror-view": "1.0.1",
     "qrcode": "1.2.0",
-    "react": "16.2.0",
+    "react": "16.3.2",
     "react-addons-css-transition-group": "15.6.2",
-    "react-dom": "16.2.0",
+    "react-dom": "16.3.2",
     "react-flip-move": "3.0.1",
     "react-router": "3.2.0",
     "sanitize-filename": "1.6.1",
