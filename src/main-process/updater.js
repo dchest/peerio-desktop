@@ -82,7 +82,7 @@ function start(mainWindow) {
         });
 
         if (!isDevEnv) {
-            autoUpdater.didLastUpdateFail().then(failed => {
+            autoUpdater.failedInstallAttempts().then(failed => {
                 if (!failed) {
                     setTimeout(() => autoUpdater.checkForUpdates(), 3000);
                     setInterval(() => autoUpdater.checkForUpdates(), 60 * 60 * 1000);
