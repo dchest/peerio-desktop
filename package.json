@@ -1,7 +1,7 @@
 {
   "name": "peerio-2",
   "description": "Peerio 2",
-  "version": "3.0.8",
+  "version": "3.1.0",
   "scripts": {
     "=== HOOKS ===": "",
     "postcheckout": "opt --in npm-install --exec \"npm install\"",
@@ -60,7 +60,7 @@
   },
   "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "devDependencies": {
-    "@peerio/desktop-release-builder": "6.14.0",
+    "@peerio/desktop-release-builder": "github:PeerioTechnologies/desktop-release-builder",
     "@types/chai": "4.1.2",
     "@types/chai-as-promised": "7.1.0",
     "@types/lodash": "4.14.107",
