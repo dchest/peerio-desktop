@@ -20,8 +20,7 @@ function context() {
     return routeNames[currentRoute] || 'Unknown route';
 }
 
-// TODO: try to get around `any` type
-const shared: any = setup({
+const shared = setup({
     // ValidatedInput
     validatedInputOnFocus: (label: string): TextInputEvent => {
         return [

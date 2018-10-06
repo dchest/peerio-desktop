@@ -1,5 +1,5 @@
 // Main client-side functionality is here, i.e. converting objects into send() functions, and the send() function itself
-import { telemetry } from 'peerio-icebear';
+import { telemetry, User } from 'peerio-icebear';
 import os from 'os';
 
 // `string` could maybe be `[keyof telemetry.S]`; audit after icebear/ts convert
@@ -51,10 +51,16 @@ function send(ev: TelemetryPayload): void {
         windowHeight: window.innerHeight
     };
 
-    const obj = {
-        event: ev[0],
-        properties: ev[1] || {}
+    const combinedProperties: telemetry.EventProperties = {
+        ...ev[1],
+        ...baseProps
     };
-    obj.properties = Object.assign(obj.properties, baseProps);
+
+    const obj: telemetry.EventObject = {
+        event: ev[0],
+        properties: combinedProperties
+    };
+
+    // `send` here will check if user is still in signup, and store events for bulk send if so
     telemetry.send(obj);
 }

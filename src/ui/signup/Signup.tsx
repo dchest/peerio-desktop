@@ -111,7 +111,6 @@ export default class Signup extends React.Component {
                 } = this.profileStore;
                 User.current.saveSettings(settings => {
                     settings.dataCollection = consentUsageData;
-                    settings.errorTracking = consentUsageData;
                     settings.subscribeToPromoEmails = subscribeNewsletter;
                 });
             });

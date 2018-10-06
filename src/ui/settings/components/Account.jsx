@@ -19,13 +19,6 @@ class Account extends React.Component {
         });
     };
 
-    onErrorTrackingChanged = ev => {
-        const { checked } = ev.target;
-        User.current.saveSettings(settings => {
-            settings.errorTracking = checked;
-        });
-    };
-
     onDataCollectionChanged = ev => {
         const { checked } = ev.target;
         User.current.saveSettings(settings => {
