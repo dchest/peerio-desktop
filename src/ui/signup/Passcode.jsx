@@ -1,7 +1,7 @@
 const React = require('react');
 const _ = require('lodash');
 const { Component } = require('react');
-const { observable, computed, reaction, action } = require('mobx');
+const { observable, computed, reaction, action, entries } = require('mobx');
 const { observer } = require('mobx-react');
 const { MaterialIcon } = require('peer-ui');
 const { socket, validation } = require('peerio-icebear'); // eslint-disable-line
@@ -233,9 +233,8 @@ class Passcode extends Component {
                     </div>
                     <ul className="passcode-hints">
                         <li className="heading">{t('title_passwordHints')}</li>
-                        {this.props.store.passcodeHints
-                            .entries()
-                            .map(([key, hint]) => {
+                        {entries(this.props.store.passcodeHints).map(
+                            ([key, hint]) => {
                                 return (
                                     <li
                                         key={key}
@@ -251,7 +250,8 @@ class Passcode extends Component {
                                         {t(`title_passwordHint_${key}`)}
                                     </li>
                                 );
-                            })}
+                            }
+                        )}
                     </ul>
                 </div>
                 <ValidatedInput

@@ -41,7 +41,7 @@ export default class Breadcrumb extends React.Component<BreadcrumbProps> {
         this._watchFolder = reaction(
             () => this.props.folder,
             this.ellipsizeFolderNames,
-            true
+            { fireImmediately: true }
         );
         window.addEventListener('resize', this.ellipsizeFolderNames, false);
     }

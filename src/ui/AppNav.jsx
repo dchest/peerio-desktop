@@ -1,5 +1,5 @@
 const React = require('react');
-const { autorunAsync, observable, computed } = require('mobx');
+const { autorun, observable, computed } = require('mobx');
 const { observer } = require('mobx-react');
 const { Avatar, Divider, Menu, MenuHeader, MenuItem } = require('peer-ui');
 const { User, contactStore, chatStore, fileStore } = require('peerio-icebear');
@@ -25,16 +25,19 @@ function startDockNotifications() {
     // if (dockNotifsStarted || (!app.setBadgeCount && !app.dock && !app.dock.bounce)) return;
     if (dockNotifsStarted) return;
     dockNotifsStarted = true;
-    autorunAsync(() => {
-        const unreadItems = chatStore.unreadMessages;
-        // mac
-        if (app.setBadgeCount && app.dock && app.dock.bounce) {
-            if (app.setBadgeCount) app.setBadgeCount(unreadItems);
-            if (unreadItems > 0) {
-                app.dock.bounce();
+    autorun(
+        () => {
+            const unreadItems = chatStore.unreadMessages;
+            // mac
+            if (app.setBadgeCount && app.dock && app.dock.bounce) {
+                if (app.setBadgeCount) app.setBadgeCount(unreadItems);
+                if (unreadItems > 0) {
+                    app.dock.bounce();
+                }
             }
-        }
-    }, 250);
+        },
+        { delay: 250 }
+    );
 }
 
 let taskbarOverlayStarted = false;
@@ -42,24 +45,29 @@ function startTaskbarOverlay() {
     // if (dockNotifsStarted || (!app.setBadgeCount && !app.dock && !app.dock.bounce)) return;
     if (taskbarOverlayStarted) return;
     taskbarOverlayStarted = true;
-    autorunAsync(() => {
-        const unreadItems = chatStore.unreadMessages;
-        // windows
-        if (typeof remote.getCurrentWindow().setOverlayIcon === 'function') {
-            const overlay = nativeImage.createFromPath(
-                path.join(
-                    app.getAppPath(),
-                    'build/static/img/taskbar-overlay.png'
-                )
-            );
-            remote
-                .getCurrentWindow()
-                .setOverlayIcon(
-                    unreadItems ? overlay : null,
-                    unreadItems ? 'newmessages' : ''
+    autorun(
+        () => {
+            const unreadItems = chatStore.unreadMessages;
+            // windows
+            if (
+                typeof remote.getCurrentWindow().setOverlayIcon === 'function'
+            ) {
+                const overlay = nativeImage.createFromPath(
+                    path.join(
+                        app.getAppPath(),
+                        'build/static/img/taskbar-overlay.png'
+                    )
                 );
-        }
-    }, 250);
+                remote
+                    .getCurrentWindow()
+                    .setOverlayIcon(
+                        unreadItems ? overlay : null,
+                        unreadItems ? 'newmessages' : ''
+                    );
+            }
+        },
+        { delay: 250 }
+    );
 }
 
 let desktopNotificationsStarted = false;

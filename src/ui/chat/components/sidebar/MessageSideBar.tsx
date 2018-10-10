@@ -1,5 +1,5 @@
 import React from 'react';
-import { action, observable, reaction, IReactionDisposer } from 'mobx';
+import { action, observable, reaction, IReactionDisposer, entries } from 'mobx';
 import { observer } from 'mobx-react';
 
 import { chatStore, systemMessages, contactStore } from 'peerio-icebear';
@@ -82,17 +82,17 @@ export default class MessageSideBar extends React.Component {
         );
     }
     getReceipts(msg) {
-        const entries = chatStore.activeChat.receipts.entries();
-        for (let i = 0; i < entries.length; i++) {
-            if (+msg.id > entries[i][1].chatPosition) {
-                entries[i] = null;
+        const rEntries = entries(chatStore.activeChat.receipts).slice();
+        for (let i = 0; i < rEntries.length; i++) {
+            if (+msg.id > rEntries[i][1].chatPosition) {
+                rEntries[i] = null;
                 continue;
             }
-            entries[i][0] = contactStore.getContact(entries[i][0]);
+            rEntries[i][0] = contactStore.getContact(rEntries[i][0]);
         }
-        entries.sort(this.compareReceipts);
+        rEntries.sort(this.compareReceipts);
 
-        return entries.map(this.renderReceipt);
+        return rEntries.map(this.renderReceipt);
     }
     render() {
         if (!this.validate(chatStore.activeChat)) return null;

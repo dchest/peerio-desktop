@@ -93,7 +93,7 @@ class ValidatedInput extends Component {
         reaction(
             () => this.props.store[this.props.name],
             () => this.validate(),
-            true
+            { fireImmediately: true }
         );
     }
 

@@ -1,6 +1,6 @@
 // @ts-check
 const React = require('react');
-const { observable, computed, action } = require('mobx');
+const { observable, computed, action, values, keys } = require('mobx');
 const { observer } = require('mobx-react');
 const { contactStore, User } = require('peerio-icebear');
 const {
@@ -66,7 +66,7 @@ class ShareWithMultipleDialog extends React.Component {
     };
     @computed
     get contacts() {
-        const selectedUsernames = this.selectedUsers.keys();
+        const selectedUsernames = keys(this.selectedUsers);
         let ret = contactStore.whitelabel
             .filter(this.query, this.shareContext)
             .filter(c => !c.isDeleted)
@@ -142,7 +142,7 @@ class ShareWithMultipleDialog extends React.Component {
 
     @action.bound
     share() {
-        this.resolver(this.selectedUsers.values());
+        this.resolver(values(this.selectedUsers));
         this.close();
     }
 
