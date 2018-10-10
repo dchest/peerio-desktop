@@ -104,6 +104,8 @@ const config = require('~/config');
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('disk-cache-size', 200 * 1024 * 1024);
 app.commandLine.appendSwitch('js-flags', '--harmony_regexp_lookbehind');
+app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required');
+
 if (process.env.REMOTE_DEBUG_PORT !== undefined) {
     app.commandLine.appendSwitch(
         'remote-debugging-port',
