@@ -169,7 +169,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.0.0",
     "@babel/register": "7.0.0",
-    "@peerio/desktop-release-builder": "7.0.2",
+    "@peerio/desktop-release-builder": "7.0.3",
     "@types/bluebird-global": "3.5.9",
     "@types/electron-devtools-installer": "2.2.0",
     "@types/enzyme": "3.1.13",
