@@ -294,7 +294,8 @@
     "nsis": {
       "artifactName": "${name}-setup-${version}.${ext}",
       "installerIcon": "dist-assets/win-installer.ico",
-      "differentialPackage": false
+      "differentialPackage": false,
+      "packElevateHelper": false
     },
     "mac": {
       "artifactName": "${name}-${version}-mac.${ext}",
