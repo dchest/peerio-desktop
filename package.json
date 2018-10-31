@@ -2,7 +2,7 @@
   "name": "peerio-2",
   "productName": "Peerio 2",
   "description": "Peerio 2",
-  "version": "3.8.2",
+  "version": "3.8.3",
   "lastMandatoryUpdateVersion": "v3.8.2",
   "main": "build/main.js",
   "scripts": {
@@ -194,7 +194,7 @@
     "debounce-queue": "0.3.0",
     "devtron": "1.4.0",
     "electron": "3.0.5",
-    "electron-builder": "20.29.0",
+    "electron-builder": "20.5.1",
     "electron-devtools-installer": "2.2.4",
     "electron-reload": "1.2.5",
     "emojione": "4.0.0",
