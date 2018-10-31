@@ -194,7 +194,7 @@
     "debounce-queue": "0.3.0",
     "devtron": "1.4.0",
     "electron": "3.0.5",
-    "electron-builder": "29.30.0",
+    "electron-builder": "20.29.0",
     "electron-devtools-installer": "2.2.4",
     "electron-reload": "1.2.5",
     "emojione": "4.0.0",
