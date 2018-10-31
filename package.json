@@ -55,21 +55,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PeerioTechnologies/peerio-desktop.git"
+    "url": "git+https://github.com/dchest/peerio-desktop.git"
   },
   "author": "Technologies Peerio Inc. <support@peerio.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/PeerioTechnologies/peerio/issues"
+    "url": "https://github.com/dchest/peerio/issues"
   },
-  "homepage": "https://github.com/PeerioTechnologies/peerio-desktop#readme",
+  "homepage": "https://github.com/dchest/peerio-desktop#readme",
   "updater": {
     "publicKeys": [
       "RWRwKJ91Y/oYjLgp1BhDX0OShp6PHCqXiJUAYm3TsDJSsVtNWE07lOMv",
       "RWQVE9QS3ACqEVxGrn/JIlDfjhMwsUOUPDhTwUg0rcCiLJTLwIMTgPOL"
     ],
     "manifests": [
-      "github:PeerioTechnologies/peerio-desktop"
+      "github:dchest/peerio-desktop"
     ]
   },
   "peerio": {
